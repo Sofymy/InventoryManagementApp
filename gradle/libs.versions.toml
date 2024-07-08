@@ -2,6 +2,8 @@
 agp = "8.5.0"
 artifactid = "version"
 converterGson = "2.9.0"
+firebaseAnalytics = "22.0.2"
+firebaseBom = "33.1.1"
 hiltNavigationCompose = "1.2.0"
 hiltVersion = "2.51.1"
 kotlin = "2.0.0"
@@ -30,6 +32,9 @@ androidx-paging-compose = { module = "androidx.paging:paging-compose", version.r
 artifactid = { module = "groupId:artifactId", version.ref = "artifactid" }
 converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "converterGson" }
 converter-moshi = { module = "com.squareup.retrofit2:converter-moshi", version.ref = "converterGson" }
+firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
+firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
+google-firebase-analytics = { module = "com.google.firebase:firebase-analytics", version.ref = "firebaseAnalytics" }
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hiltVersion" }
 hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hiltVersion" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
