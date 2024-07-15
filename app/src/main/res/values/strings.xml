@@ -1,3 +1,13 @@
 <resources>
     <string name="app_name">IMAApp</string>
+    <string name="login">Log in</string>
+    <string name="qrreader">QR Reader</string>
+    <string name="admin">Admin</string>
+    <string name="mydevices">My Devices</string>
+    <string name="devicelist">Device List</string>
+    <string name="request">Request</string>
+    <string name="screen_title_my_devices">My Devices</string>
+    <string name="screen_title_qr_reader">QR Reader</string>
+    <string name="screen_title_request">Request</string>
+    <string name="screen_title_admin">Admin</string>
 </resources>

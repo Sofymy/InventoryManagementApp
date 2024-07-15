@@ -1,4 +1,4 @@
-package com.zenitech.imaapp.feature.qr_reader
+package com.zenitech.imaapp.feature.request
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -9,18 +9,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun QRReaderScreen(
+fun RequestScreen(
 ) {
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(20.dp)
     ) {
-        QRReaderContent()
+        RequestContent()
     }
 }
 
 @Composable
-fun QRReaderContent() {
-    Text("QR Reader Screen")
+fun RequestContent() {
+    Text("Request Screen")
 }

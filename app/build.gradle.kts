@@ -94,7 +94,16 @@ dependencies {
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.analytics)
     implementation(libs.google.firebase.analytics)
+    implementation(libs.firebase.crashlytics.ktx)
 
-    implementation("com.google.firebase:firebase-crashlytics-ktx")
-    implementation("com.google.firebase:firebase-analytics-ktx")
+    implementation(libs.androidx.material)
+
+    implementation(libs.androidx.navigation.compose)
+    implementation(libs.androidx.material.icons.extended)
+
+    implementation(libs.accompanist.systemuicontroller)
+
+
+
+
 }
