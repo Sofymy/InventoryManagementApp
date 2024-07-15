@@ -81,8 +81,5 @@ data class DeviceResponse (
     @Json(name = "location")
     val location: kotlin.String? = null
 
-) {
-
-
-}
+)
 

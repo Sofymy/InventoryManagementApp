@@ -11,10 +11,10 @@ import androidx.navigation.compose.composable
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.zenitech.imaapp.feature.admin.AdminScreen
 import com.zenitech.imaapp.feature.devicelist.DeviceListScreen
-import com.zenitech.imaapp.feature.login.LoginScreen
 import com.zenitech.imaapp.feature.my_devices.MyDevicesScreen
 import com.zenitech.imaapp.feature.qr_reader.QRReaderScreen
 import com.zenitech.imaapp.feature.request.RequestScreen
+import com.zenitech.imaapp.feature.sign_in.SignInScreen
 
 @ExperimentalMaterial3Api
 @Composable
@@ -30,9 +30,9 @@ fun NavGraph(
 
     NavHost(navController, startDestination = Screen.MyDevices) {
 
-        composable<Screen.Login> {
-            onTopNavigationBarTitleChange("Log In")
-            LoginScreen()
+        composable<Screen.SignIn> {
+            onTopNavigationBarTitleChange("Sign In")
+            SignInScreen()
         }
 
         composable<Screen.DeviceList> {

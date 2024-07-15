@@ -85,8 +85,5 @@ data class DeviceSearchRequest (
     @Json(name = "location")
     val location: kotlin.String? = null
 
-) {
-
-
-}
+)
 

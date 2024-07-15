@@ -1,4 +1,4 @@
-package com.zenitech.imaapp.navigation
+package com.zenitech.imaapp.ui.common
 
 import androidx.annotation.StringRes
 import androidx.compose.material.icons.Icons
@@ -7,6 +7,7 @@ import androidx.compose.material.icons.twotone.AdminPanelSettings
 import androidx.compose.material.icons.twotone.Devices
 import androidx.compose.material.icons.twotone.QrCode
 import androidx.compose.ui.graphics.vector.ImageVector
+import com.zenitech.imaapp.navigation.Screen
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
 

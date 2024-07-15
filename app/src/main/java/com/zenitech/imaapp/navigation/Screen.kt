@@ -9,7 +9,7 @@ sealed class Screen(
     @StringRes val resourceId: Int
 ){
     @Serializable
-    data object Login: Screen(R.string.login)
+    data object SignIn: Screen(R.string.sign_in)
 
     @Serializable
     data object QRReader: Screen(R.string.qrreader)
