@@ -10,4 +10,5 @@
     <string name="screen_title_qr_reader">QR Reader</string>
     <string name="screen_title_request">Request</string>
     <string name="screen_title_admin">Admin</string>
+    <string name="sign_in">Sign In</string>
 </resources>

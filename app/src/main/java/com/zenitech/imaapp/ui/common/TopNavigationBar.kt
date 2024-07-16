@@ -1,28 +1,23 @@
-package com.zenitech.imaapp.navigation
+package com.zenitech.imaapp.ui.common
 
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.zenitech.imaapp.ui.theme.EerieBlack10White
-import com.zenitech.imaapp.ui.theme.NavigationBarCustomColorsPalette
+import com.zenitech.imaapp.ui.theme.LocalNavigationBarColorsPalette
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -33,11 +28,11 @@ fun TopNavigationBar(
     TopAppBar(
         modifier = Modifier.shadow(0.dp),
         colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = NavigationBarCustomColorsPalette.current.topContainerBar,
-            titleContentColor = NavigationBarCustomColorsPalette.current.containerTextColor,
+            containerColor = LocalNavigationBarColorsPalette.current.topContainerBarColor,
+            titleContentColor = LocalNavigationBarColorsPalette.current.containerTextColor,
         ),
         title = {
-            Text(topNavigationBarTitle, fontWeight = FontWeight.Bold)
+            Text(topNavigationBarTitle, fontWeight = FontWeight.Bold, fontSize = 30.sp)
         },
         actions = {
             IconButton(

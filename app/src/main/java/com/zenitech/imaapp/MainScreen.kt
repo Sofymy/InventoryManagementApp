@@ -3,6 +3,8 @@ package com.zenitech.imaapp
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.LocalContentColor
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
@@ -11,11 +13,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.zenitech.imaapp.navigation.BottomNavigationBar
+import com.zenitech.imaapp.ui.common.BottomNavigationBar
 import com.zenitech.imaapp.navigation.NavGraph
-import com.zenitech.imaapp.navigation.TopNavigationBar
+import com.zenitech.imaapp.ui.common.TopNavigationBar
+import com.zenitech.imaapp.ui.theme.Grey
 import com.zenitech.imaapp.ui.theme.IMAAppTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -42,7 +46,7 @@ fun MainScreen(
         ) { innerPadding ->
             Surface(
                 modifier = Modifier
-                    .padding(innerPadding)
+                    .padding(innerPadding),
             ) {
                 NavGraph(
                     navController = navController,

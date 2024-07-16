@@ -17,7 +17,7 @@ import androidx.compose.ui.platform.LocalContext
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 private val DarkColorScheme = darkColorScheme(
-    primary = RaspberryRed,
+    primary = RaspberryRed30White,
     secondary = EerieBlack,
     background = EerieBlack40Black,
     surface = EerieBlack40Black,
@@ -32,58 +32,78 @@ private val LightColorScheme = lightColorScheme(
     surface = Grey,
     onSurface = Color.Black,
     onBackground = Color.Black
-
-
-    /* Other default colors to override
-    background = Color(0xFFFFFBFE),
-    surface = Color(0xFFFFFBFE),
-    onPrimary = Color.White,
-    onSecondary = Color.White,
-    onTertiary = Color.White,
-    onBackground = Color(0xFF1C1B1F),
-    onSurface = Color(0xFF1C1B1F),
-    */
 )
 
 @Immutable
 data class BottomNavigationBarColorScheme(
-    val topContainerBar: Color = Color.Unspecified,
+    val topContainerBarColor: Color = Color.Unspecified,
     val containerTextColor : Color = Color.Unspecified,
     val selectedIconColor: Color = Color.Unspecified,
     val selectedTextColor: Color = Color.Unspecified,
     val unselectedIconColor: Color = Color.Unspecified,
     val unselectedTextColor: Color = Color.Unspecified,
-    val bottomContainerBar: Color = Color.Unspecified
+    val bottomContainerBarColor: Color = Color.Unspecified,
+    val bottomContainerBarDividerColor: Color = Color.Unspecified
 )
 
+@Immutable
+data class CardColorScheme(
+    val containerColor: Color = Color.Unspecified,
+    val borderColor: Color = Color.Unspecified,
+    val arrowColor: Color = Color.Unspecified,
+    val contentColor: Color = Color.Unspecified,
+    val secondaryContentColor: Color = Color.Unspecified
+)
+
+val LocalNavigationBarColorsPalette = staticCompositionLocalOf { BottomNavigationBarColorScheme() }
+
 @SuppressLint("CompositionLocalNaming")
-val NavigationBarCustomColorsPalette = staticCompositionLocalOf { BottomNavigationBarColorScheme() }
+val LocalCardColorsPalette = staticCompositionLocalOf { CardColorScheme() }
 
 
-val LightBottomNavigationBarColorScheme = BottomNavigationBarColorScheme(
-    topContainerBar = Grey,
+val LightNavigationBarColorScheme = BottomNavigationBarColorScheme(
+    topContainerBarColor = Grey,
     containerTextColor = Color.Black,
     selectedIconColor = RaspberryRed,
     selectedTextColor = RaspberryRed,
     unselectedIconColor = Color.Black,
     unselectedTextColor = Color.Black,
-    bottomContainerBar = Color.White
+    bottomContainerBarColor = Color.White,
+    bottomContainerBarDividerColor = Color.Black.copy(0.1f)
 )
 
-val DarkBottomNavigationBarColorScheme = BottomNavigationBarColorScheme(
-    topContainerBar = EerieBlack40Black,
+val DarkNavigationBarColorScheme = BottomNavigationBarColorScheme(
+    topContainerBarColor = EerieBlack40Black,
     containerTextColor = Color.White,
     selectedIconColor = RaspberryRed30White,
     selectedTextColor = RaspberryRed30White,
     unselectedIconColor = Color.White,
     unselectedTextColor = Color.White,
-    bottomContainerBar = EerieBlack
+    bottomContainerBarColor = EerieBlack,
+    bottomContainerBarDividerColor = EerieBlack40White
 )
+
+val DarkCardColorScheme = CardColorScheme(
+    containerColor = EerieBlack,
+    arrowColor = EerieBlack40White,
+    borderColor = EerieBlack40White,
+    contentColor = Color.White,
+    secondaryContentColor = Color.White.copy(0.3f),
+)
+
+val LightCardColorScheme = CardColorScheme(
+    containerColor = Color.White,
+    arrowColor = Color.Black.copy(0.1f),
+    borderColor = Color.Black.copy(0.1f),
+    contentColor = Color.Black,
+    secondaryContentColor = Color.Black.copy(0.2f),
+)
+
+
 @Composable
 fun IMAAppTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    // Dynamic color is available on Android 12+
-    dynamicColor: Boolean = true,
+    dynamicColor: Boolean = false,
     content: @Composable () -> Unit
 ) {
     val colorScheme = when {
@@ -113,18 +133,19 @@ fun IMAAppTheme(
         )
     }
 
-    MaterialTheme(
-        colorScheme = colorScheme,
-        typography = Typography,
-        content = content
-    )
+    val cardColorScheme =
+        if (darkTheme) DarkCardColorScheme
+        else LightCardColorScheme
+
 
     val bottomNavigationBarColorScheme =
-        if (darkTheme) DarkBottomNavigationBarColorScheme
-        else LightBottomNavigationBarColorScheme
+        if (darkTheme) DarkNavigationBarColorScheme
+        else LightNavigationBarColorScheme
+
 
     CompositionLocalProvider(
-        NavigationBarCustomColorsPalette provides bottomNavigationBarColorScheme
+        LocalCardColorsPalette provides cardColorScheme,
+        LocalNavigationBarColorsPalette provides bottomNavigationBarColorScheme
     ) {
         MaterialTheme(
             colorScheme = colorScheme,
@@ -132,4 +153,5 @@ fun IMAAppTheme(
             content = content
         )
     }
+
 }
