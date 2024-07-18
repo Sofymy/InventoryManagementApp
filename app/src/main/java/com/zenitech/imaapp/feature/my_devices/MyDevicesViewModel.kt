@@ -5,7 +5,6 @@ import androidx.lifecycle.viewModelScope
 import com.zenitech.imaapp.domain.usecases.my_devices.MyDevicesUseCases
 import com.zenitech.imaapp.ui.model.DeviceResponseUi
 import com.zenitech.imaapp.ui.model.asDeviceResponseUi
-import com.zenitech.imaapp.ui.model.asDeviceTypeUi
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -46,7 +45,7 @@ class MyDevicesViewModel @Inject constructor(
     }
 
 
-    private val _sortingOption = MutableStateFlow(SortingOption.Name)
+    private val _sortingOption = MutableStateFlow(SortingOption.Type)
     val sortingOption: StateFlow<SortingOption> = _sortingOption.asStateFlow()
 
 
@@ -59,7 +58,7 @@ class MyDevicesViewModel @Inject constructor(
         _state.update { currentState ->
             if (currentState is MyDevicesState.Success) {
                 val sortedList = when (_sortingOption.value) {
-                    SortingOption.Name -> currentState.myDeviceList.sortedBy { it.inventoryNumber }
+                    SortingOption.Manufacturer -> currentState.myDeviceList.sortedBy { it.manufacturer }
                     SortingOption.Type -> currentState.myDeviceList.sortedBy { it.assetName.label }
                 }
                 currentState.copy(myDeviceList = sortedList)
@@ -69,4 +68,3 @@ class MyDevicesViewModel @Inject constructor(
         }
     }
 }
-

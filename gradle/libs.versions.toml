@@ -5,6 +5,7 @@ artifactid = "version"
 converterGson = "2.9.0"
 firebaseAnalytics = "22.0.2"
 firebaseBom = "33.1.1"
+hazeJetpackCompose = "0.4.1"
 hiltNavigationCompose = "1.2.0"
 hiltVersion = "2.51.1"
 kotlin = "2.0.0"
@@ -43,6 +44,7 @@ firebase-analytics-ktx = { module = "com.google.firebase:firebase-analytics-ktx"
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
 firebase-crashlytics-ktx = { module = "com.google.firebase:firebase-crashlytics-ktx" }
 google-firebase-analytics = { module = "com.google.firebase:firebase-analytics", version.ref = "firebaseAnalytics" }
+haze-jetpack-compose = { module = "dev.chrisbanes.haze:haze-jetpack-compose", version.ref = "hazeJetpackCompose" }
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hiltVersion" }
 hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hiltVersion" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }

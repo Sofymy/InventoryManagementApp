@@ -14,7 +14,7 @@ fun QRReaderScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(20.dp)
+            .padding(15.dp)
     ) {
         QRReaderContent()
     }

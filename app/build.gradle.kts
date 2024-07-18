@@ -103,6 +103,9 @@ dependencies {
 
     implementation(libs.accompanist.systemuicontroller)
 
+    implementation(libs.haze.jetpack.compose)
+
+
 
 
 

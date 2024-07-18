@@ -8,6 +8,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.navigation
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.zenitech.imaapp.feature.admin.AdminScreen
 import com.zenitech.imaapp.feature.devicelist.DeviceListScreen
@@ -15,6 +16,11 @@ import com.zenitech.imaapp.feature.my_devices.MyDevicesScreen
 import com.zenitech.imaapp.feature.qr_reader.QRReaderScreen
 import com.zenitech.imaapp.feature.request.RequestScreen
 import com.zenitech.imaapp.feature.sign_in.SignInScreen
+import kotlinx.serialization.Serializable
+
+
+// Route for nested graph
+@Serializable object Main
 
 @ExperimentalMaterial3Api
 @Composable
@@ -28,36 +34,42 @@ fun NavGraph(
 
     setupScreenTracking(navController, firebaseAnalytics)
 
-    NavHost(navController, startDestination = Screen.MyDevices) {
+    NavHost(navController, startDestination = Screen.SignIn) {
+
 
         composable<Screen.SignIn> {
-            onTopNavigationBarTitleChange("Sign In")
-            SignInScreen()
+            SignInScreen(
+                onNavigateToMyDevices = {
+                    navController.navigate(Main)
+                }
+            )
         }
 
-        composable<Screen.DeviceList> {
-            onTopNavigationBarTitleChange("Device List")
-            DeviceListScreen()
-        }
+        navigation<Main>(startDestination = Screen.MyDevices) {
+            composable<Screen.DeviceList> {
+                onTopNavigationBarTitleChange("Device List")
+                DeviceListScreen()
+            }
 
-        composable<Screen.QRReader> {
-            onTopNavigationBarTitleChange("QR Reader")
-            QRReaderScreen()
-        }
+            composable<Screen.QRReader> {
+                onTopNavigationBarTitleChange("QR Reader")
+                QRReaderScreen()
+            }
 
-        composable<Screen.MyDevices> {
-            onTopNavigationBarTitleChange("My Devices")
-            MyDevicesScreen()
-        }
+            composable<Screen.MyDevices> {
+                onTopNavigationBarTitleChange("My Devices")
+                MyDevicesScreen()
+            }
 
-        composable<Screen.Admin> {
-            onTopNavigationBarTitleChange("Admin")
-            AdminScreen()
-        }
+            composable<Screen.Admin> {
+                onTopNavigationBarTitleChange("Admin")
+                AdminScreen()
+            }
 
-        composable<Screen.Request> {
-            onTopNavigationBarTitleChange("Request Test Device")
-            RequestScreen()
+            composable<Screen.Request> {
+                onTopNavigationBarTitleChange("Request Test Device")
+                RequestScreen()
+            }
         }
 
     }
