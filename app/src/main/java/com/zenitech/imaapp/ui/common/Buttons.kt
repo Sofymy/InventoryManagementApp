@@ -28,6 +28,7 @@ import com.zenitech.imaapp.ui.theme.EerieBlack
 import com.zenitech.imaapp.ui.theme.EerieBlack40Black
 import com.zenitech.imaapp.ui.theme.EerieBlack40BlackTransparent
 import com.zenitech.imaapp.ui.theme.EerieBlack40White
+import com.zenitech.imaapp.ui.theme.LocalButtonColorsPalette
 import com.zenitech.imaapp.ui.theme.TeaGreen
 import dev.chrisbanes.haze.HazeState
 import dev.chrisbanes.haze.hazeChild
@@ -48,8 +49,8 @@ fun PrimaryButton(
             )
             .fillMaxWidth()
             .pulsate()
-            .border(1.dp, EerieBlack40White, RoundedCornerShape(15.dp))
-            .background(EerieBlack40BlackTransparent, RoundedCornerShape(15.dp))
+            .border(1.dp, LocalButtonColorsPalette.current.borderColor, RoundedCornerShape(15.dp))
+            .background(LocalButtonColorsPalette.current.containerColor, RoundedCornerShape(15.dp))
             .padding(15.dp)
         ,
         horizontalArrangement = Arrangement.Center,

@@ -8,7 +8,9 @@ import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.icons.Icons
@@ -22,6 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.paint
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -35,7 +38,6 @@ import kotlinx.coroutines.launch
 fun SignInScreen(
     onNavigateToMyDevices: () -> Unit
 ) {
-
     AnimatedContent()
     SignInContent(onNavigateToMyDevices)
 }
@@ -103,12 +105,31 @@ fun AnimatedContent(){
         scrollState.animateScrollTo(scrollState.value + 1, spring(stiffness = Spring.StiffnessHigh))
     }
 
+    ThemedContentWrapper(
+        rotationTerminal = rotationTerminal.value,
+        rotationLoupe = rotationLoupe.value,
+        rotationText = rotationText.value,
+        scrollState = scrollState
+    )
+}
+
+@Composable
+fun ThemedContent(
+    scrollState: ScrollState,
+    backgroundPainter: Painter,
+    terminalIconPainter: Painter,
+    findPersonIconPainter: Painter,
+    textIconPainter: Painter,
+    rotationTerminal: Float,
+    rotationLoupe: Float,
+    rotationText: Float
+) {
     Box(
         modifier = Modifier
             .fillMaxSize()
             .horizontalScroll(scrollState)
             .paint(
-                painter = painterResource(id = R.drawable.cover_sky),
+                painter = backgroundPainter,
                 alignment = Alignment.TopStart,
                 contentScale = ContentScale.FillHeight,
             )
@@ -116,40 +137,73 @@ fun AnimatedContent(){
 
     Box(modifier = Modifier.fillMaxSize()) {
         Image(
-            painter = painterResource(R.drawable.ic_cover_terminal),
+            painter = terminalIconPainter,
             contentDescription = null,
             modifier = Modifier
                 .padding(20.dp, end = 60.dp)
                 .align(Alignment.TopEnd)
                 .size(200.dp)
                 .graphicsLayer {
-                    rotationZ = rotationTerminal.value
+                    rotationZ = rotationTerminal
                 }
         )
         Image(
-            painter = painterResource(R.drawable.ic_cover_find_person),
+            painter = findPersonIconPainter,
             contentDescription = null,
             modifier = Modifier
                 .padding(bottom = 160.dp)
                 .align(Alignment.CenterStart)
                 .size(150.dp)
                 .graphicsLayer {
-                    rotationZ = rotationLoupe.value
+                    rotationZ = rotationLoupe
                 }
         )
         Image(
-            painter = painterResource(R.drawable.ic_cover_text),
+            painter = textIconPainter,
             contentDescription = null,
             modifier = Modifier
-                .padding(bottom = 200.dp, end = 30.dp)
+                .padding(bottom = 240.dp, end = 30.dp)
                 .align(Alignment.BottomEnd)
                 .size(180.dp)
                 .graphicsLayer {
-                    rotationZ = rotationText.value
+                    rotationZ = rotationText
                 }
         )
     }
 }
+
+@Composable
+fun ThemedContentWrapper(
+    scrollState: ScrollState,
+    rotationTerminal: Float,
+    rotationLoupe: Float,
+    rotationText: Float
+) {
+    if (isSystemInDarkTheme()) {
+        ThemedContent(
+            backgroundPainter = painterResource(id = R.drawable.cover_sky),
+            terminalIconPainter = painterResource(id = R.drawable.ic_terminal_dark),
+            findPersonIconPainter = painterResource(id = R.drawable.ic_loupe_dark),
+            textIconPainter = painterResource(id = R.drawable.ic_text_dark),
+            rotationTerminal = rotationTerminal,
+            rotationLoupe = rotationLoupe,
+            rotationText = rotationText,
+            scrollState = scrollState
+        )
+    } else {
+        ThemedContent(
+            backgroundPainter = painterResource(id = R.drawable.cover_sky_light),
+            terminalIconPainter = painterResource(id = R.drawable.ic_terminal_light),
+            findPersonIconPainter = painterResource(id = R.drawable.ic_loupe_light),
+            textIconPainter = painterResource(id = R.drawable.ic_text_light),
+            rotationTerminal = rotationTerminal,
+            rotationLoupe = rotationLoupe,
+            rotationText = rotationText,
+            scrollState = scrollState
+        )
+    }
+}
+
 
 @Composable
 fun SignInContent(onNavigateToMyDevices: () -> Unit) {
@@ -186,7 +240,7 @@ fun SignInButton(onNavigateToMyDevices: () -> Unit) {
 fun ZenitechLogo() {
     Image(
         modifier = Modifier.padding(20.dp, 10.dp),
-        painter = painterResource(id = R.drawable.ic_zenitech_logo_white),
+        painter = painterResource(if(isSystemInDarkTheme())R.drawable.ic_zenitech_logo_white else R.drawable.ic_zenitech_logo_light),
         contentScale = ContentScale.Fit,
         contentDescription = null
     )
