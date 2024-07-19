@@ -1,5 +1,6 @@
 package com.zenitech.imaapp.feature.my_devices
 
+import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.Transition
@@ -67,6 +68,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.zenitech.imaapp.ui.common.CircularLoadingIndicator
 import com.zenitech.imaapp.ui.common.pulsate
 import com.zenitech.imaapp.ui.common.shimmerBrush
 import com.zenitech.imaapp.ui.common.simpleVerticalScrollbar
@@ -110,7 +112,12 @@ fun MyDevicesContent(
             Text((state as MyDevicesState.Error).error.message.toString())
         }
         is MyDevicesState.Loading -> {
-            // Show loading indicator
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.Center
+            ) {
+                CircularLoadingIndicator()
+            }
         }
         is MyDevicesState.Success -> {
             Row(
@@ -239,34 +246,15 @@ fun MyDevicesShimmerItem() {
     }
 }
 
-
-enum class ComponentState { Pressed, Released }
-
 @Composable
 fun MyDevicesDeviceItem(
     deviceResponseUi: DeviceResponseUi
 ) {
 
-    var toState by remember { mutableStateOf(ComponentState.Released) }
-    val transition: Transition<ComponentState> = updateTransition(targetState = toState, label = "")
-
-    val scaleX: Float by transition.animateFloat(
-        transitionSpec = { spring(stiffness = Spring.StiffnessMedium) }, label = ""
-    ) { state ->
-        if (state == ComponentState.Pressed) 0.95f else 1f
-    }
-    val scaleY: Float by transition.animateFloat(
-        transitionSpec = { spring(stiffness = Spring.StiffnessMedium) }, label = ""
-    ) { state ->
-        if (state == ComponentState.Pressed) 0.95f else 1f
-    }
-
     Card(
         shape = RoundedCornerShape(15.dp),
         modifier = Modifier
-            .pulsate(scaleX, scaleY, toState) {
-                toState = it
-            }
+            .pulsate()
             .padding(bottom = 15.dp)
             .border(1.dp, LocalCardColorsPalette.current.borderColor, RoundedCornerShape(15.dp))
             .fillMaxWidth()
@@ -297,9 +285,9 @@ fun MyDevicesDeviceItem(
                 Icon(imageVector = deviceResponseUi.assetName.icon, contentDescription = null)
                 Spacer(modifier = Modifier.width(20.dp))
                 Column {
-                    Text(deviceResponseUi.inventoryNumber)
+                    Text(deviceResponseUi.assetName.label)
                     Spacer(modifier = Modifier.height(5.dp))
-                    Text(deviceResponseUi.assetName.label, color = LocalCardColorsPalette.current.secondaryContentColor)
+                    Text(deviceResponseUi.manufacturer, color = LocalCardColorsPalette.current.secondaryContentColor)
                 }
             }
             Icon(
@@ -314,7 +302,7 @@ fun MyDevicesDeviceItem(
 @Composable
 fun SortingComponent(sortingOptions: Array<SortingOption>, onSortSelected: (SortingOption) -> Unit) {
     var expanded by remember { mutableStateOf(false) }
-    var selectedOption by remember { mutableStateOf<SortingOption>(SortingOption.Name) }
+    var selectedOption by remember { mutableStateOf(SortingOption.Type) }
 
     Row(
         modifier = Modifier
@@ -350,7 +338,7 @@ fun SortingDropDown(
     ExposedDropdownMenuBox(expanded = expanded, onExpandedChange = { onExpandedChange() }) {
         Row(
             modifier = Modifier
-                .width(110.dp)
+                .width(150.dp)
                 .menuAnchor(),
             horizontalArrangement = Arrangement.End
         ) {
@@ -408,5 +396,5 @@ fun ScrollToTopButton(onClick: () -> Unit) {
 }
 
 enum class SortingOption {
-    Name, Type
+    Type, Manufacturer
 }

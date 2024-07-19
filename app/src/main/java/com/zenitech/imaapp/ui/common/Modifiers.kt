@@ -1,12 +1,20 @@
 package com.zenitech.imaapp.ui.common
 
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.Transition
+import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.core.updateTransition
 import androidx.compose.foundation.gestures.awaitFirstDown
 import androidx.compose.foundation.gestures.waitForUpOrCancellation
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.geometry.CornerRadius
@@ -17,29 +25,40 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.zenitech.imaapp.feature.my_devices.ComponentState
 import com.zenitech.imaapp.ui.theme.LocalCardColorsPalette
 
+
+enum class ComponentState { Pressed, Released }
+
 @Composable
-fun Modifier.pulsate(
-    scaleX: Float,
-    scaleY: Float,
-    toState: ComponentState,
-    onNewState: (ComponentState) -> Unit
-): Modifier {
+fun Modifier.pulsate(): Modifier {
+    var toState by remember { mutableStateOf(ComponentState.Released) }
+    val transition: Transition<ComponentState> = updateTransition(targetState = toState, label = "")
+
+    val scaleX: Float by transition.animateFloat(
+        transitionSpec = { spring(stiffness = Spring.StiffnessMedium) }, label = ""
+    ) { state ->
+        if (state == ComponentState.Pressed) 0.95f else 1f
+    }
+    val scaleY: Float by transition.animateFloat(
+        transitionSpec = { spring(stiffness = Spring.StiffnessMedium) }, label = ""
+    ) { state ->
+        if (state == ComponentState.Pressed) 0.95f else 1f
+    }
+
     return this then Modifier.graphicsLayer{
         this.scaleX = scaleX
         this.scaleY = scaleY
     }
         .pointerInput(toState) {
             awaitPointerEventScope {
-                onNewState(if (toState == ComponentState.Pressed) {
+                if (toState == ComponentState.Pressed) {
                     waitForUpOrCancellation()
-                    ComponentState.Released
+                    toState = ComponentState.Released
                 } else {
                     awaitFirstDown(false)
-                    ComponentState.Pressed
-                })
+                    toState = ComponentState.Pressed
+                }
             }
         }
 }
@@ -78,5 +97,14 @@ fun Modifier.simpleVerticalScrollbar(
                 alpha = alpha
             )
         }
+    }
+}
+
+@Composable
+fun Modifier.conditional(condition : Boolean, modifier : @Composable Modifier.() -> Modifier) : Modifier {
+    return if (condition) {
+        then(modifier(Modifier))
+    } else {
+        this
     }
 }

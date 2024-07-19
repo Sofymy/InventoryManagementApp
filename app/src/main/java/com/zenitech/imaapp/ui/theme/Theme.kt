@@ -55,11 +55,17 @@ data class CardColorScheme(
     val secondaryContentColor: Color = Color.Unspecified
 )
 
+@Immutable
+data class ButtonColorScheme(
+    val containerColor: Color = Color.Unspecified,
+    val borderColor: Color = Color.Unspecified,
+)
+
 val LocalNavigationBarColorsPalette = staticCompositionLocalOf { BottomNavigationBarColorScheme() }
 
-@SuppressLint("CompositionLocalNaming")
 val LocalCardColorsPalette = staticCompositionLocalOf { CardColorScheme() }
 
+val LocalButtonColorsPalette = staticCompositionLocalOf { ButtonColorScheme() }
 
 val LightNavigationBarColorScheme = BottomNavigationBarColorScheme(
     topContainerBarColor = Grey,
@@ -97,6 +103,16 @@ val LightCardColorScheme = CardColorScheme(
     borderColor = Color.Black.copy(0.1f),
     contentColor = Color.Black,
     secondaryContentColor = Color.Black.copy(0.2f),
+)
+
+val DarkButtonColorScheme = ButtonColorScheme(
+    containerColor = EerieBlack40BlackTransparent,
+    borderColor = EerieBlack40White,
+)
+
+val LightButtonColorScheme = ButtonColorScheme(
+    containerColor = WhiteTransparent,
+    borderColor = Color.Black.copy(0.1f),
 )
 
 
@@ -142,9 +158,14 @@ fun IMAAppTheme(
         if (darkTheme) DarkNavigationBarColorScheme
         else LightNavigationBarColorScheme
 
+    val buttonColorScheme =
+        if (darkTheme) DarkButtonColorScheme
+        else LightButtonColorScheme
+
 
     CompositionLocalProvider(
         LocalCardColorsPalette provides cardColorScheme,
+        LocalButtonColorsPalette provides buttonColorScheme,
         LocalNavigationBarColorsPalette provides bottomNavigationBarColorScheme
     ) {
         MaterialTheme(

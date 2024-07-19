@@ -18,7 +18,10 @@ class MyDevicesRepositoryImpl : MyDevicesRepository {
         return flow {
             val mockedDevices = mutableListOf<DeviceResponse>()
             for (deviceType in DeviceTypeUi.entries) {
-                mockedDevices.add(DeviceResponse(getRandomString(8), deviceType.asDeviceType()))
+                mockedDevices.add(DeviceResponse(getRandomString(8),
+                    deviceType.asDeviceType(),
+                    getRandomManufacturer()
+                ))
             }
             val orderedMockedDevices = mockedDevices.sortedBy { it.inventoryNumber }
             emit(orderedMockedDevices)
@@ -31,4 +34,9 @@ fun getRandomString(length: Int) : String {
     return (1..length)
         .map { allowedChars.random() }
         .joinToString("")
+}
+
+fun getRandomManufacturer() : String {
+    val manufacturers = listOf("Apple", "LG", "Samsung")
+    return manufacturers.random()
 }
