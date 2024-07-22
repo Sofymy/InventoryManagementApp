@@ -1,6 +1,5 @@
 package com.zenitech.imaapp.ui.theme
 
-import android.annotation.SuppressLint
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
@@ -59,6 +58,9 @@ data class CardColorScheme(
 data class ButtonColorScheme(
     val containerColor: Color = Color.Unspecified,
     val borderColor: Color = Color.Unspecified,
+    val roundedButtonColor: Color = Color.Unspecified,
+    val roundedButtonBorderColor: Color = Color.Unspecified,
+    val roundedButtonColorDisabledContentColor: Color = Color.Unspecified
 )
 
 val LocalNavigationBarColorsPalette = staticCompositionLocalOf { BottomNavigationBarColorScheme() }
@@ -108,11 +110,17 @@ val LightCardColorScheme = CardColorScheme(
 val DarkButtonColorScheme = ButtonColorScheme(
     containerColor = EerieBlack40BlackTransparent,
     borderColor = EerieBlack40White,
+    roundedButtonColor = EerieBlack,
+    roundedButtonBorderColor = EerieBlack40White,
+    roundedButtonColorDisabledContentColor = Color.White.copy(0.3f)
 )
 
 val LightButtonColorScheme = ButtonColorScheme(
     containerColor = WhiteTransparent,
     borderColor = Color.Black.copy(0.1f),
+    roundedButtonColor = Color.White,
+    roundedButtonBorderColor = Color.Black.copy(0.1f),
+    roundedButtonColorDisabledContentColor = Color.Black.copy(0.2f),
 )
 
 

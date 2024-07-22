@@ -1,12 +1,6 @@
 package com.zenitech.imaapp.feature.my_devices
 
-import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.Spring
-import androidx.compose.animation.core.Transition
-import androidx.compose.animation.core.animateFloat
-import androidx.compose.animation.core.spring
-import androidx.compose.animation.core.updateTransition
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
@@ -18,26 +12,20 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Sort
 import androidx.compose.material.icons.automirrored.twotone.KeyboardArrowRight
-import androidx.compose.material.icons.twotone.KeyboardArrowUp
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DropdownMenuItem
@@ -60,8 +48,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
@@ -69,6 +55,7 @@ import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.zenitech.imaapp.ui.common.CircularLoadingIndicator
+import com.zenitech.imaapp.ui.common.ScrollToTopButton
 import com.zenitech.imaapp.ui.common.pulsate
 import com.zenitech.imaapp.ui.common.shimmerBrush
 import com.zenitech.imaapp.ui.common.simpleVerticalScrollbar
@@ -78,19 +65,25 @@ import com.zenitech.imaapp.ui.theme.RaspberryRed30White
 import kotlinx.coroutines.launch
 
 @Composable
-fun MyDevicesScreen() {
+fun MyDevicesScreen(
+    onNavigateToDeviceDetails: (String) -> Unit
+) {
     Column(
         modifier = Modifier
+            .background(MaterialTheme.colorScheme.background)
             .fillMaxSize()
             .padding(horizontal = 0.dp)
     ) {
-        MyDevicesContent()
+        MyDevicesContent(
+            onNavigateToDeviceDetails = onNavigateToDeviceDetails
+        )
     }
 }
 
 @Composable
 fun MyDevicesContent(
-    viewModel: MyDevicesViewModel = hiltViewModel()
+    viewModel: MyDevicesViewModel = hiltViewModel(),
+    onNavigateToDeviceDetails: (String) -> Unit
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val lifecycleOwner = LocalLifecycleOwner.current
@@ -127,11 +120,14 @@ fun MyDevicesContent(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 MyDevicesCounter((state as MyDevicesState.Success).myDeviceList.size)
-                SortingComponent(SortingOption.entries.toTypedArray()) { sortingType ->
+                MyDevicesSorting(SortingOption.entries.toTypedArray()) { sortingType ->
                     viewModel.setSortingOption(sortingType)
                 }
             }
-            MyDevicesList(deviceResponseUiList = (state as MyDevicesState.Success).myDeviceList)
+            MyDevicesList(
+                deviceResponseUiList = (state as MyDevicesState.Success).myDeviceList,
+                onNavigateToDeviceDetails = onNavigateToDeviceDetails
+            )
         }
     }
 }
@@ -150,6 +146,7 @@ fun MyDevicesCounter(
 @Composable
 fun MyDevicesList(
     deviceResponseUiList: List<DeviceResponseUi>,
+    onNavigateToDeviceDetails: (String) -> Unit,
 ) {
     val listState = rememberLazyListState()
     val showButtonAndDivider by remember {
@@ -187,6 +184,8 @@ fun MyDevicesList(
             ) { device ->
                 MyDevicesDeviceItem(
                     deviceResponseUi = device,
+                    modifier = Modifier,
+                    onNavigateToDeviceDetails = onNavigateToDeviceDetails
                 )
             }
         }
@@ -248,22 +247,23 @@ fun MyDevicesShimmerItem() {
 
 @Composable
 fun MyDevicesDeviceItem(
-    deviceResponseUi: DeviceResponseUi
+    deviceResponseUi: DeviceResponseUi,
+    modifier: Modifier,
+    onNavigateToDeviceDetails: (String) -> Unit
 ) {
 
     Card(
         shape = RoundedCornerShape(15.dp),
-        modifier = Modifier
+        modifier = modifier
             .pulsate()
             .padding(bottom = 15.dp)
             .border(1.dp, LocalCardColorsPalette.current.borderColor, RoundedCornerShape(15.dp))
             .fillMaxWidth()
-            .clip(RoundedCornerShape(15.dp))
             .clickable(
                 interactionSource = remember { MutableInteractionSource() },
                 indication = null,
                 onClick = {
-
+                    onNavigateToDeviceDetails(deviceResponseUi.inventoryNumber)
                 }
             )
         ,
@@ -293,14 +293,17 @@ fun MyDevicesDeviceItem(
             Icon(
                 imageVector = Icons.AutoMirrored.TwoTone.KeyboardArrowRight,
                 contentDescription = null,
-                tint = Color.Transparent
+                tint = LocalCardColorsPalette.current.arrowColor
             )
         }
     }
 }
 
 @Composable
-fun SortingComponent(sortingOptions: Array<SortingOption>, onSortSelected: (SortingOption) -> Unit) {
+fun MyDevicesSorting(
+    sortingOptions: Array<SortingOption>,
+    onSortSelected: (SortingOption) -> Unit
+) {
     var expanded by remember { mutableStateOf(false) }
     var selectedOption by remember { mutableStateOf(SortingOption.Type) }
 
@@ -312,7 +315,7 @@ fun SortingComponent(sortingOptions: Array<SortingOption>, onSortSelected: (Sort
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.End
     ) {
-        SortingDropDown(
+        MyDevicesSortingDropDown(
             selectedOption = selectedOption.name,
             expanded = expanded,
             options = sortingOptions,
@@ -328,7 +331,7 @@ fun SortingComponent(sortingOptions: Array<SortingOption>, onSortSelected: (Sort
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SortingDropDown(
+fun MyDevicesSortingDropDown(
     selectedOption: String,
     expanded: Boolean,
     options: Array<SortingOption>,
@@ -366,34 +369,6 @@ fun SortingDropDown(
     }
 }
 
-@Composable
-fun ScrollToTopButton(onClick: () -> Unit) {
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(bottom = 20.dp, end = 30.dp)
-        ,
-        contentAlignment = Alignment.BottomEnd
-    ) {
-        Button(onClick = { onClick() },
-            contentPadding = PaddingValues(13.dp),
-            shape = CircleShape,
-            modifier = Modifier
-                .shadow(10.dp, shape = CircleShape)
-                .size(65.dp),
-            colors = ButtonDefaults.buttonColors(
-                containerColor = MaterialTheme.colorScheme.primary,
-                contentColor = Color.White
-            )
-        ) {
-            Icon(
-                imageVector = Icons.TwoTone.KeyboardArrowUp,
-                contentDescription = null,
-                modifier = Modifier.fillMaxSize(),
-            )
-        }
-    }
-}
 
 enum class SortingOption {
     Type, Manufacturer

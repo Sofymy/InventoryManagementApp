@@ -9,12 +9,12 @@ import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.ScrollState
+import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.material.icons.Icons
-import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -22,7 +22,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.paint
-import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
@@ -38,35 +37,14 @@ import kotlinx.coroutines.launch
 fun SignInScreen(
     onNavigateToMyDevices: () -> Unit
 ) {
-    AnimatedContent()
+    SignInAnimatedBackground()
     SignInContent(onNavigateToMyDevices)
 }
 
 @Composable
-fun ScrollContent(){
-    val scrollState = rememberScrollState()
-
-    LaunchedEffect(scrollState.isScrollInProgress) {
-        scrollState.animateScrollTo(scrollState.value + 1, spring(stiffness = Spring.StiffnessHigh))
-    }
-
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .horizontalScroll(scrollState)
-            .paint(
-                painter = painterResource(id = R.drawable.cover),
-                alignment = Alignment.TopStart,
-                contentScale = ContentScale.FillHeight,
-            )
-    )
-}
-
-
-@Composable
-fun AnimatedContent(){
+fun SignInAnimatedBackground(){
     val rotationTerminal = remember { Animatable(-30f) }
-    val rotationLoupe = remember { Animatable(-10f) }
+    val rotationLoupe = remember { Animatable(10f) }
     val rotationText = remember { Animatable(-20f) }
 
     LaunchedEffect(Unit) {
@@ -81,7 +59,7 @@ fun AnimatedContent(){
         }
         launch {
             rotationLoupe.animateTo(
-                targetValue = 10f,
+                targetValue = -10f,
                 animationSpec = infiniteRepeatable(
                     animation = tween(durationMillis = 4000, easing = LinearEasing),
                     repeatMode = RepeatMode.Reverse
@@ -92,7 +70,7 @@ fun AnimatedContent(){
             rotationText.animateTo(
                 targetValue = 20f,
                 animationSpec = infiniteRepeatable(
-                    animation = tween(durationMillis = 10000, easing = LinearEasing),
+                    animation = tween(durationMillis = 8000, easing = LinearEasing),
                     repeatMode = RepeatMode.Reverse
                 )
             )
@@ -105,7 +83,7 @@ fun AnimatedContent(){
         scrollState.animateScrollTo(scrollState.value + 1, spring(stiffness = Spring.StiffnessHigh))
     }
 
-    ThemedContentWrapper(
+    SignInAnimatedThemedBackground(
         rotationTerminal = rotationTerminal.value,
         rotationLoupe = rotationLoupe.value,
         rotationText = rotationText.value,
@@ -114,11 +92,43 @@ fun AnimatedContent(){
 }
 
 @Composable
-fun ThemedContent(
+fun SignInAnimatedThemedBackground(
+    scrollState: ScrollState,
+    rotationTerminal: Float,
+    rotationLoupe: Float,
+    rotationText: Float
+) {
+    if (isSystemInDarkTheme()) {
+        SignInAnimatedThemedBackgroundContent(
+            backgroundPainter = painterResource(id = R.drawable.cover_sky),
+            terminalIconPainter = painterResource(id = R.drawable.ic_terminal_dark),
+            loupeIconPainter = painterResource(id = R.drawable.ic_loupe_dark),
+            textIconPainter = painterResource(id = R.drawable.ic_text_dark),
+            rotationTerminal = rotationTerminal,
+            rotationLoupe = rotationLoupe,
+            rotationText = rotationText,
+            scrollState = scrollState
+        )
+    } else {
+        SignInAnimatedThemedBackgroundContent(
+            backgroundPainter = painterResource(id = R.drawable.cover_sky_light),
+            terminalIconPainter = painterResource(id = R.drawable.ic_terminal_light),
+            loupeIconPainter = painterResource(id = R.drawable.ic_loupe_light),
+            textIconPainter = painterResource(id = R.drawable.ic_text_light),
+            rotationTerminal = rotationTerminal,
+            rotationLoupe = rotationLoupe,
+            rotationText = rotationText,
+            scrollState = scrollState
+        )
+    }
+}
+
+@Composable
+fun SignInAnimatedThemedBackgroundContent(
     scrollState: ScrollState,
     backgroundPainter: Painter,
     terminalIconPainter: Painter,
-    findPersonIconPainter: Painter,
+    loupeIconPainter: Painter,
     textIconPainter: Painter,
     rotationTerminal: Float,
     rotationLoupe: Float,
@@ -126,6 +136,7 @@ fun ThemedContent(
 ) {
     Box(
         modifier = Modifier
+            .background(MaterialTheme.colorScheme.background)
             .fillMaxSize()
             .horizontalScroll(scrollState)
             .paint(
@@ -135,72 +146,62 @@ fun ThemedContent(
             )
     )
 
-    Box(modifier = Modifier.fillMaxSize()) {
-        Image(
-            painter = terminalIconPainter,
-            contentDescription = null,
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .fillMaxHeight(0.77f)
+        ,
+    ) {
+        Row(
             modifier = Modifier
-                .padding(20.dp, end = 60.dp)
-                .align(Alignment.TopEnd)
-                .size(200.dp)
-                .graphicsLayer {
-                    rotationZ = rotationTerminal
-                }
-        )
-        Image(
-            painter = findPersonIconPainter,
-            contentDescription = null,
+                .weight(1f)
+                .fillMaxWidth()
+            ,
+            horizontalArrangement = Arrangement.End
+        ) {
+            Image(
+                painter = terminalIconPainter,
+                contentDescription = null,
+                modifier = Modifier
+                    .padding(20.dp, end = 40.dp, top = 10.dp)
+                    .graphicsLayer {
+                        rotationZ = rotationTerminal
+                    }
+            )
+        }
+        Row(
             modifier = Modifier
-                .padding(bottom = 160.dp)
-                .align(Alignment.CenterStart)
-                .size(150.dp)
-                .graphicsLayer {
-                    rotationZ = rotationLoupe
-                }
-        )
-        Image(
-            painter = textIconPainter,
-            contentDescription = null,
+                .weight(1f)
+                .fillMaxWidth(),
+            horizontalArrangement = Arrangement.Start
+        ) {
+            Image(
+                painter = loupeIconPainter,
+                contentDescription = null,
+                modifier = Modifier
+                    .padding(start = 15.dp)
+                    .graphicsLayer {
+                        rotationZ = rotationLoupe
+                    }
+            )
+        }
+        Row(
             modifier = Modifier
-                .padding(bottom = 240.dp, end = 30.dp)
-                .align(Alignment.BottomEnd)
-                .size(180.dp)
-                .graphicsLayer {
-                    rotationZ = rotationText
-                }
-        )
-    }
-}
-
-@Composable
-fun ThemedContentWrapper(
-    scrollState: ScrollState,
-    rotationTerminal: Float,
-    rotationLoupe: Float,
-    rotationText: Float
-) {
-    if (isSystemInDarkTheme()) {
-        ThemedContent(
-            backgroundPainter = painterResource(id = R.drawable.cover_sky),
-            terminalIconPainter = painterResource(id = R.drawable.ic_terminal_dark),
-            findPersonIconPainter = painterResource(id = R.drawable.ic_loupe_dark),
-            textIconPainter = painterResource(id = R.drawable.ic_text_dark),
-            rotationTerminal = rotationTerminal,
-            rotationLoupe = rotationLoupe,
-            rotationText = rotationText,
-            scrollState = scrollState
-        )
-    } else {
-        ThemedContent(
-            backgroundPainter = painterResource(id = R.drawable.cover_sky_light),
-            terminalIconPainter = painterResource(id = R.drawable.ic_terminal_light),
-            findPersonIconPainter = painterResource(id = R.drawable.ic_loupe_light),
-            textIconPainter = painterResource(id = R.drawable.ic_text_light),
-            rotationTerminal = rotationTerminal,
-            rotationLoupe = rotationLoupe,
-            rotationText = rotationText,
-            scrollState = scrollState
-        )
+                .weight(1f)
+                .fillMaxWidth(),
+            horizontalArrangement = Arrangement.End
+        ) {
+            Image(
+                painter = textIconPainter,
+                contentScale = ContentScale.FillHeight,
+                contentDescription = null,
+                modifier = Modifier
+                    .padding(end = 30.dp)
+                    .graphicsLayer {
+                        rotationZ = rotationText
+                    }
+            )
+        }
     }
 }
 
@@ -220,6 +221,16 @@ fun SignInContent(onNavigateToMyDevices: () -> Unit) {
 }
 
 @Composable
+fun ZenitechLogo() {
+    Image(
+        modifier = Modifier.padding(20.dp, 10.dp),
+        painter = painterResource(if(isSystemInDarkTheme())R.drawable.ic_zenitech_logo_white else R.drawable.ic_zenitech_logo_light),
+        contentScale = ContentScale.Fit,
+        contentDescription = null
+    )
+}
+
+@Composable
 fun SignInButton(onNavigateToMyDevices: () -> Unit) {
     PrimaryButton(
         onClick = { onNavigateToMyDevices() },
@@ -236,12 +247,3 @@ fun SignInButton(onNavigateToMyDevices: () -> Unit) {
     )
 }
 
-@Composable
-fun ZenitechLogo() {
-    Image(
-        modifier = Modifier.padding(20.dp, 10.dp),
-        painter = painterResource(if(isSystemInDarkTheme())R.drawable.ic_zenitech_logo_white else R.drawable.ic_zenitech_logo_light),
-        contentScale = ContentScale.Fit,
-        contentDescription = null
-    )
-}

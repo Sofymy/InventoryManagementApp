@@ -9,8 +9,10 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
+import androidx.navigation.toRoute
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.zenitech.imaapp.feature.admin.AdminScreen
+import com.zenitech.imaapp.feature.device_details.DeviceDetailsScreen
 import com.zenitech.imaapp.feature.devicelist.DeviceListScreen
 import com.zenitech.imaapp.feature.my_devices.MyDevicesScreen
 import com.zenitech.imaapp.feature.qr_reader.QRReaderScreen
@@ -21,6 +23,7 @@ import kotlinx.serialization.Serializable
 
 // Route for nested graph
 @Serializable object Main
+
 
 @ExperimentalMaterial3Api
 @Composable
@@ -58,7 +61,15 @@ fun NavGraph(
 
             composable<Screen.MyDevices> {
                 onTopNavigationBarTitleChange("My Devices")
-                MyDevicesScreen()
+                MyDevicesScreen(onNavigateToDeviceDetails = { inventoryNumber ->
+                    navController.navigate(Screen.DeviceDetails(inventoryNumber))
+                })
+            }
+
+            composable<Screen.DeviceDetails> { backStackEntry ->
+                val device: Screen.DeviceDetails = backStackEntry.toRoute()
+                onTopNavigationBarTitleChange("Device Details")
+                DeviceDetailsScreen(device.inventoryNumber)
             }
 
             composable<Screen.Admin> {
