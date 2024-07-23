@@ -21,6 +21,9 @@ sealed class Screen(
     data object MyDevices: Screen(R.string.mydevices)
 
     @Serializable
+    data class DeviceDetails(val inventoryNumber: String) : Screen(R.string.devicedetails)
+
+    @Serializable
     data object DeviceList: Screen(R.string.devicelist)
 
     @Serializable

@@ -1,6 +1,9 @@
 package com.zenitech.imaapp.ui.common
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
@@ -9,6 +12,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Text
@@ -25,6 +29,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.zenitech.imaapp.ui.theme.LocalButtonColorsPalette
 import com.zenitech.imaapp.ui.theme.LocalNavigationBarColorsPalette
 import kotlinx.coroutines.delay
 
@@ -41,6 +46,8 @@ fun BottomNavigationBar(
     navController: NavController,
     bottomBarState: MutableState<Boolean>
 ) {
+
+
     AnimatedVisibility(
         visible = bottomBarState.value,
         enter = slideInVertically (
@@ -57,7 +64,6 @@ fun BottomNavigationBar(
                 )
                 BottomAppBar(
                     modifier = Modifier
-                        .clip(RoundedCornerShape(10.dp, 10.dp, 0.dp, 0.dp))
                         .shadow(0.dp)
                     ,
                     containerColor = LocalNavigationBarColorsPalette.current.bottomContainerBarColor,
@@ -65,9 +71,11 @@ fun BottomNavigationBar(
                 ) {
                     val navBackStackEntry by navController.currentBackStackEntryAsState()
                     val currentDestination = navBackStackEntry?.destination
+
                     items.forEach { item ->
 
                         NavigationBarItem(
+                            modifier = Modifier.pulsate(),
                             colors = NavigationBarItemDefaults.colors(
                                 selectedIconColor = LocalNavigationBarColorsPalette.current.selectedIconColor,
                                 selectedTextColor = LocalNavigationBarColorsPalette.current.selectedTextColor,
