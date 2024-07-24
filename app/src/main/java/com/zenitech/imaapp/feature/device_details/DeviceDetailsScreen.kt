@@ -49,7 +49,6 @@ import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -152,7 +151,7 @@ fun DeviceDetailsList(
     val visible = remember {
         mutableStateOf(false)
     }
-    val heightInDp = animateFloatAsState(
+    val hexagonHeight = animateFloatAsState(
         targetValue = if (visible.value) 1f else 0.6f,
         animationSpec = spring(stiffness = Spring.StiffnessVeryLow), label = ""
     )
@@ -178,7 +177,7 @@ fun DeviceDetailsList(
                 .padding(horizontal = 0.dp),
             state = listState
         ) {
-            item { DeviceDetailsTopSection(heightInDp.value, device, listState) }
+            item { DeviceDetailsTopSection(hexagonHeight.value, device, listState) }
             item { DeviceDetailsHeaderIcon(Icons.TwoTone.Warehouse) }
             items(device.getDeviceDetails()[0].details) { detail -> DeviceDetailsItem(modifier = Modifier, fieldName = detail.first, fieldValue = detail.second) }
             item { HorizontalDivider(thickness = 20.dp, color = MaterialTheme.colorScheme.background) }
@@ -194,29 +193,21 @@ fun DeviceDetailsList(
 
 @Composable
 fun DeviceDetailsTopSection(scale: Float, device: DeviceSearchRequestUi, listState: LazyListState) {
-    var offsetX by remember { mutableFloatStateOf(0f) }
-    var offsetY by remember { mutableFloatStateOf(0f) }
-    var state by remember { mutableStateOf(HexagonFace.Back) }
+    val state = remember { mutableStateOf(HexagonFace.Back) }
     val clickCounter = remember { mutableIntStateOf(0) }
 
     DeviceDetailsFlippingHexagonSection(
-        state,
-        scale,
-        listState,
-        device,
-        offsetX,
-        offsetY,
+        state = state.value,
+        scale = scale,
+        listState = listState,
+        device = device,
         onStateChange = { stateValue ->
-            state = when {
+            state.value = when {
                 (stateValue.angle == 180f && clickCounter.intValue.mod(3) == 0 && clickCounter.intValue != 0) -> HexagonFace.Front
                 else -> stateValue.next
             }
             clickCounter.intValue++
         },
-        onOffsetChange = { x, y ->
-            offsetX = x
-            offsetY = y
-        }
     )
 }
 
@@ -226,9 +217,6 @@ fun DeviceDetailsFlippingHexagonSection(
     scale: Float,
     listState: LazyListState,
     device: DeviceSearchRequestUi,
-    offsetX: Float,
-    offsetY: Float,
-    onOffsetChange: (Float, Float) -> Unit,
     onStateChange: (HexagonFace) -> Unit,
 ) {
     DeviceDetailsFlippingHexagon(
@@ -238,45 +226,117 @@ fun DeviceDetailsFlippingHexagonSection(
         },
         axis = RotationAxis.AxisY,
         back = {
-            HexagonBackContent(
+            DeviceDetailsHexagonBackContent(
                 scale,
                 listState,
                 device,
-                offsetX,
-                offsetY,
-                onOffsetChange
             )
         },
         front = {
-            HexagonFrontContent(
+            DeviceDetailsHexagonFrontContent(
                 scale,
                 listState,
-                offsetX,
-                offsetY,
-                onOffsetChange
             )
         }
     )
 }
 
+@SuppressLint("UnrememberedMutableInteractionSource")
 @Composable
-fun HexagonBackContent(
+fun DeviceDetailsFlippingHexagon(
+    hexagonFace: HexagonFace,
+    onClick: (HexagonFace) -> Unit,
+    modifier: Modifier = Modifier,
+    axis: RotationAxis = RotationAxis.AxisY,
+    back: @Composable () -> Unit = {},
+    front: @Composable () -> Unit = {},
+) {
+    val offsetX = remember { mutableFloatStateOf(0f) }
+    val offsetY = remember { mutableFloatStateOf(0f) }
+
+    val rotation = animateFloatAsState(
+        targetValue = hexagonFace.angle,
+        animationSpec = tween(
+            durationMillis = if(hexagonFace.angle == 140f) 300 else 1500,
+            easing = FastOutSlowInEasing,
+        ), label = "", finishedListener = {
+            if(hexagonFace.angle == 140f){
+                onClick(hexagonFace)
+            }
+        }
+    )
+
+    Column(
+        modifier = modifier
+            .clickable(
+                interactionSource = MutableInteractionSource(),
+                indication = null,
+                onClick = {
+                    onClick(hexagonFace)
+                }
+            )
+            .pointerInput(Unit) {
+                detectDragGestures { _, dragAmount ->
+                    val original = Offset(offsetX.floatValue, offsetY.floatValue)
+                    val summed = original + dragAmount
+                    val newValue = Offset(
+                        x = summed.x.coerceIn(-100f, 100.dp.toPx() / density),
+                        y = summed.y.coerceIn(-15f, 50.dp.toPx() / density)
+                    )
+                    offsetX.floatValue = newValue.x
+                    offsetY.floatValue = newValue.y
+                }
+            }
+            .graphicsLayer {
+                translationX = offsetX.floatValue
+                translationY = offsetY.floatValue
+            }
+            .graphicsLayer {
+                if (axis == RotationAxis.AxisX) {
+                    rotationX = rotation.value
+                } else {
+                    rotationY = rotation.value
+                }
+                cameraDistance = 12f * density
+            },
+    ) {
+        if (rotation.value <= 90f) {
+            Box(
+                Modifier.fillMaxSize()
+            ) {
+                front()
+            }
+        } else {
+            Box(
+                Modifier
+                    .fillMaxSize()
+                    .graphicsLayer {
+                        if (axis == RotationAxis.AxisX) {
+                            rotationX = 180f
+                        } else {
+                            rotationY = 180f
+                        }
+                    },
+            ) {
+                back()
+            }
+        }
+    }
+}
+
+@Composable
+fun DeviceDetailsHexagonBackContent(
     scale: Float,
     listState: LazyListState,
     device: DeviceSearchRequestUi,
-    offsetX: Float,
-    offsetY: Float,
-    onOffsetChange: (Float, Float) -> Unit
 ) {
-    HexagonContent(
-        scale,
-        listState,
-        offsetX,
-        offsetY,
-        onOffsetChange,
+    DeviceDetailsHexagonContent(
+        scale = scale,
+        listState = listState,
         hexagonBackground = {
             Image(
-                modifier = Modifier.size(272.dp),
+                modifier = Modifier.size(272.dp)
+                ,
                 painter = painterResource(R.drawable.shape_hexagon),
                 colorFilter = ColorFilter.tint(LocalCardColorsPalette.current.borderColor),
                 contentDescription = null,
@@ -289,25 +349,19 @@ fun HexagonBackContent(
                 colorFilter = ColorFilter.tint(LocalCardColorsPalette.current.containerColor),
                 contentDescription = null,
             )
-            DeviceIconContent(device)
+            DeviceDetailsIconContent(device)
         }
     )
 }
 
 @Composable
-fun HexagonFrontContent(
+fun DeviceDetailsHexagonFrontContent(
     scale: Float,
     listState: LazyListState,
-    offsetX: Float,
-    offsetY: Float,
-    onOffsetChange: (Float, Float) -> Unit
 ) {
-    HexagonContent(
-        scale,
-        listState,
-        offsetX,
-        offsetY,
-        onOffsetChange,
+    DeviceDetailsHexagonContent(
+        scale = scale,
+        listState = listState,
         hexagonBackground = {
             Image(
                 modifier = Modifier.size(272.dp),
@@ -328,34 +382,17 @@ fun HexagonFrontContent(
 }
 
 @Composable
-fun HexagonContent(
+fun DeviceDetailsHexagonContent(
     scale: Float,
     listState: LazyListState,
-    offsetX: Float,
-    offsetY: Float,
-    onOffsetChange: (Float, Float) -> Unit,
     hexagonBackground: @Composable () -> Unit,
     hexagonForeground: @Composable () -> Unit
 ) {
+
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
-            .pointerInput(Unit) {
-                detectDragGestures { _, dragAmount ->
-                    val original = Offset(offsetX, offsetY)
-                    val summed = original + dragAmount
-                    val newValue = Offset(
-                        x = summed.x.coerceIn(-300f, 100.dp.toPx()),
-                        y = summed.y.coerceIn(-20f, 100.dp.toPx())
-                    )
-                    onOffsetChange(newValue.x, newValue.y)
-                }
-            }
             .fillMaxWidth()
-            .graphicsLayer {
-                this.translationX = offsetX
-                this.translationY = offsetY
-            }
             .graphicsLayer {
                 this.scaleX = scale
                 this.scaleY = scale
@@ -371,8 +408,9 @@ fun HexagonContent(
     }
 }
 
+
 @Composable
-fun DeviceIconContent(device: DeviceSearchRequestUi) {
+fun DeviceDetailsIconContent(device: DeviceSearchRequestUi) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
@@ -479,68 +517,4 @@ enum class HexagonFace(val angle: Float) {
 enum class RotationAxis {
     AxisX,
     AxisY,
-}
-
-@SuppressLint("UnrememberedMutableInteractionSource")
-@Composable
-fun DeviceDetailsFlippingHexagon(
-    hexagonFace: HexagonFace,
-    onClick: (HexagonFace) -> Unit,
-    modifier: Modifier = Modifier,
-    axis: RotationAxis = RotationAxis.AxisY,
-    back: @Composable () -> Unit = {},
-    front: @Composable () -> Unit = {},
-) {
-    val rotation = animateFloatAsState(
-        targetValue = hexagonFace.angle,
-        animationSpec = tween(
-            durationMillis = if(hexagonFace.angle == 140f) 300 else 1500,
-            easing = FastOutSlowInEasing,
-        ), label = "", finishedListener = {
-            if(hexagonFace.angle == 140f){
-                onClick(hexagonFace)
-            }
-        }
-    )
-
-    Column(
-        modifier = modifier
-            .clickable(
-                interactionSource = MutableInteractionSource(),
-                indication = null,
-                onClick = {
-                    onClick(hexagonFace)
-                }
-            )
-            .graphicsLayer {
-                if (axis == RotationAxis.AxisX) {
-                    rotationX = rotation.value
-                } else {
-                    rotationY = rotation.value
-                }
-                cameraDistance = 12f * density
-            },
-    ) {
-        if (rotation.value <= 90f) {
-            Box(
-                Modifier.fillMaxSize()
-            ) {
-                front()
-            }
-        } else {
-            Box(
-                Modifier
-                    .fillMaxSize()
-                    .graphicsLayer {
-                        if (axis == RotationAxis.AxisX) {
-                            rotationX = 180f
-                        } else {
-                            rotationY = 180f
-                        }
-                    },
-            ) {
-                back()
-            }
-        }
-    }
 }
