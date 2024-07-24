@@ -1,5 +1,6 @@
 package com.zenitech.imaapp.ui.common
 
+import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.Spring
@@ -24,6 +25,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hierarchy
@@ -84,8 +86,8 @@ fun BottomNavigationBar(
                                 unselectedTextColor = LocalNavigationBarColorsPalette.current.unselectedTextColor,
                             ),
                             icon = { Icon(item.icon, contentDescription = null) },
-                            label = { Text(stringResource(item.resourceId)) },
-                            selected = currentDestination?.hierarchy?.any { it.route == item.screen::class.qualifiedName } == true,
+                            label = { Text(stringResource(item.resourceId), fontWeight = FontWeight.Bold) },
+                            selected = currentDestination?.hierarchy?.any { currentDestination.parent?.startDestinationRoute == item.screen::class.qualifiedName} == true,
                             onClick = {
                                 navController.navigate(item.screen) {
                                     popUpTo(navController.graph.findStartDestination().id) {

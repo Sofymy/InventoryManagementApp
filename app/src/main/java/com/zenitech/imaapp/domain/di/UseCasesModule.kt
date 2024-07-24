@@ -1,10 +1,13 @@
 package com.zenitech.imaapp.domain.di
 
 import com.zenitech.imaapp.data.repository.AdminRepository
+import com.zenitech.imaapp.data.repository.DeviceDetailsRepository
 import com.zenitech.imaapp.data.repository.MyDevicesRepository
 import com.zenitech.imaapp.data.repository.QRReaderRepository
 import com.zenitech.imaapp.data.repository.RequestRepository
 import com.zenitech.imaapp.domain.usecases.admin.AdminUseCases
+import com.zenitech.imaapp.domain.usecases.device_details.DeviceDetailsUseCases
+import com.zenitech.imaapp.domain.usecases.device_details.LoadDeviceDetailsUseCase
 import com.zenitech.imaapp.domain.usecases.my_devices.LoadMyDevicesUseCase
 import com.zenitech.imaapp.domain.usecases.my_devices.MyDevicesUseCases
 import com.zenitech.imaapp.domain.usecases.qr_reader.QRReaderUseCases
@@ -32,6 +35,18 @@ object UseCasesModule {
         repository: MyDevicesRepository
     ): LoadMyDevicesUseCase = LoadMyDevicesUseCase(repository)
 
+    @Provides
+    @Singleton
+    fun provideDeviceDetailsUseCase(
+        repository: DeviceDetailsRepository,
+        loadDeviceDetails: LoadDeviceDetailsUseCase
+    ): DeviceDetailsUseCases = DeviceDetailsUseCases(repository, loadDeviceDetails)
+
+    @Provides
+    @Singleton
+    fun provideLoadDeviceDetailsUseCase(
+        repository: DeviceDetailsRepository
+    ): LoadDeviceDetailsUseCase = LoadDeviceDetailsUseCase(repository)
 
     @Provides
     @Singleton

@@ -1,6 +1,8 @@
 package com.zenitech.imaapp.navigation
 
 import android.os.Bundle
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionLayout
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
@@ -21,10 +23,14 @@ import com.zenitech.imaapp.feature.sign_in.SignInScreen
 import kotlinx.serialization.Serializable
 
 
-// Route for nested graph
 @Serializable object Main
+@Serializable object MyDevices
+@Serializable object Request
+@Serializable object QRReader
+@Serializable object Admin
 
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 @ExperimentalMaterial3Api
 @Composable
 fun NavGraph(
@@ -37,52 +43,75 @@ fun NavGraph(
 
     setupScreenTracking(navController, firebaseAnalytics)
 
-    NavHost(navController, startDestination = Screen.SignIn) {
+    SharedTransitionLayout(
+    ) {
+        NavHost(navController, startDestination = Screen.SignIn) {
 
 
-        composable<Screen.SignIn> {
-            SignInScreen(
-                onNavigateToMyDevices = {
-                    navController.navigate(Main)
+            composable<Screen.SignIn> {
+                SignInScreen(
+                    onNavigateToMyDevices = {
+                        navController.navigate(MyDevices){
+                            popUpTo(Screen.SignIn) {
+                                inclusive = true
+                            }
+                        }
+                    }
+                )
+            }
+
+            navigation<Request>(startDestination = Screen.Request) {
+
+                composable<Screen.Request> {
+                    onTopNavigationBarTitleChange("Request Test Device")
+                    RequestScreen()
                 }
-            )
-        }
+            }
 
-        navigation<Main>(startDestination = Screen.MyDevices) {
+            navigation<QRReader>(startDestination = Screen.QRReader) {
+
+                composable<Screen.QRReader> {
+                    onTopNavigationBarTitleChange("QR Reader")
+                    QRReaderScreen()
+                }
+            }
+
+            navigation<Admin>(startDestination = Screen.Admin) {
+
+                composable<Screen.Admin> {
+                    onTopNavigationBarTitleChange("Admin")
+                    AdminScreen()
+                }
+            }
+
+            navigation<MyDevices>(startDestination = Screen.MyDevices) {
+                composable<Screen.MyDevices> {
+                    onTopNavigationBarTitleChange("My Devices")
+                    MyDevicesScreen(
+                        onNavigateToDeviceDetails = { device ->
+                            navController.navigate(Screen.DeviceDetails(id = device))
+                        },
+                        this@SharedTransitionLayout,
+                        this@composable
+                    )
+                }
+
+                composable<Screen.DeviceDetails> { backStackEntry ->
+                    onTopNavigationBarTitleChange("Device Details")
+                    val device: Screen.DeviceDetails = backStackEntry.toRoute()
+                    DeviceDetailsScreen(
+                        device = device.id,
+                        this@SharedTransitionLayout,
+                        this@composable
+                    )
+                }
+            }
+
             composable<Screen.DeviceList> {
                 onTopNavigationBarTitleChange("Device List")
                 DeviceListScreen()
             }
-
-            composable<Screen.QRReader> {
-                onTopNavigationBarTitleChange("QR Reader")
-                QRReaderScreen()
-            }
-
-            composable<Screen.MyDevices> {
-                onTopNavigationBarTitleChange("My Devices")
-                MyDevicesScreen(onNavigateToDeviceDetails = { inventoryNumber ->
-                    navController.navigate(Screen.DeviceDetails(inventoryNumber))
-                })
-            }
-
-            composable<Screen.DeviceDetails> { backStackEntry ->
-                val device: Screen.DeviceDetails = backStackEntry.toRoute()
-                onTopNavigationBarTitleChange("Device Details")
-                DeviceDetailsScreen(device.inventoryNumber)
-            }
-
-            composable<Screen.Admin> {
-                onTopNavigationBarTitleChange("Admin")
-                AdminScreen()
-            }
-
-            composable<Screen.Request> {
-                onTopNavigationBarTitleChange("Request Test Device")
-                RequestScreen()
-            }
         }
-
     }
 }
 
