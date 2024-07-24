@@ -1,6 +1,12 @@
+@file:OptIn(ExperimentalSharedTransitionApi::class)
+
 package com.zenitech.imaapp.feature.my_devices
 
+import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.AnimatedVisibilityScope
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
@@ -60,13 +66,16 @@ import com.zenitech.imaapp.ui.common.pulsate
 import com.zenitech.imaapp.ui.common.shimmerBrush
 import com.zenitech.imaapp.ui.common.simpleVerticalScrollbar
 import com.zenitech.imaapp.ui.model.DeviceResponseUi
+import com.zenitech.imaapp.ui.model.DeviceSearchRequestUi
 import com.zenitech.imaapp.ui.theme.LocalCardColorsPalette
 import com.zenitech.imaapp.ui.theme.RaspberryRed30White
 import kotlinx.coroutines.launch
 
 @Composable
 fun MyDevicesScreen(
-    onNavigateToDeviceDetails: (String) -> Unit
+    onNavigateToDeviceDetails: (String) -> Unit,
+    sharedTransitionScope: SharedTransitionScope,
+    animatedVisibilityScope: AnimatedVisibilityScope
 ) {
     Column(
         modifier = Modifier
@@ -75,7 +84,9 @@ fun MyDevicesScreen(
             .padding(horizontal = 0.dp)
     ) {
         MyDevicesContent(
-            onNavigateToDeviceDetails = onNavigateToDeviceDetails
+            onNavigateToDeviceDetails = onNavigateToDeviceDetails,
+            sharedTransitionScope = sharedTransitionScope,
+            animatedVisibilityScope = animatedVisibilityScope
         )
     }
 }
@@ -83,7 +94,9 @@ fun MyDevicesScreen(
 @Composable
 fun MyDevicesContent(
     viewModel: MyDevicesViewModel = hiltViewModel(),
-    onNavigateToDeviceDetails: (String) -> Unit
+    onNavigateToDeviceDetails: (String) -> Unit,
+    sharedTransitionScope: SharedTransitionScope,
+    animatedVisibilityScope: AnimatedVisibilityScope
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val lifecycleOwner = LocalLifecycleOwner.current
@@ -126,7 +139,9 @@ fun MyDevicesContent(
             }
             MyDevicesList(
                 deviceResponseUiList = (state as MyDevicesState.Success).myDeviceList,
-                onNavigateToDeviceDetails = onNavigateToDeviceDetails
+                onNavigateToDeviceDetails = onNavigateToDeviceDetails,
+                animatedVisibilityScope = animatedVisibilityScope,
+                sharedTransitionScope = sharedTransitionScope
             )
         }
     }
@@ -145,8 +160,10 @@ fun MyDevicesCounter(
 
 @Composable
 fun MyDevicesList(
-    deviceResponseUiList: List<DeviceResponseUi>,
+    deviceResponseUiList: List<DeviceSearchRequestUi>,
     onNavigateToDeviceDetails: (String) -> Unit,
+    sharedTransitionScope: SharedTransitionScope,
+    animatedVisibilityScope: AnimatedVisibilityScope
 ) {
     val listState = rememberLazyListState()
     val showButtonAndDivider by remember {
@@ -180,12 +197,14 @@ fun MyDevicesList(
             items(
                 items = deviceResponseUiList,
                 contentType = { it },
-                key = { device -> device.inventoryNumber }
+                key = { device -> device.inventoryId }
             ) { device ->
                 MyDevicesDeviceItem(
                     deviceResponseUi = device,
                     modifier = Modifier,
-                    onNavigateToDeviceDetails = onNavigateToDeviceDetails
+                    onNavigateToDeviceDetails = onNavigateToDeviceDetails,
+                    animatedVisibilityScope = animatedVisibilityScope,
+                    sharedTransitionScope = sharedTransitionScope
                 )
             }
         }
@@ -247,9 +266,11 @@ fun MyDevicesShimmerItem() {
 
 @Composable
 fun MyDevicesDeviceItem(
-    deviceResponseUi: DeviceResponseUi,
+    deviceResponseUi: DeviceSearchRequestUi,
     modifier: Modifier,
-    onNavigateToDeviceDetails: (String) -> Unit
+    onNavigateToDeviceDetails: (String) -> Unit,
+    sharedTransitionScope: SharedTransitionScope,
+    animatedVisibilityScope: AnimatedVisibilityScope
 ) {
 
     Card(
@@ -263,7 +284,7 @@ fun MyDevicesDeviceItem(
                 interactionSource = remember { MutableInteractionSource() },
                 indication = null,
                 onClick = {
-                    onNavigateToDeviceDetails(deviceResponseUi.inventoryNumber)
+                    onNavigateToDeviceDetails(deviceResponseUi.inventoryId)
                 }
             )
         ,
@@ -282,12 +303,21 @@ fun MyDevicesDeviceItem(
             Row(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                Icon(imageVector = deviceResponseUi.assetName.icon, contentDescription = null)
-                Spacer(modifier = Modifier.width(20.dp))
-                Column {
-                    Text(deviceResponseUi.assetName.label)
-                    Spacer(modifier = Modifier.height(5.dp))
-                    Text(deviceResponseUi.manufacturer, color = LocalCardColorsPalette.current.secondaryContentColor)
+                with(sharedTransitionScope) {
+                    Icon(
+                        imageVector = deviceResponseUi.asset.icon,
+                        contentDescription = null,
+                        modifier = Modifier
+                    )
+                    Spacer(modifier = Modifier.width(20.dp))
+                    Column {
+                        Text(deviceResponseUi.asset.name, )
+                        Spacer(modifier = Modifier.height(5.dp))
+                        Text(deviceResponseUi.manufacturer,
+                            color = LocalCardColorsPalette.current.secondaryContentColor,
+
+                            )
+                    }
                 }
             }
             Icon(
@@ -297,6 +327,7 @@ fun MyDevicesDeviceItem(
             )
         }
     }
+
 }
 
 @Composable
@@ -305,7 +336,7 @@ fun MyDevicesSorting(
     onSortSelected: (SortingOption) -> Unit
 ) {
     var expanded by remember { mutableStateOf(false) }
-    var selectedOption by remember { mutableStateOf(SortingOption.Type) }
+    var selectedOption by remember { mutableStateOf(SortingOption.Asset) }
 
     Row(
         modifier = Modifier
@@ -347,7 +378,7 @@ fun MyDevicesSortingDropDown(
         ) {
             Text("Sort")
             Spacer(modifier = Modifier.width(10.dp))
-            Icon(Icons.AutoMirrored.Filled.Sort, contentDescription = null, tint = RaspberryRed30White)
+            Icon(Icons.AutoMirrored.Filled.Sort, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
         }
         ExposedDropdownMenu(
             expanded = expanded,
@@ -358,7 +389,7 @@ fun MyDevicesSortingDropDown(
                     text = {
                         Text(
                             option.name,
-                            color = if (option.name == selectedOption) RaspberryRed30White else MaterialTheme.colorScheme.onBackground
+                            color = if (option.name == selectedOption) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onBackground
                         )
                     },
                     onClick = { onOptionSelected(option) },
@@ -371,5 +402,5 @@ fun MyDevicesSortingDropDown(
 
 
 enum class SortingOption {
-    Type, Manufacturer
+    Asset, Manufacturer
 }

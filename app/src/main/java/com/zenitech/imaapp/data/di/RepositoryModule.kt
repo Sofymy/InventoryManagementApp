@@ -3,6 +3,8 @@ package com.zenitech.imaapp.data.di
 import androidx.appcompat.app.AppCompatActivity
 import com.zenitech.imaapp.data.repository.AdminRepository
 import com.zenitech.imaapp.data.repository.AdminRepositoryImpl
+import com.zenitech.imaapp.data.repository.DeviceDetailsRepository
+import com.zenitech.imaapp.data.repository.DeviceDetailsRepositoryImpl
 import com.zenitech.imaapp.data.repository.DeviceListRepository
 import com.zenitech.imaapp.data.repository.DeviceListRepositoryImpl
 import com.zenitech.imaapp.data.repository.MyDevicesRepository
@@ -46,5 +48,9 @@ object RepositoryModule {
     @Provides
     @Singleton
     fun provideSignInRepository(): SignInRepository = SignInRepositoryImpl()
+
+    @Provides
+    @Singleton
+    fun provideDeviceDetailsRepository(): DeviceDetailsRepository = DeviceDetailsRepositoryImpl()
 
 }

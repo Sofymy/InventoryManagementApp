@@ -1,6 +1,6 @@
 package com.zenitech.imaapp.domain.model
 
-enum class DeviceType {
+enum class DeviceAsset {
     MONITOR,
     PREMIUM_ADAPTER,
     SPEAKERPHONE,

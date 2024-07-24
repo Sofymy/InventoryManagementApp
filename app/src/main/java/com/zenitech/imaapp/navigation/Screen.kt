@@ -2,6 +2,7 @@ package com.zenitech.imaapp.navigation
 
 import androidx.annotation.StringRes
 import com.zenitech.imaapp.R
+import com.zenitech.imaapp.ui.model.DeviceResponseUi
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -21,7 +22,7 @@ sealed class Screen(
     data object MyDevices: Screen(R.string.mydevices)
 
     @Serializable
-    data class DeviceDetails(val inventoryNumber: String) : Screen(R.string.devicedetails)
+    data class DeviceDetails(val id: String) : Screen(R.string.devicedetails)
 
     @Serializable
     data object DeviceList: Screen(R.string.devicelist)

@@ -96,15 +96,15 @@ val DarkCardColorScheme = CardColorScheme(
     arrowColor = EerieBlack40White,
     borderColor = EerieBlack40White,
     contentColor = Color.White,
-    secondaryContentColor = Color.White.copy(0.3f),
+    secondaryContentColor = Color.White.copy(alpha = 0.3f),
 )
 
 val LightCardColorScheme = CardColorScheme(
     containerColor = Color.White,
     arrowColor = Color.Black.copy(0.1f),
-    borderColor = Color.Black.copy(0.1f),
+    borderColor = DarkGrey,
     contentColor = Color.Black,
-    secondaryContentColor = Color.Black.copy(0.2f),
+    secondaryContentColor = DarkGrey,
 )
 
 val DarkButtonColorScheme = ButtonColorScheme(
