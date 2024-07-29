@@ -280,8 +280,8 @@ fun DeviceDetailsFlippingHexagon(
                     val original = Offset(offsetX.floatValue, offsetY.floatValue)
                     val summed = original + dragAmount
                     val newValue = Offset(
-                        x = summed.x.coerceIn(-100f, 100.dp.toPx() / density),
-                        y = summed.y.coerceIn(-15f, 50.dp.toPx() / density)
+                        x = summed.x.coerceIn(-300f, 300.dp.toPx() / density),
+                        y = summed.y.coerceIn(-15f, 100.dp.toPx() / density)
                     )
                     offsetX.floatValue = newValue.x
                     offsetY.floatValue = newValue.y

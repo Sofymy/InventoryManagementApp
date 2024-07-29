@@ -18,14 +18,16 @@ import com.zenitech.imaapp.feature.device_details.DeviceDetailsScreen
 import com.zenitech.imaapp.feature.devicelist.DeviceListScreen
 import com.zenitech.imaapp.feature.my_devices.MyDevicesScreen
 import com.zenitech.imaapp.feature.qr_reader.QRReaderScreen
-import com.zenitech.imaapp.feature.request.RequestScreen
+import com.zenitech.imaapp.feature.request_test_device.RequestTestDeviceManufacturerScreen
+import com.zenitech.imaapp.feature.request_test_device.RequestTestDeviceScreen
+import com.zenitech.imaapp.feature.request_test_device.RequestTestDeviceSuccessfulScreen
+import com.zenitech.imaapp.feature.request_test_device.RequestTestDeviceTypeScreen
 import com.zenitech.imaapp.feature.sign_in.SignInScreen
 import kotlinx.serialization.Serializable
 
 
-@Serializable object Main
 @Serializable object MyDevices
-@Serializable object Request
+@Serializable object RequestTestDevice
 @Serializable object QRReader
 @Serializable object Admin
 
@@ -43,10 +45,8 @@ fun NavGraph(
 
     setupScreenTracking(navController, firebaseAnalytics)
 
-    SharedTransitionLayout(
-    ) {
+    SharedTransitionLayout {
         NavHost(navController, startDestination = Screen.SignIn) {
-
 
             composable<Screen.SignIn> {
                 SignInScreen(
@@ -60,11 +60,66 @@ fun NavGraph(
                 )
             }
 
-            navigation<Request>(startDestination = Screen.Request) {
+            navigation<RequestTestDevice>(startDestination = Screen.RequestTestDevice()) {
 
-                composable<Screen.Request> {
+                composable<Screen.RequestTestDevice> {backStackEntry ->
+                    val type = backStackEntry.arguments?.getString("type")
+                    val manufacturer = backStackEntry.arguments?.getString("manufacturer")
+
                     onTopNavigationBarTitleChange("Request Test Device")
-                    RequestScreen()
+                    RequestTestDeviceScreen(
+                        onNavigateToDeviceType = {
+                            navController.navigate(Screen.RequestTestDeviceType.withManufacturer(manufacturer))
+                        },
+                        onNavigateToDeviceManufacturer = {
+                            navController.navigate(Screen.RequestTestDeviceManufacturer.withType(type))
+                        },
+                        onNavigateTestDeviceSuccessful = {
+                            navController.navigate(Screen.RequestTestDeviceSuccessful){
+                                popUpTo(Screen.RequestTestDevice()){
+                                    inclusive = true
+                                }
+                            }
+                        },
+                        type = type?:"",
+                        manufacturer = manufacturer?:""
+                    )
+                }
+
+                composable<Screen.RequestTestDeviceType> {backStackEntry ->
+                    val manufacturer = backStackEntry.arguments?.getString("manufacturer")
+
+                    onTopNavigationBarTitleChange("Test Device Type")
+                    RequestTestDeviceTypeScreen(
+                        onNavigateToRequestTestDevice = {
+                            navController.navigate(Screen.RequestTestDevice(it, manufacturer))
+                        }
+                    )
+                }
+
+                composable<Screen.RequestTestDeviceManufacturer> { backStackEntry ->
+                    val type = backStackEntry.arguments?.getString("type")
+
+                    onTopNavigationBarTitleChange("Device Type Manufacturer")
+                    RequestTestDeviceManufacturerScreen(
+                        onNavigateToRequestTestDevice = {
+                            navController.navigate(Screen.RequestTestDevice(type, it))
+                        }
+                    )
+                }
+
+                composable<Screen.RequestTestDeviceSuccessful> {
+                    onTopNavigationBarTitleChange("Request Test Device")
+
+                    RequestTestDeviceSuccessfulScreen(
+                        onNavigateToRequestTestDevice = {
+                            navController.navigate(Screen.RequestTestDevice()){
+                                popUpTo(Screen.RequestTestDeviceSuccessful){
+                                    inclusive = true
+                                }
+                            }
+                        }
+                    )
                 }
             }
 

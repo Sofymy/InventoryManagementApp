@@ -133,8 +133,8 @@ fun MyDevicesContent(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 MyDevicesCounter((state as MyDevicesState.Success).myDeviceList.size)
-                MyDevicesSorting(SortingOption.entries.toTypedArray()) { sortingType ->
-                    viewModel.setSortingOption(sortingType)
+                MyDevicesSorting(SortingOption.entries.toTypedArray()) { sortingOption ->
+                    viewModel.onEvent(MyDevicesUserEvent.ChangeSortingOption(sortingOption))
                 }
             }
             MyDevicesList(
@@ -313,10 +313,7 @@ fun MyDevicesDeviceItem(
                     Column {
                         Text(deviceResponseUi.asset.name, )
                         Spacer(modifier = Modifier.height(5.dp))
-                        Text(deviceResponseUi.manufacturer,
-                            color = LocalCardColorsPalette.current.secondaryContentColor,
-
-                            )
+                        Text(deviceResponseUi.manufacturer, color = LocalCardColorsPalette.current.secondaryContentColor,)
                     }
                 }
             }

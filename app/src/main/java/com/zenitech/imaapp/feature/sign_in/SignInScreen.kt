@@ -1,5 +1,10 @@
 package com.zenitech.imaapp.feature.sign_in
 
+import android.app.Activity
+import android.util.Log
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.IntentSenderRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
@@ -17,7 +22,11 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -25,11 +34,19 @@ import androidx.compose.ui.draw.paint
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.zenitech.imaapp.R
+import com.zenitech.imaapp.ui.common.CircularLoadingIndicator
 import com.zenitech.imaapp.ui.common.PrimaryButton
+import com.zenitech.imaapp.ui.utils.GoogleSignInHelper
 import kotlinx.coroutines.launch
 
 
@@ -207,7 +224,44 @@ fun SignInAnimatedThemedBackgroundContent(
 
 
 @Composable
-fun SignInContent(onNavigateToMyDevices: () -> Unit) {
+fun SignInContent(
+    onNavigateToMyDevices: () -> Unit,
+    viewModel: SignInViewModel = hiltViewModel()
+) {
+    val state by viewModel.state.collectAsStateWithLifecycle()
+    val lifecycleOwner = LocalLifecycleOwner.current
+    val isLoading = remember {
+        mutableStateOf(false)
+    }
+
+    DisposableEffect(lifecycleOwner) {
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_RESUME) {
+                viewModel.onEvent(SignInUserEvent.HasUser)
+            }
+        }
+        lifecycleOwner.lifecycle.addObserver(observer)
+        onDispose {
+            lifecycleOwner.lifecycle.removeObserver(observer)
+        }
+    }
+
+    LaunchedEffect(state) {
+        state.let {
+            when (it) {
+                SignInState.Success -> {
+                    onNavigateToMyDevices()
+                }
+                SignInState.Loading -> {
+                    isLoading.value = true
+                }
+                else -> {
+                    Log.e("SignInButton", "Google sign-in failed:")
+                }
+            }
+        }
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -215,9 +269,10 @@ fun SignInContent(onNavigateToMyDevices: () -> Unit) {
         verticalArrangement = Arrangement.Bottom
     ) {
         ZenitechLogo()
-        SignInButton(onNavigateToMyDevices)
+        SignInButton(onNavigateToMyDevices, isLoading = isLoading)
         Spacer(modifier = Modifier.height(20.dp))
     }
+
 }
 
 @Composable
@@ -231,19 +286,70 @@ fun ZenitechLogo() {
 }
 
 @Composable
-fun SignInButton(onNavigateToMyDevices: () -> Unit) {
+fun SignInButton(
+    onNavigateToMyDevices: () -> Unit,
+    viewModel: SignInViewModel = hiltViewModel(),
+    isLoading: MutableState<Boolean>
+) {
+    val context = LocalContext.current
+
+    val client = remember { GoogleSignInHelper.getGoogleSignInClient(context) }
+    val request = remember { GoogleSignInHelper.getGoogleSignInRequest() }
+
+    val signInResultLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.StartIntentSenderForResult()
+    ) { result ->
+        if(result.resultCode == Activity.RESULT_OK && result.data != null) {
+            val credential = client.getSignInCredentialFromIntent(result.data)
+            val idToken = credential.googleIdToken
+
+            if(idToken != null) {
+                viewModel.onEvent(SignInUserEvent.SignIn(idToken))
+            } else {
+                Log.e("SignInButton", "Google sign-in failed: idToken is null")
+            }
+        } else {
+            Log.e("SignInButton", "Google sign-in failed: Activity result not OK")
+        }
+    }
+
     PrimaryButton(
-        onClick = { onNavigateToMyDevices() },
+        onClick = {
+            client.beginSignIn(request).addOnCompleteListener { task ->
+                if(task.isSuccessful) {
+                    val intentSender = task.result.pendingIntent.intentSender
+                    val intentSenderRequest = IntentSenderRequest.Builder(intentSender).build()
+                    signInResultLauncher.launch(intentSenderRequest)
+                } else {
+                    Log.e("SignInButton", "Google sign-in initiation failed: ${task.exception?.message}")
+                }
+            }
+        },
         content = {
-            Image(
-                modifier = Modifier.size(20.dp),
-                painter = painterResource(id = R.drawable.ic_google_logo),
-                contentScale = ContentScale.Fit,
-                contentDescription = null
-            )
-            Spacer(modifier = Modifier.width(10.dp))
-            Text("Sign in with Google", fontWeight = FontWeight.Bold)
+            if(isLoading.value){
+                CircularLoadingIndicator(size = 20.dp)
+                Row(
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    CircularLoadingIndicator(size = 20.dp, strokeWidth = 2.dp)
+                }
+            }
+            else {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Image(
+                        modifier = Modifier.size(20.dp),
+                        painter = painterResource(id = R.drawable.ic_google_logo),
+                        contentScale = ContentScale.Fit,
+                        contentDescription = null
+                    )
+                    Spacer(modifier = Modifier.width(10.dp))
+                    Text("Sign in with Google", fontWeight = FontWeight.Bold)
+                }
+            }
         }
     )
 }
+
 

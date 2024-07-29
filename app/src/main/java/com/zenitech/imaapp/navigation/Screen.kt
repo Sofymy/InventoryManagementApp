@@ -28,5 +28,43 @@ sealed class Screen(
     data object DeviceList: Screen(R.string.devicelist)
 
     @Serializable
-    data object Request: Screen(R.string.request)
+    data class RequestTestDevice(val type: String? = null, val manufacturer: String? = null) : Screen(R.string.request) {
+
+        companion object {
+            fun withType(type: String): RequestTestDevice {
+                return RequestTestDevice(type = type)
+            }
+
+            fun withManufacturer(manufacturer: String): RequestTestDevice {
+                return RequestTestDevice(manufacturer = manufacturer)
+            }
+        }
+
+    }
+
+
+    @Serializable
+    data class RequestTestDeviceType(val manufacturer: String? = null): Screen(R.string.request_type) {
+
+        companion object {
+            fun withManufacturer(manufacturer: String?): RequestTestDeviceType {
+                return RequestTestDeviceType(manufacturer = manufacturer)
+            }
+        }
+
+    }
+
+    @Serializable
+    data class RequestTestDeviceManufacturer(val type: String ?= null): Screen(R.string.request_manufacturer){
+
+        companion object {
+            fun withType(type: String?): RequestTestDeviceManufacturer {
+                return RequestTestDeviceManufacturer(type = type)
+            }
+        }
+
+    }
+
+    @Serializable
+    data object RequestTestDeviceSuccessful: Screen(R.string.devicelist)
 }

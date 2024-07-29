@@ -22,6 +22,10 @@ sealed class MyDevicesState {
     data class Success(var myDeviceList : List<DeviceSearchRequestUi>) : MyDevicesState()
 }
 
+sealed class MyDevicesUserEvent {
+    data class ChangeSortingOption(val sortingOption: SortingOption): MyDevicesUserEvent()
+}
+
 @HiltViewModel
 class MyDevicesViewModel @Inject constructor(
     private val myDevicesOperations: MyDevicesUseCases
@@ -29,6 +33,14 @@ class MyDevicesViewModel @Inject constructor(
 
     private val _state = MutableStateFlow<MyDevicesState>(MyDevicesState.Loading)
     val state = _state.asStateFlow()
+
+    fun onEvent(event: MyDevicesUserEvent){
+        when(event){
+            is MyDevicesUserEvent.ChangeSortingOption -> {
+                sortDevices(event.sortingOption)
+            }
+        }
+    }
 
     fun loadMyDevices(){
 
@@ -46,20 +58,10 @@ class MyDevicesViewModel @Inject constructor(
 
     }
 
-
-    private val _sortingOption = MutableStateFlow(SortingOption.Asset)
-    val sortingOption: StateFlow<SortingOption> = _sortingOption.asStateFlow()
-
-
-    fun setSortingOption(option: SortingOption) {
-        _sortingOption.value = option
-        sortDevices()
-    }
-
-    private fun sortDevices() {
+    private fun sortDevices(sortingOption: SortingOption) {
         _state.update { currentState ->
             if (currentState is MyDevicesState.Success) {
-                val sortedList = when (_sortingOption.value) {
+                val sortedList = when (sortingOption) {
                     SortingOption.Manufacturer -> currentState.myDeviceList.sortedBy { it.manufacturer }
                     SortingOption.Asset -> currentState.myDeviceList.sortedBy { it.asset.name }
                 }

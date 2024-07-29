@@ -12,4 +12,6 @@
     <string name="screen_title_admin">Admin</string>
     <string name="sign_in">Sign In</string>
     <string name="devicedetails">Device Details</string>
+    <string name="request_type">Test Device Type</string>
+    <string name="request_manufacturer">Test device manufacturer</string>
 </resources>

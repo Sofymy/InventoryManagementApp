@@ -55,6 +55,10 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+    tasks.register<Wrapper>("wrapper") {
+        gradleVersion = "8.9"
+    }
+
 }
 
 kapt {
@@ -71,6 +75,7 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+    implementation(libs.protolite.well.known.types)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -112,5 +117,10 @@ dependencies {
     implementation(libs.accompanist.permissions)
     implementation(kotlin("reflect"))
 
+    implementation(libs.firebase.auth.ktx)
+    implementation(libs.play.services.auth)
+    implementation(libs.google.firebase.auth.ktx)
+
+    implementation(libs.kotlin.reflect)
 
 }

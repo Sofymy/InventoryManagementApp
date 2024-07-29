@@ -3,37 +3,45 @@ package com.zenitech.imaapp.ui.common
 import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.core.Spring
-import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.FastOutLinearInEasing
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.LinearOutSlowInEasing
+import androidx.compose.animation.core.TweenSpec
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.BottomAppBar
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.NavigationBarItem
-import androidx.compose.material3.NavigationBarItemDefaults
+import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
+import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
-import com.zenitech.imaapp.ui.theme.LocalButtonColorsPalette
+import com.zenitech.imaapp.navigation.Screen
 import com.zenitech.imaapp.ui.theme.LocalNavigationBarColorsPalette
-import kotlinx.coroutines.delay
 
 
 val items = listOf(
@@ -45,62 +53,97 @@ val items = listOf(
 
 @Composable
 fun BottomNavigationBar(
-    navController: NavController,
-    bottomBarState: MutableState<Boolean>
+    navController: NavHostController,
 ) {
 
+    Box(
+        modifier = Modifier
+            .fillMaxWidth(),
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth(),
+            verticalArrangement = Arrangement.Top,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            HorizontalDivider(color = LocalNavigationBarColorsPalette.current.bottomContainerBarDividerColor)
+            NavigationBar(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                containerColor = LocalNavigationBarColorsPalette.current.bottomContainerBarColor,
+                tonalElevation = 0.dp
+            ) {
+                val navBackStackEntry by navController.currentBackStackEntryAsState()
+                val currentDestination = navBackStackEntry?.destination
 
-    AnimatedVisibility(
-        visible = bottomBarState.value,
-        enter = slideInVertically (
-            initialOffsetY = {
-                it
-            },
-        ),
-        exit = slideOutVertically(targetOffsetY = { it }),
-        content = {
-            Column {
-                HorizontalDivider(
-                    color = LocalNavigationBarColorsPalette.current.bottomContainerBarDividerColor,
-                    thickness = 1.dp
-                )
-                BottomAppBar(
-                    modifier = Modifier
-                        .shadow(0.dp)
-                    ,
-                    containerColor = LocalNavigationBarColorsPalette.current.bottomContainerBarColor,
-                    tonalElevation = 0.dp
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceEvenly
                 ) {
-                    val navBackStackEntry by navController.currentBackStackEntryAsState()
-                    val currentDestination = navBackStackEntry?.destination
-
                     items.forEach { item ->
-
-                        NavigationBarItem(
-                            modifier = Modifier.pulsate(),
-                            colors = NavigationBarItemDefaults.colors(
-                                selectedIconColor = LocalNavigationBarColorsPalette.current.selectedIconColor,
-                                selectedTextColor = LocalNavigationBarColorsPalette.current.selectedTextColor,
-                                indicatorColor = Color.Transparent,
-                                unselectedIconColor = LocalNavigationBarColorsPalette.current.unselectedIconColor,
-                                unselectedTextColor = LocalNavigationBarColorsPalette.current.unselectedTextColor,
-                            ),
-                            icon = { Icon(item.icon, contentDescription = null) },
-                            label = { Text(stringResource(item.resourceId), fontWeight = FontWeight.Bold) },
-                            selected = currentDestination?.hierarchy?.any { currentDestination.parent?.startDestinationRoute == item.screen::class.qualifiedName} == true,
-                            onClick = {
-                                navController.navigate(item.screen) {
-                                    popUpTo(navController.graph.findStartDestination().id) {
-                                        saveState = true
-                                    }
-                                    launchSingleTop = true
-                                    restoreState = true
-                                }
-                            }
+                        NavigationItem(
+                            item = item,
+                            currentDestination = currentDestination,
+                            navController = navController,
                         )
                     }
                 }
             }
         }
+    }
+}
+
+@Composable
+fun NavigationItem(
+    item: BottomNavigationBarItem,
+    currentDestination: NavDestination?,
+    navController: NavHostController,
+) {
+    val selected =
+        currentDestination?.hierarchy?.any { currentDestination.parent?.startDestinationRoute?.substringBefore("/").toString() == item.screen::class.qualifiedName } == true
+
+    val contentColor =
+        if (selected) LocalNavigationBarColorsPalette.current.selectedTextColor
+        else LocalNavigationBarColorsPalette.current.unselectedTextColor
+
+    val animatedColor by animateColorAsState(
+        targetValue = contentColor,
+        animationSpec = tween(
+            durationMillis = 300,
+            easing = LinearEasing
+        ),
+        label = ""
     )
+
+    Box(
+        modifier = Modifier,
+        contentAlignment = Alignment.TopCenter
+    ) {
+        Column(
+            modifier = Modifier
+                .pulsate()
+                .clickable(
+                    interactionSource = remember { MutableInteractionSource() },
+                    indication = null,
+                    onClick = {
+                        navController.navigate(item.screen) {
+                            popUpTo(navController.graph.findStartDestination().id)
+                            launchSingleTop = true
+                        }
+                    }
+                ),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Icon(
+                imageVector = if (selected) item.icon else item.icon,
+                contentDescription = "icon",
+                tint = animatedColor,
+                modifier = Modifier
+            )
+            Spacer(Modifier.height(5.dp))
+            Text(text = stringResource(item.screen.resourceId), color = animatedColor)
+        }
+    }
 }

@@ -1,5 +1,9 @@
 package com.zenitech.imaapp.ui.common
 
+import android.app.Activity
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.IntentSenderRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
@@ -11,6 +15,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -32,8 +37,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import com.zenitech.imaapp.R
 import com.zenitech.imaapp.ui.theme.LocalButtonColorsPalette
+import com.zenitech.imaapp.ui.utils.GoogleSignInHelper
 
 @Composable
 fun PrimaryButton(
@@ -53,7 +61,7 @@ fun PrimaryButton(
             .pulsate()
             .border(1.dp, LocalButtonColorsPalette.current.borderColor, RoundedCornerShape(15.dp))
             .background(LocalButtonColorsPalette.current.containerColor, RoundedCornerShape(15.dp))
-            .padding(15.dp)
+            .padding(15.dp, 20.dp)
         ,
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically,
@@ -64,11 +72,27 @@ fun PrimaryButton(
 @Composable
 fun SecondaryButton(
     onClick: () -> Unit,
-    text: String
+    content: @Composable () -> Unit
 ) {
-    Button(onClick = { onClick() }) {
-        Text(text)
-    }
+    val interactionSource: MutableInteractionSource = remember { MutableInteractionSource() }
+
+    Row(
+        modifier = Modifier
+            .clickable(
+                indication = null,
+                interactionSource = interactionSource,
+                onClick = onClick
+            )
+            .fillMaxWidth()
+            .pulsate()
+            .border(1.dp, LocalButtonColorsPalette.current.borderColor, RoundedCornerShape(15.dp))
+            .background(MaterialTheme.colorScheme.secondary, RoundedCornerShape(15.dp))
+            .padding(15.dp, 20.dp)
+        ,
+        horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.CenterVertically,
+        content = { content() }
+    )
 }
 
 @Composable
@@ -84,10 +108,10 @@ fun ScrollToTopButton(onClick: () -> Unit) {
             contentPadding = PaddingValues(13.dp),
             shape = CircleShape,
             modifier = Modifier
-                .shadow(10.dp, shape = CircleShape)
+                .shadow(5.dp, shape = CircleShape)
                 .size(65.dp),
             colors = ButtonDefaults.buttonColors(
-                containerColor = MaterialTheme.colorScheme.primary,
+                containerColor = MaterialTheme.colorScheme.secondary,
                 contentColor = Color.White
             )
         ) {
@@ -141,3 +165,4 @@ fun RoundedButton(
     )
 
 }
+

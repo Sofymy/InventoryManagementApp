@@ -10,6 +10,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import com.zenitech.imaapp.navigation.Screen
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
+import kotlin.reflect.cast
 
 @Serializable
 sealed class BottomNavigationBarItem(
@@ -33,8 +34,8 @@ sealed class BottomNavigationBarItem(
 
     @Serializable
     data object Request : BottomNavigationBarItem(
-        screen = Screen.Request,
-        resourceId = Screen.Request.resourceId,
+        screen = Screen.RequestTestDevice(),
+        resourceId = Screen.RequestTestDevice().resourceId,
         icon = Icons.TwoTone.AddComment
     )
 
