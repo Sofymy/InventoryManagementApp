@@ -63,16 +63,24 @@ fun NavGraph(
             navigation<RequestTestDevice>(startDestination = Screen.RequestTestDevice()) {
 
                 composable<Screen.RequestTestDevice> {backStackEntry ->
-                    val type = backStackEntry.arguments?.getString("type")
-                    val manufacturer = backStackEntry.arguments?.getString("manufacturer")
+                    val type = backStackEntry.savedStateHandle.get<String>("type")
+                    val manufacturer = backStackEntry.savedStateHandle.get<String>("manufacturer")
 
                     onTopNavigationBarTitleChange("Request Test Device")
                     RequestTestDeviceScreen(
                         onNavigateToDeviceType = {
-                            navController.navigate(Screen.RequestTestDeviceType.withManufacturer(manufacturer))
+                            navController.navigate(Screen.RequestTestDeviceType
+                                .withManufacturer(
+                                    manufacturer = manufacturer,
+                                )
+                            )
                         },
                         onNavigateToDeviceManufacturer = {
-                            navController.navigate(Screen.RequestTestDeviceManufacturer.withType(type))
+                            navController.navigate(Screen.RequestTestDeviceManufacturer
+                                .withType(
+                                    type = type
+                                )
+                            )
                         },
                         onNavigateTestDeviceSuccessful = {
                             navController.navigate(Screen.RequestTestDeviceSuccessful){
@@ -82,28 +90,28 @@ fun NavGraph(
                             }
                         },
                         type = type?:"",
-                        manufacturer = manufacturer?:""
-                    )
+                        manufacturer = manufacturer?:"",
+                        )
                 }
 
                 composable<Screen.RequestTestDeviceType> {backStackEntry ->
-                    val manufacturer = backStackEntry.arguments?.getString("manufacturer")
 
                     onTopNavigationBarTitleChange("Test Device Type")
                     RequestTestDeviceTypeScreen(
-                        onNavigateToRequestTestDevice = {
-                            navController.navigate(Screen.RequestTestDevice(it, manufacturer))
-                        }
+                        onNavigateToRequestTestDevice = { it ->
+                            navController.previousBackStackEntry?.savedStateHandle?.set("type", it)
+                            navController.popBackStack()
+                        },
                     )
                 }
 
                 composable<Screen.RequestTestDeviceManufacturer> { backStackEntry ->
-                    val type = backStackEntry.arguments?.getString("type")
 
                     onTopNavigationBarTitleChange("Device Type Manufacturer")
                     RequestTestDeviceManufacturerScreen(
                         onNavigateToRequestTestDevice = {
-                            navController.navigate(Screen.RequestTestDevice(type, it))
+                            navController.previousBackStackEntry?.savedStateHandle?.set("manufacturer", it)
+                            navController.popBackStack()
                         }
                     )
                 }

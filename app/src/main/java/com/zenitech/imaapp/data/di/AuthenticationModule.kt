@@ -21,6 +21,8 @@ object AuthenticationModule {
     @Singleton
     fun providesAuthenticationService(
         firebaseAuth: FirebaseAuth
-    ): AuthenticationService = AuthenticationServiceImpl(firebaseAuth)
+    ): AuthenticationService {
+        return AuthenticationServiceImpl(firebaseAuth)
+    }
 
 }

@@ -1,19 +1,18 @@
 package com.zenitech.imaapp.feature.request_test_device
 
 import android.util.Log
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.paging.LOG_TAG
 import com.zenitech.imaapp.domain.usecases.request_test_device.RequestTestDeviceUseCases
 import com.zenitech.imaapp.ui.model.RequestTestDeviceUi
-import com.zenitech.imaapp.ui.model.UiEvent
 import com.zenitech.imaapp.ui.utils.validation.ValidateState
+import com.zenitech.imaapp.ui.utils.validation.ValidationError
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.receiveAsFlow
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -23,90 +22,78 @@ sealed class RequestTestDeviceUserEvent {
     data class ChangeRequestDate(val date: String) : RequestTestDeviceUserEvent()
     data class ChangeReturnDate(val date: String) : RequestTestDeviceUserEvent()
     data class ChangeAdditionalRequests(val text: String) : RequestTestDeviceUserEvent()
-    data object SaveRequest: RequestTestDeviceUserEvent()
-    data object SavedSuccessfully: RequestTestDeviceUserEvent()
-
+    data object SaveRequest : RequestTestDeviceUserEvent()
+    data object SavedSuccessfully : RequestTestDeviceUserEvent()
 }
 
-data class RequestTestDeviceState(
-    val request: RequestTestDeviceUi = RequestTestDeviceUi()
-)
+sealed class RequestTestDeviceState {
+    data object Loading : RequestTestDeviceState()
+    data object Success : RequestTestDeviceState()
+    data class Failure(val error: List<ValidationError?>) : RequestTestDeviceState()
+}
 
 @HiltViewModel
 class RequestTestDeviceViewModel @Inject constructor(
     private val requestTestDeviceOperations: RequestTestDeviceUseCases
 ) : ViewModel() {
 
-    private val _state = MutableStateFlow(RequestTestDeviceState())
+    private val _state = MutableStateFlow<RequestTestDeviceState>(RequestTestDeviceState.Loading)
     val state = _state.asStateFlow()
 
-    private val _uiEvent = Channel<UiEvent>()
-    val uiEvent = _uiEvent.receiveAsFlow()
+    private var uiState by mutableStateOf(RequestTestDeviceUi())
 
     fun onEvent(event: RequestTestDeviceUserEvent) {
-        when(event) {
+        when (event) {
             is RequestTestDeviceUserEvent.ChangeAdditionalRequests -> {
-                val newValue = event.text
-                _state.update { it.copy(
-                    request = it.request.copy(additionalRequests = newValue)
-                ) }
+                uiState = uiState.copy(additionalRequests = event.text)
             }
             is RequestTestDeviceUserEvent.ChangeDeviceManufacturer -> {
-                val newValue = event.text
-                _state.update { it.copy(
-                    request = it.request.copy(manufacturer = newValue)
-                ) }
+                uiState = uiState.copy(manufacturer = event.text)
             }
             is RequestTestDeviceUserEvent.ChangeDeviceType -> {
-                val newValue = event.text
-                _state.update { it.copy(
-                    request = it.request.copy(type = newValue)
-                ) }
+                uiState = uiState.copy(type = event.text)
             }
             is RequestTestDeviceUserEvent.ChangeRequestDate -> {
-                val newValue = event.date
-                _state.update { it.copy(
-                    request = it.request.copy(requestDate = newValue)
-                ) }
+                uiState = uiState.copy(requestDate = event.date)
             }
             is RequestTestDeviceUserEvent.ChangeReturnDate -> {
-                val newValue = event.date
-                _state.update { it.copy(
-                    request = it.request.copy(returnDate = newValue)
-                ) }
+                uiState = uiState.copy(returnDate = event.date)
             }
-            is RequestTestDeviceUserEvent.SavedSuccessfully -> {
-                _state.update {
-                    it.copy(
-                        request = it.request.copy(
-                            type = "",
-                            manufacturer = "",
-                            requestDate = "",
-                            returnDate = "",
-                            additionalRequests = "",
-                            error = null
-                        )
-                    )
-                }
-            }
-
             RequestTestDeviceUserEvent.SaveRequest -> {
                 onSave()
+            }
+            RequestTestDeviceUserEvent.SavedSuccessfully -> {
+                resetForm()
             }
         }
     }
 
     private fun onSave() {
-        val stateValidator = ValidateState(RequestTestDeviceUi::class);
-        val errors = stateValidator.validate(state.value.request)
+        val stateValidator = ValidateState(RequestTestDeviceUi::class)
+        val errors = stateValidator.validate(uiState)
 
         viewModelScope.launch {
             if (errors.isEmpty()) {
-                requestTestDeviceOperations.saveTestDeviceRequestUseCase()
-                _uiEvent.send(UiEvent.Success)
+                try {
+                    requestTestDeviceOperations.saveTestDeviceRequestUseCase()
+                    _state.value = RequestTestDeviceState.Success
+                    Log.d(LOG_TAG, "Save request successful")
+                } catch (e: Exception) {
+                    Log.e(LOG_TAG, "Save request failed", e)
+                    _state.value = RequestTestDeviceState.Failure(listOf(ValidationError(message = e.message.toString())))
+                }
             } else {
-                _uiEvent.send(UiEvent.Failure(errors))
+                _state.value = RequestTestDeviceState.Failure(errors)
             }
         }
+    }
+
+    private fun resetForm() {
+        uiState = RequestTestDeviceUi()
+        _state.value = RequestTestDeviceState.Success
+    }
+
+    companion object {
+        private const val LOG_TAG = "RequestTestDeviceVM"
     }
 }

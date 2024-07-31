@@ -20,6 +20,9 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
@@ -31,9 +34,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
@@ -42,6 +47,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.zenitech.imaapp.navigation.Screen
 import com.zenitech.imaapp.ui.theme.LocalNavigationBarColorsPalette
+import com.zenitech.imaapp.ui.theme.Mint
 
 
 val items = listOf(
@@ -77,7 +83,7 @@ fun BottomNavigationBar(
                 val currentDestination = navBackStackEntry?.destination
 
                 Row(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier.padding(horizontal = 15.dp),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceEvenly
                 ) {
@@ -86,6 +92,7 @@ fun BottomNavigationBar(
                             item = item,
                             currentDestination = currentDestination,
                             navController = navController,
+                            modifier = Modifier.weight(1f)
                         )
                     }
                 }
@@ -99,6 +106,7 @@ fun NavigationItem(
     item: BottomNavigationBarItem,
     currentDestination: NavDestination?,
     navController: NavHostController,
+    modifier: Modifier
 ) {
     val selected =
         currentDestination?.hierarchy?.any { currentDestination.parent?.startDestinationRoute?.substringBefore("/").toString() == item.screen::class.qualifiedName } == true
@@ -117,7 +125,7 @@ fun NavigationItem(
     )
 
     Box(
-        modifier = Modifier,
+        modifier = modifier,
         contentAlignment = Alignment.TopCenter
     ) {
         Column(

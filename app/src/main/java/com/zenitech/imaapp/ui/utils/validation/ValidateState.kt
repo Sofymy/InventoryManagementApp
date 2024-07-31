@@ -19,15 +19,9 @@ class ValidateState<State: Any>(
             val value = it.get(state)
 
             for(annotation in annotations){
-                if (annotation is DeviceTypeValidation) {
+                if (annotation is EmptyFieldValidation) {
                     if (isEmpty(value)) {
-                        errors.add(ValidationError(property, "Must fill device type field"))
-                    }
-                }
-
-                if (annotation is DeviceManufacturerValidation) {
-                    if (isNotEmail(value)) {
-                        errors.add(ValidationError(property, "Must fill device manufacturer field"))
+                        errors.add(ValidationError(property, "Must fill this field"))
                     }
                 }
             }

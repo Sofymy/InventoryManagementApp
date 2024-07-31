@@ -1,8 +1,18 @@
 package com.zenitech.imaapp.feature.sign_in
 
+import android.content.Context
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.LocalContext
+import androidx.credentials.CredentialManager
+import androidx.credentials.GetCredentialResponse
+import androidx.credentials.exceptions.GetCredentialException
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.zenitech.imaapp.domain.usecases.sign_in.SignInUseCases
+import com.zenitech.imaapp.ui.utils.GoogleSignInHelper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -19,7 +29,7 @@ sealed class SignInState {
 }
 
 sealed class SignInUserEvent {
-    data class SignIn(val idToken: String) : SignInUserEvent()
+    data class SignIn(val context: Context) : SignInUserEvent()
     data object HasUser: SignInUserEvent()
     data object SignOut: SignInUserEvent()
 }
@@ -38,7 +48,7 @@ class SignInViewModel @Inject constructor(
                 hasUser()
             }
             is SignInUserEvent.SignIn -> {
-                signInWithGoogle(event.idToken)
+                signInWithGoogle(event.context)
             }
             SignInUserEvent.SignOut -> {
                 signOut()
@@ -62,20 +72,32 @@ class SignInViewModel @Inject constructor(
         }
     }
 
-    private fun signInWithGoogle(idToken: String) {
+    private fun signInWithGoogle(context: Context) {
+        val credentialManager = CredentialManager.create(context)
+
         viewModelScope.launch {
+            _state.value = SignInState.Loading
             try {
-                _state.value = SignInState.Loading
-                val result = signInOperations.signInWithGoogle(idToken)
-                if(result.isSuccess){
-                    _state.value = SignInState.Success
+                val response = credentialManager.getCredential(
+                    request = GoogleSignInHelper.request,
+                    context = context
+                )
+                val result = signInOperations.signInWithGoogle(response)
+
+                _state.value = if (result.isSuccess) {
+                    SignInState.Success
+                } else {
+                    SignInState.Error(Throwable(result.exceptionOrNull()))
                 }
+            } catch (e: GetCredentialException) {
+                _state.value = SignInState.Error(e)
             } catch (e: Exception) {
+                // Handle any other exceptions that may occur
                 _state.value = SignInState.Error(e)
             }
         }
-
     }
+
 
     private fun signOut() {
         viewModelScope.launch {

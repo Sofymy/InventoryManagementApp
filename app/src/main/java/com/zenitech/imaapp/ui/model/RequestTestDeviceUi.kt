@@ -1,14 +1,13 @@
 package com.zenitech.imaapp.ui.model
 
-import com.zenitech.imaapp.ui.utils.validation.DeviceManufacturerValidation
-import com.zenitech.imaapp.ui.utils.validation.DeviceTypeValidation
+import com.zenitech.imaapp.ui.utils.validation.EmptyFieldValidation
 import com.zenitech.imaapp.ui.utils.validation.ValidationError
 
 data class RequestTestDeviceUi(
-    @property:DeviceTypeValidation()
+    @property:EmptyFieldValidation()
     val type: String = "",
 
-    @property:DeviceManufacturerValidation()
+    @property:EmptyFieldValidation()
     val manufacturer: String = "",
 
     val requestDate: String = "",

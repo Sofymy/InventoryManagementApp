@@ -1,7 +1,10 @@
 package com.zenitech.imaapp.data.auth
 
+import androidx.credentials.GetCredentialResponse
+
 interface AuthenticationService {
-    suspend fun signInWithGoogle(idToken: String): Result<Unit>
+
     fun signOut()
     val hasUser: Boolean
+    suspend fun signInWithGoogle(result: GetCredentialResponse): Result<String>
 }

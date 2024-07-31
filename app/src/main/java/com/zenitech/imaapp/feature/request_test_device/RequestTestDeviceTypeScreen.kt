@@ -27,14 +27,14 @@ import com.zenitech.imaapp.ui.theme.LocalCardColorsPalette
 
 @Composable
 fun RequestTestDeviceTypeScreen(
-    onNavigateToRequestTestDevice: (String) -> Unit
+    onNavigateToRequestTestDevice: (String?) -> Unit
 ) {
     Column(
         modifier = Modifier
             .fillMaxSize()
     ) {
         RequestTestDeviceTypeContent(
-            onNavigateToRequestTestDevice = onNavigateToRequestTestDevice
+            onNavigateToRequestTestDevice = onNavigateToRequestTestDevice,
         )
     }
 }
@@ -42,7 +42,7 @@ fun RequestTestDeviceTypeScreen(
 @Composable
 fun RequestTestDeviceTypeContent(
     viewModel: RequestTestDeviceTypeViewModel = hiltViewModel(),
-    onNavigateToRequestTestDevice: (String) -> Unit
+    onNavigateToRequestTestDevice: (String?) -> Unit,
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val lifecycleOwner = LocalLifecycleOwner.current
@@ -83,18 +83,21 @@ fun RequestTestDeviceTypeContent(
 @Composable
 fun RequestTestDeviceTypeList(
     list: List<String>,
-    onNavigateToRequestTestDevice: (String) -> Unit
+    onNavigateToRequestTestDevice: (String?) -> Unit,
 ) {
     LazyColumn {
         items(list){
-            RequestTestDeviceTypeItem(text = it, onClick = { onNavigateToRequestTestDevice(it) })
+            RequestTestDeviceTypeItem(text = it, onClick = { onNavigateToRequestTestDevice(
+                it,
+            ) })
         }
     }
 }
 
 @Composable
 fun RequestTestDeviceTypeItem(
-    text: String, onClick: () -> Unit
+    text: String, 
+    onClick: () -> Unit
 ) {
     Column(
         modifier = Modifier

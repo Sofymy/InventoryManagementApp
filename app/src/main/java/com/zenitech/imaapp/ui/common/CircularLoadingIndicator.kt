@@ -30,7 +30,7 @@ fun CircularLoadingIndicator(
     size: Dp = 100.dp,
     sweepAngle: Float = 90f,
     color: Color = MaterialTheme.colorScheme.primary,
-    strokeWidth: Dp = 10.dp
+    strokeWidth: Dp = 4.dp
 ) {
     val transition = rememberInfiniteTransition(label = "")
 

@@ -2,7 +2,6 @@ package com.zenitech.imaapp.navigation
 
 import androidx.annotation.StringRes
 import com.zenitech.imaapp.R
-import com.zenitech.imaapp.ui.model.DeviceResponseUi
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -28,15 +27,41 @@ sealed class Screen(
     data object DeviceList: Screen(R.string.devicelist)
 
     @Serializable
-    data class RequestTestDevice(val type: String? = null, val manufacturer: String? = null) : Screen(R.string.request) {
+    data class RequestTestDevice(
+        val type: String? = null,
+        val manufacturer: String? = null,
+        val requestDate: String? = null,
+        val returnDate: String? = null,
+        val additionalRequests: String? = null
+    ) : Screen(R.string.request) {
 
         companion object {
-            fun withType(type: String): RequestTestDevice {
-                return RequestTestDevice(type = type)
+            fun withType(
+                type: String,
+                requestDate: String,
+                returnDate: String,
+                additionalRequests: String
+            ): RequestTestDevice {
+                return RequestTestDevice(
+                    type = type,
+                    requestDate = requestDate,
+                    returnDate = returnDate,
+                    additionalRequests = additionalRequests
+                )
             }
 
-            fun withManufacturer(manufacturer: String): RequestTestDevice {
-                return RequestTestDevice(manufacturer = manufacturer)
+            fun withManufacturer(
+                manufacturer: String,
+                requestDate: String,
+                returnDate: String,
+                additionalRequests: String
+            ): RequestTestDevice {
+                return RequestTestDevice(
+                    manufacturer = manufacturer,
+                    requestDate = requestDate,
+                    returnDate = returnDate,
+                    additionalRequests = additionalRequests
+                )
             }
         }
 
@@ -47,7 +72,9 @@ sealed class Screen(
     data class RequestTestDeviceType(val manufacturer: String? = null): Screen(R.string.request_type) {
 
         companion object {
-            fun withManufacturer(manufacturer: String?): RequestTestDeviceType {
+            fun withManufacturer(
+                manufacturer: String?
+            ): RequestTestDeviceType {
                 return RequestTestDeviceType(manufacturer = manufacturer)
             }
         }
@@ -58,7 +85,9 @@ sealed class Screen(
     data class RequestTestDeviceManufacturer(val type: String ?= null): Screen(R.string.request_manufacturer){
 
         companion object {
-            fun withType(type: String?): RequestTestDeviceManufacturer {
+            fun withType(
+                type: String?
+            ): RequestTestDeviceManufacturer {
                 return RequestTestDeviceManufacturer(type = type)
             }
         }
