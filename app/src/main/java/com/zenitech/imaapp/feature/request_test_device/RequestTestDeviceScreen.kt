@@ -55,6 +55,7 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
@@ -129,7 +130,7 @@ fun RequestTestDeviceContent(
     ) {
         item {
             RequestDeviceInputFields(
-                viewModel = viewModel,
+                onEvent = { viewModel.onEvent(it) },
                 onNavigateToDeviceType = onNavigateToDeviceType,
                 onNavigateToDeviceManufacturer = onNavigateToDeviceManufacturer,
                 manufacturer = manufacturer,
@@ -154,15 +155,15 @@ fun RequestDeviceInputFields(
     onNavigateToDeviceType: () -> Unit,
     type: String?,
     manufacturer: String?,
-    viewModel: RequestTestDeviceViewModel,
-    errors: List<ValidationError?>
+    errors: List<ValidationError?>,
+    onEvent: (RequestTestDeviceUserEvent) -> Unit
 ) {
     Column {
-        Section(title = "Device details") {
+        Section(title = stringResource(id = R.string.device_details)) {
             RequestTestDeviceDeviceTypeInput(
                 onNavigateToDeviceType = onNavigateToDeviceType,
                 onRequestTestDeviceTypeChange = { text ->
-                    viewModel.onEvent(RequestTestDeviceUserEvent.ChangeDeviceType(text))
+                    onEvent(RequestTestDeviceUserEvent.ChangeDeviceType(text))
                 },
                 type = type,
                 errors = errors
@@ -172,7 +173,7 @@ fun RequestDeviceInputFields(
             RequestTestDeviceDeviceManufacturerInput(
                 onNavigateToDeviceManufacturer = onNavigateToDeviceManufacturer,
                 onRequestTestDeviceManufacturerChange = { text ->
-                    viewModel.onEvent(RequestTestDeviceUserEvent.ChangeDeviceManufacturer(text))
+                    onEvent(RequestTestDeviceUserEvent.ChangeDeviceManufacturer(text))
                 },
                 manufacturer = manufacturer,
                 errors = errors
@@ -180,27 +181,27 @@ fun RequestDeviceInputFields(
         }
 
         HorizontalDivider(color = LocalCardColorsPalette.current.borderColor)
-        Section(title = "Date details") {
+        Section(title = stringResource(R.string.date_details)) {
             RequestTestDeviceRequestDateInput(
                 onRequestTestDeviceRequestDateChange = {
-                    viewModel.onEvent(RequestTestDeviceUserEvent.ChangeRequestDate(it))
+                    onEvent(RequestTestDeviceUserEvent.ChangeRequestDate(it))
                 },
                 errors = errors,
             )
             Spacer(modifier = Modifier.height(spacerHeight))
             RequestTestDeviceReturnDateInput(
                 onRequestTestDeviceReturnDateChange = {
-                    viewModel.onEvent(RequestTestDeviceUserEvent.ChangeReturnDate(it))
+                    onEvent(RequestTestDeviceUserEvent.ChangeReturnDate(it))
                 },
                 errors = errors,
             )
         }
 
         HorizontalDivider(color = LocalCardColorsPalette.current.borderColor)
-        Section(title = "Optional details") {
+        Section(title = stringResource(R.string.optional_details)) {
             RequestTestDeviceAdditionalRequestsInput(
                 onTestDeviceAdditionalRequestsChange = {
-                    viewModel.onEvent(RequestTestDeviceUserEvent.ChangeAdditionalRequests(it))
+                    onEvent(RequestTestDeviceUserEvent.ChangeAdditionalRequests(it))
                 },
             )
         }
@@ -227,7 +228,7 @@ fun RequestTestDeviceSendRequestButton(
 ) {
     Box(modifier = Modifier.padding(start = 15.dp, bottom = 15.dp, end = 15.dp)) {
         SecondaryButton(onClick = onClick) {
-            Text("Send request", fontWeight = FontWeight.Bold, color = Color.White)
+            Text(stringResource(R.string.send_request), fontWeight = FontWeight.Bold, color = Color.White)
         }
     }
 }
@@ -276,7 +277,7 @@ fun RequestTestDeviceDeviceTypeInput(
     }
 
     RequestDeviceInput(
-        type = "Device type",
+        type = stringResource(R.string.device_type),
         value = {
             Icon(imageVector = Icons.TwoTone.Devices, contentDescription = null, tint = LocalCardColorsPalette.current.borderColor)
             Spacer(modifier = Modifier.width(10.dp))
@@ -296,7 +297,7 @@ fun RequestTestDeviceReturnDateInput(
     errors: List<ValidationError?>,
 ) {
     RequestDeviceDateInput(
-        type = "Return date",
+        type = stringResource(R.string.return_date),
         onValueChange = onRequestTestDeviceReturnDateChange,
     )
 }
@@ -320,7 +321,7 @@ fun RequestTestDeviceAdditionalRequestsInput(
     ) {
         RequestDeviceInput(
             onClick = { focusRequester.requestFocus() },
-            type = "Additional requests",
+            type = stringResource(R.string.additional_requests),
             value = {
                 Icon(
                     imageVector = Icons.TwoTone.Textsms,
@@ -356,7 +357,7 @@ fun RequestTestDeviceRequestDateInput(
     errors: List<ValidationError?>
 ) {
     RequestDeviceDateInput(
-        type = "Request date",
+        type = stringResource(R.string.request_date),
         onValueChange = onRequestTestDeviceRequestDateChange
     )
 }
@@ -410,10 +411,10 @@ fun RequestTestDeviceDatePickerWithDialog(
                     Button(onClick = {
                         onExpandedChange()
                         onValueChange(dateToString)
-                    }) { Text(text = "OK") }
+                    }) { Text(text = stringResource(R.string.ok)) }
                 },
                 dismissButton = {
-                    Button(onClick = onExpandedChange) { Text(text = "Cancel") }
+                    Button(onClick = onExpandedChange) { Text(text = stringResource(R.string.cancel)) }
                 }
             ) {
                 DatePicker(state = dateState, showModeToggle = true)
@@ -436,7 +437,7 @@ fun RequestTestDeviceDeviceManufacturerInput(
     }
 
     RequestDeviceInput(
-        type = "Device manufacturer",
+        type = stringResource(R.string.device_manufacturer),
         value = {
             Icon(imageVector = Icons.TwoTone.Factory, contentDescription = null, tint = LocalCardColorsPalette.current.borderColor)
             Spacer(modifier = Modifier.width(10.dp))

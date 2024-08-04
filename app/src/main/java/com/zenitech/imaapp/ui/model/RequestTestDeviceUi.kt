@@ -4,10 +4,10 @@ import com.zenitech.imaapp.ui.utils.validation.EmptyFieldValidation
 import com.zenitech.imaapp.ui.utils.validation.ValidationError
 
 data class RequestTestDeviceUi(
-    @property:EmptyFieldValidation()
+    @property:EmptyFieldValidation
     val type: String = "",
 
-    @property:EmptyFieldValidation()
+    @property:EmptyFieldValidation
     val manufacturer: String = "",
 
     val requestDate: String = "",

@@ -69,17 +69,11 @@ fun NavGraph(
                     onTopNavigationBarTitleChange("Request Test Device")
                     RequestTestDeviceScreen(
                         onNavigateToDeviceType = {
-                            navController.navigate(Screen.RequestTestDeviceType
-                                .withManufacturer(
-                                    manufacturer = manufacturer,
-                                )
+                            navController.navigate(Screen.RequestTestDeviceType(manufacturer = manufacturer,)
                             )
                         },
                         onNavigateToDeviceManufacturer = {
-                            navController.navigate(Screen.RequestTestDeviceManufacturer
-                                .withType(
-                                    type = type
-                                )
+                            navController.navigate(Screen.RequestTestDeviceManufacturer(type = type)
                             )
                         },
                         onNavigateTestDeviceSuccessful = {

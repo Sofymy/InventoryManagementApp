@@ -5,7 +5,7 @@ import com.google.android.libraries.identity.googleid.GetSignInWithGoogleOption
 
 object GoogleSignInHelper {
 
-    private val signInWithGoogleOption = GetSignInWithGoogleOption.Builder("756383197869-p01ve0lvqqplfs455hvlc78jdhfg7hrr.apps.googleusercontent.com")
+    private val signInWithGoogleOption = GetSignInWithGoogleOption.Builder(Constants.SERVER_CLIENT_ID)
         .setHostedDomainFilter("zenitech.co.uk")
         .build()
 

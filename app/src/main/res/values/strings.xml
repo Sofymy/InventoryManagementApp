@@ -1,17 +1,59 @@
 <resources>
     <string name="app_name">IMAApp</string>
     <string name="login">Log in</string>
-    <string name="qrreader">QR Reader</string>
+    <string name="qr_reader">QR Reader</string>
     <string name="admin">Admin</string>
-    <string name="mydevices">My Devices</string>
-    <string name="devicelist">Device List</string>
+    <string name="my_devices">My Devices</string>
+    <string name="device_list">Device List</string>
     <string name="request">Request</string>
     <string name="screen_title_my_devices">My Devices</string>
     <string name="screen_title_qr_reader">QR Reader</string>
     <string name="screen_title_request">Request</string>
     <string name="screen_title_admin">Admin</string>
     <string name="sign_in">Sign In</string>
-    <string name="devicedetails">Device Details</string>
+    <string name="device_details">Device Details</string>
     <string name="request_type">Test Device Type</string>
     <string name="request_manufacturer">Test device manufacturer</string>
+
+    <string name="filter">Filter</string>
+    <string name="reset">Reset</string>
+    <string name="empty">Empty</string>
+    <string name="all_pages">All pages</string>
+    <string name="current_lines_per_page">Lines per page</string>
+    <string name="all_of">All</string>
+
+    <string name="inventory_id">Inventory number</string>
+    <string name="type">Type</string>
+    <string name="manufacturer">Manufacturer</string>
+    <string name="serial_number">Serial Number</string>
+    <string name="asset_name">Asset name</string>
+    <string name="supplier">Supplier</string>
+    <string name="invoice_number">Invoice number</string>
+    <string name="shipment_date">Shipment date</string>
+    <string name="warranty">Warranty</string>
+    <string name="condition">Condition</string>
+    <string name="status">Status</string>
+    <string name="lease">Lease</string>
+    <string name="site">Site</string>
+    <string name="location">Location</string>
+    <string name="note">Note</string>
+    <string name="tags">Tags</string>
+    <string name="shipment_date_range">Shipment date range</string>
+    <string name="warranty_range">Warranty range</string>
+    <string name="sign_in_with_google">Sign in with Google</string>
+    <string name="sign_out">Sign out</string>
+    <string name="sort">Sort</string>
+    <string name="send_request">Send request</string>
+    <string name="devices">%1$s devices</string>
+    <string name="this_feature_is_unavailable_because_it_requires_camera_permission">This feature is unavailable because it requires camera permission.</string>
+    <string name="date_details">Date details</string>
+    <string name="optional_details">Optional details</string>
+    <string name="device_type">Device type</string>
+    <string name="return_date">Return date</string>
+    <string name="additional_requests">Additional requests</string>
+    <string name="request_date">Request date</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+    <string name="device_manufacturer">Device manufacturer</string>
+
 </resources>

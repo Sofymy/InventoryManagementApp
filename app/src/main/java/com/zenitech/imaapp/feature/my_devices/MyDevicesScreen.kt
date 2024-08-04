@@ -54,12 +54,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.zenitech.imaapp.R
 import com.zenitech.imaapp.ui.common.CircularLoadingIndicator
 import com.zenitech.imaapp.ui.common.ScrollToTopButton
 import com.zenitech.imaapp.ui.common.pulsate
@@ -154,7 +156,7 @@ fun MyDevicesCounter(
     Column(
         Modifier.padding(15.dp, 15.dp, 0.dp, 15.dp),
     ) {
-        Text("$deviceNumber devices")
+        Text(stringResource(R.string.devices, deviceNumber))
     }
 }
 
@@ -373,7 +375,7 @@ fun MyDevicesSortingDropDown(
                 .menuAnchor(),
             horizontalArrangement = Arrangement.End
         ) {
-            Text("Sort")
+            Text(stringResource(R.string.sort))
             Spacer(modifier = Modifier.width(10.dp))
             Icon(Icons.AutoMirrored.Filled.Sort, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
         }

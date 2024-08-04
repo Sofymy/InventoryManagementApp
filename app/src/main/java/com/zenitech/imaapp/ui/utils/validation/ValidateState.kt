@@ -1,6 +1,5 @@
 package com.zenitech.imaapp.ui.utils.validation
 
-import android.util.Log
 import kotlin.reflect.KClass
 import kotlin.reflect.full.memberProperties
 
@@ -32,10 +31,6 @@ class ValidateState<State: Any>(
     }
 
     private fun isEmpty(value: Any?): Boolean {
-        return value.toString().isEmpty()
-    }
-
-    private fun isNotEmail(value: Any?): Boolean{
         return value.toString().isEmpty()
     }
 
