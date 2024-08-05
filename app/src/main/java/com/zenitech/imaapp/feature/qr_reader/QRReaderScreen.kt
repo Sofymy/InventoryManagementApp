@@ -58,7 +58,9 @@ import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
@@ -75,6 +77,9 @@ import com.google.mlkit.vision.barcode.BarcodeScannerOptions
 import com.google.mlkit.vision.barcode.BarcodeScanning
 import com.google.mlkit.vision.barcode.common.Barcode
 import com.google.mlkit.vision.common.InputImage
+import com.zenitech.imaapp.R
+import com.zenitech.imaapp.ui.common.CircularLoadingIndicator
+import com.zenitech.imaapp.ui.common.InstructionsComponent
 import com.zenitech.imaapp.ui.common.RoundedButton
 import com.zenitech.imaapp.ui.theme.LocalCardColorsPalette
 import java.util.concurrent.Executors
@@ -99,33 +104,7 @@ fun QRReaderContent() {
             .fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        QRReaderInstructions()
         QRReaderSquare()
-    }
-}
-
-@Composable
-fun QRReaderInstructions() {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(top = 40.dp)
-            .padding(horizontal = 30.dp)
-            .border(1.dp, LocalCardColorsPalette.current.borderColor, RoundedCornerShape(15.dp))
-            .background(
-                LocalCardColorsPalette.current.containerColor,
-                RoundedCornerShape(15.dp)
-            )
-            .padding(10.dp)
-        ,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Icon(imageVector = Icons.TwoTone.Info, contentDescription = null, tint = MaterialTheme.colorScheme.onBackground)
-        Spacer(modifier = Modifier.width(20.dp))
-        Text(
-            text = "Place the QR code of your device in the frame",
-            fontWeight = FontWeight.Bold
-        )
     }
 }
 
@@ -193,6 +172,22 @@ fun QRReaderHandlePermissionAndLifecycle(
             }
         }
     }
+    else{
+        Column(
+            modifier = Modifier
+                .padding(15.dp)
+                .fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            Text(
+                text = stringResource(R.string.this_feature_is_unavailable_because_it_requires_camera_permission),
+                fontWeight = FontWeight.Bold,
+                textAlign = TextAlign.Center,
+                color = MaterialTheme.colorScheme.onBackground,
+            )
+        }
+    }
 }
 
 @Composable
@@ -206,6 +201,11 @@ fun QRReaderSquareContent(
     var lastScannedBarcode by remember { mutableStateOf<String?>(null) }
     val isToggleOn = remember { mutableStateOf(false) }
     val zoomLevel = remember { mutableFloatStateOf(1f) }
+
+    InstructionsComponent(
+        "Place the QR code of your device in the frame",
+        modifier = Modifier.padding(15.dp)
+    )
 
     Box(
         modifier = Modifier.fillMaxSize()

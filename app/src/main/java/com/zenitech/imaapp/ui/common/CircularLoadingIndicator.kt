@@ -30,7 +30,7 @@ fun CircularLoadingIndicator(
     size: Dp = 100.dp,
     sweepAngle: Float = 90f,
     color: Color = MaterialTheme.colorScheme.primary,
-    strokeWidth: Dp = 10.dp
+    strokeWidth: Dp = 4.dp
 ) {
     val transition = rememberInfiniteTransition(label = "")
 
@@ -56,9 +56,9 @@ fun CircularLoadingIndicator(
     ) {
         Canvas(
             Modifier
-                .progressSemantics() // (optional) for Accessibility services
-                .size(size) // canvas size
-                .padding(strokeWidth / 2) //padding. otherwise, not the whole circle will fit in the canvas
+                .progressSemantics()
+                .size(size)
+                .padding(strokeWidth / 2)
         ) {
             drawCircle(Color.Transparent, style = stroke)
 

@@ -2,7 +2,6 @@ package com.zenitech.imaapp.navigation
 
 import androidx.annotation.StringRes
 import com.zenitech.imaapp.R
-import com.zenitech.imaapp.ui.model.DeviceResponseUi
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -13,20 +12,37 @@ sealed class Screen(
     data object SignIn: Screen(R.string.sign_in)
 
     @Serializable
-    data object QRReader: Screen(R.string.qrreader)
+    data object QRReader: Screen(R.string.qr_reader)
 
     @Serializable
     data object Admin: Screen(R.string.admin)
 
     @Serializable
-    data object MyDevices: Screen(R.string.mydevices)
+    data object MyDevices: Screen(R.string.my_devices)
 
     @Serializable
-    data class DeviceDetails(val id: String) : Screen(R.string.devicedetails)
+    data class DeviceDetails(val id: String) : Screen(R.string.device_details)
 
     @Serializable
-    data object DeviceList: Screen(R.string.devicelist)
+    data object DeviceList: Screen(R.string.device_list)
 
     @Serializable
-    data object Request: Screen(R.string.request)
+    data class RequestTestDevice(
+        val type: String? = null,
+        val manufacturer: String? = null,
+        val requestDate: String? = null,
+        val returnDate: String? = null,
+        val additionalRequests: String? = null
+    ) : Screen(R.string.request)
+
+
+    @Serializable
+    data class RequestTestDeviceType(val manufacturer: String? = null): Screen(R.string.request_type)
+
+    @Serializable
+    data class RequestTestDeviceManufacturer(val type: String ?= null): Screen(R.string.request_manufacturer)
+
+
+    @Serializable
+    data object RequestTestDeviceSuccessful: Screen(R.string.device_list)
 }

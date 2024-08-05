@@ -9,6 +9,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -19,10 +20,12 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.twotone.KeyboardArrowUp
+import androidx.compose.material.icons.twotone.Preview
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -32,8 +35,26 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.zenitech.imaapp.ui.theme.IMAAppTheme
 import com.zenitech.imaapp.ui.theme.LocalButtonColorsPalette
+
+@Composable
+@Preview(showBackground = true)
+fun ButtonPreview(){
+    IMAAppTheme {
+        Surface {
+            Column() {
+                PrimaryButton(onClick = { }) { Text("Primary Button") }
+                SecondaryButton(onClick = { }) { Text("Secondary Button") }
+                ScrollToTopButton { }
+                RoundedButton(onClick = { }, iconImageVector = Icons.TwoTone.Preview)
+            }
+        }
+    }
+}
+
 
 @Composable
 fun PrimaryButton(
@@ -53,7 +74,7 @@ fun PrimaryButton(
             .pulsate()
             .border(1.dp, LocalButtonColorsPalette.current.borderColor, RoundedCornerShape(15.dp))
             .background(LocalButtonColorsPalette.current.containerColor, RoundedCornerShape(15.dp))
-            .padding(15.dp)
+            .padding(15.dp, 20.dp)
         ,
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically,
@@ -64,11 +85,27 @@ fun PrimaryButton(
 @Composable
 fun SecondaryButton(
     onClick: () -> Unit,
-    text: String
+    content: @Composable () -> Unit
 ) {
-    Button(onClick = { onClick() }) {
-        Text(text)
-    }
+    val interactionSource: MutableInteractionSource = remember { MutableInteractionSource() }
+
+    Row(
+        modifier = Modifier
+            .clickable(
+                indication = null,
+                interactionSource = interactionSource,
+                onClick = onClick
+            )
+            .fillMaxWidth()
+            .pulsate()
+            .border(1.dp, LocalButtonColorsPalette.current.borderColor, RoundedCornerShape(15.dp))
+            .background(MaterialTheme.colorScheme.secondary, RoundedCornerShape(15.dp))
+            .padding(15.dp, 20.dp)
+        ,
+        horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.CenterVertically,
+        content = { content() }
+    )
 }
 
 @Composable
@@ -84,10 +121,10 @@ fun ScrollToTopButton(onClick: () -> Unit) {
             contentPadding = PaddingValues(13.dp),
             shape = CircleShape,
             modifier = Modifier
-                .shadow(10.dp, shape = CircleShape)
+                .shadow(5.dp, shape = CircleShape)
                 .size(65.dp),
             colors = ButtonDefaults.buttonColors(
-                containerColor = MaterialTheme.colorScheme.primary,
+                containerColor = MaterialTheme.colorScheme.secondary,
                 contentColor = Color.White
             )
         ) {
@@ -141,3 +178,4 @@ fun RoundedButton(
     )
 
 }
+

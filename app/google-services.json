@@ -12,7 +12,12 @@
           "package_name": "com.zenitech.imaapp"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "756383197869-p01ve0lvqqplfs455hvlc78jdhfg7hrr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyC8e9FM605lRoHEr7VfbLUyG_VXbvGBFrc"
@@ -20,7 +25,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "756383197869-4qsf78eau75232itvf2eu1d58v7t79p0.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "756383197869-5cci13m476t5po6g1uk1lj9psatg6fso.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "uk.co.zenitech.inventoryma"
+              }
+            }
+          ]
         }
       }
     }

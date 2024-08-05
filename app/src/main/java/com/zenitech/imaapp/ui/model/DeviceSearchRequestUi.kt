@@ -1,8 +1,5 @@
 package com.zenitech.imaapp.ui.model
 
-import com.zenitech.imaapp.data.model.DeviceStatus
-import java.util.Date
-
 data class DeviceSearchRequestUi(
     val inventoryId: String,
     val type: String,

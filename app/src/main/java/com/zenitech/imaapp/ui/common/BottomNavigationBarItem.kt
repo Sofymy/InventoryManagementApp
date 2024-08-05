@@ -33,8 +33,8 @@ sealed class BottomNavigationBarItem(
 
     @Serializable
     data object Request : BottomNavigationBarItem(
-        screen = Screen.Request,
-        resourceId = Screen.Request.resourceId,
+        screen = Screen.RequestTestDevice(),
+        resourceId = Screen.RequestTestDevice().resourceId,
         icon = Icons.TwoTone.AddComment
     )
 

@@ -16,8 +16,8 @@ import androidx.compose.ui.platform.LocalContext
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 private val DarkColorScheme = darkColorScheme(
-    primary = RaspberryRed30White,
-    secondary = EerieBlack,
+    primary = RaspberryRed,
+    secondary = Mint,
     background = EerieBlack40Black,
     surface = EerieBlack40Black,
     onSurface = White,
@@ -26,7 +26,7 @@ private val DarkColorScheme = darkColorScheme(
 
 private val LightColorScheme = lightColorScheme(
     primary = RaspberryRed,
-    secondary = EerieBlack,
+    secondary = Mint,
     background = Grey,
     surface = Grey,
     onSurface = Color.Black,
@@ -77,14 +77,14 @@ val LightNavigationBarColorScheme = BottomNavigationBarColorScheme(
     unselectedIconColor = Color.Black,
     unselectedTextColor = Color.Black,
     bottomContainerBarColor = Color.White,
-    bottomContainerBarDividerColor = Color.Black.copy(0.1f)
+    bottomContainerBarDividerColor = DarkGrey
 )
 
 val DarkNavigationBarColorScheme = BottomNavigationBarColorScheme(
     topContainerBarColor = EerieBlack40Black,
     containerTextColor = Color.White,
-    selectedIconColor = RaspberryRed30White,
-    selectedTextColor = RaspberryRed30White,
+    selectedIconColor = Mint,
+    selectedTextColor = Mint,
     unselectedIconColor = Color.White,
     unselectedTextColor = Color.White,
     bottomContainerBarColor = EerieBlack,

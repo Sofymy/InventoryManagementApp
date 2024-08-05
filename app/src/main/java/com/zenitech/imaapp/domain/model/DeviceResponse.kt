@@ -1,6 +1,5 @@
 package com.zenitech.imaapp.domain.model
 
-import com.zenitech.imaapp.ui.model.DeviceAssetUi
 import com.zenitech.imaapp.ui.model.DeviceResponseUi
 import com.zenitech.imaapp.ui.model.asDeviceAsset
 import com.zenitech.imaapp.ui.model.asDeviceAssetUi
