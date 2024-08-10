@@ -2,6 +2,14 @@ package com.zenitech.imaapp.ui.common
 
 import androidx.annotation.StringRes
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AddComment
+import androidx.compose.material.icons.filled.AdminPanelSettings
+import androidx.compose.material.icons.filled.Devices
+import androidx.compose.material.icons.filled.QrCode
+import androidx.compose.material.icons.outlined.AddComment
+import androidx.compose.material.icons.outlined.AdminPanelSettings
+import androidx.compose.material.icons.outlined.Devices
+import androidx.compose.material.icons.outlined.QrCode
 import androidx.compose.material.icons.twotone.AddComment
 import androidx.compose.material.icons.twotone.AdminPanelSettings
 import androidx.compose.material.icons.twotone.Devices
@@ -15,33 +23,38 @@ import kotlinx.serialization.Serializable
 sealed class BottomNavigationBarItem(
     val screen: Screen,
     @StringRes val resourceId: Int,
-    val icon: @Contextual ImageVector
+    val selectedIcon: @Contextual ImageVector,
+    val unselectedIcon: @Contextual ImageVector
 ) {
     @Serializable
     data object MyDevices : BottomNavigationBarItem(
         screen = Screen.MyDevices,
         resourceId = Screen.MyDevices.resourceId,
-        icon = Icons.TwoTone.Devices
+        unselectedIcon = Icons.TwoTone.Devices,
+        selectedIcon = Icons.Filled.Devices
     )
 
     @Serializable
     data object QRReader : BottomNavigationBarItem(
         screen = Screen.QRReader,
         resourceId = Screen.QRReader.resourceId,
-        icon = Icons.TwoTone.QrCode
+        unselectedIcon = Icons.TwoTone.QrCode,
+        selectedIcon = Icons.Filled.QrCode
     )
 
     @Serializable
     data object Request : BottomNavigationBarItem(
         screen = Screen.RequestTestDevice(),
         resourceId = Screen.RequestTestDevice().resourceId,
-        icon = Icons.TwoTone.AddComment
+        unselectedIcon = Icons.TwoTone.AddComment,
+        selectedIcon = Icons.Filled.AddComment
     )
 
     @Serializable
     data object Admin : BottomNavigationBarItem(
         screen = Screen.Admin,
         resourceId = Screen.Admin.resourceId,
-        icon = Icons.TwoTone.AdminPanelSettings
+        unselectedIcon = Icons.TwoTone.AdminPanelSettings,
+        selectedIcon = Icons.Filled.AdminPanelSettings
     )
 }

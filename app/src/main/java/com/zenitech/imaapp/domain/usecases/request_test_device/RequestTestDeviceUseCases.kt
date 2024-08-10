@@ -6,5 +6,5 @@ class RequestTestDeviceUseCases(
     val repository: RequestTestDeviceRepository,
     val loadTestDeviceManufacturers: LoadTestDeviceManufacturersUseCase,
     val loadTestDeviceTypes: LoadTestDeviceTypesUseCase,
-    val saveTestDeviceRequestUseCase: SaveTestDeviceRequestUseCase
+    val saveTestDeviceRequest: SaveTestDeviceRequestUseCase
 )

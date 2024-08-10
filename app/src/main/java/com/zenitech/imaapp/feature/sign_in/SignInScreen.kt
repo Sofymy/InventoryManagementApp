@@ -274,7 +274,8 @@ fun SignInContent(
                     onNavigateToMyDevices()
                 }
                 is SignInState.Error -> {
-                    Log.d("SignInContent", "Google sign-in failed: ${it.error.message}", it.error)
+                    //onNavigateToMyDevices()
+                    Log.e("SignInContent", "Google sign-in failed: ${it.error.message}", it.error)
                     scope.launch {
                         snackBarHostState.showSnackbar("Sign in failed. Please try again!")
                     }

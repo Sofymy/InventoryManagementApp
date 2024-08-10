@@ -6,7 +6,13 @@ import com.zenitech.imaapp.data.repository.MyDevicesRepository
 import com.zenitech.imaapp.data.repository.QRReaderRepository
 import com.zenitech.imaapp.data.repository.RequestTestDeviceRepository
 import com.zenitech.imaapp.data.auth.AuthenticationService
+import com.zenitech.imaapp.domain.usecases.admin.AdminCreateDeviceUseCase
 import com.zenitech.imaapp.domain.usecases.admin.AdminUseCases
+import com.zenitech.imaapp.domain.usecases.admin.LoadAdminAddDeviceAssetsUseCase
+import com.zenitech.imaapp.domain.usecases.admin.LoadAdminAddDeviceManufacturersUseCase
+import com.zenitech.imaapp.domain.usecases.admin.LoadAdminAddDeviceSitesUseCase
+import com.zenitech.imaapp.domain.usecases.admin.LoadAdminAddDeviceTypesUseCase
+import com.zenitech.imaapp.domain.usecases.admin.LoadAdminDevicesUseCase
 import com.zenitech.imaapp.domain.usecases.device_details.DeviceDetailsUseCases
 import com.zenitech.imaapp.domain.usecases.device_details.LoadDeviceDetailsUseCase
 import com.zenitech.imaapp.domain.usecases.my_devices.LoadMyDevicesUseCase
@@ -60,8 +66,50 @@ object UseCasesModule {
     @Singleton
     fun provideAdminUseCases(
         repository: AdminRepository,
-    ): AdminUseCases = AdminUseCases(repository)
+        loadAdminDevices: LoadAdminDevicesUseCase,
+        loadAdminAddDeviceAssets: LoadAdminAddDeviceAssetsUseCase,
+        loadAdminAddDeviceTypes: LoadAdminAddDeviceTypesUseCase,
+        loadAdminAddDeviceManufacturers: LoadAdminAddDeviceManufacturersUseCase,
+        loadAdminAddDevicesSites: LoadAdminAddDeviceSitesUseCase,
+        createDevice: AdminCreateDeviceUseCase
+    ): AdminUseCases = AdminUseCases(repository, loadAdminDevices, loadAdminAddDeviceAssets, loadAdminAddDeviceTypes, loadAdminAddDeviceManufacturers, loadAdminAddDevicesSites, createDevice)
 
+    @Provides
+    @Singleton
+    fun provideLoadAdminDevicesUseCase(
+        repository: AdminRepository
+    ): LoadAdminDevicesUseCase = LoadAdminDevicesUseCase(repository)
+
+    @Provides
+    @Singleton
+    fun provideLoadAdminDeviceAssetsUseCase(
+        repository: AdminRepository
+    ): LoadAdminAddDeviceAssetsUseCase = LoadAdminAddDeviceAssetsUseCase(repository)
+
+    @Provides
+    @Singleton
+    fun provideLoadAdminDeviceSitesUseCase(
+        repository: AdminRepository
+    ): LoadAdminAddDeviceSitesUseCase = LoadAdminAddDeviceSitesUseCase(repository)
+
+
+    @Provides
+    @Singleton
+    fun provideLoadAdminDeviceTypesUseCase(
+        repository: AdminRepository
+    ): LoadAdminAddDeviceTypesUseCase = LoadAdminAddDeviceTypesUseCase(repository)
+
+    @Provides
+    @Singleton
+    fun provideLoadAdminDeviceManufacturersUseCase(
+        repository: AdminRepository
+    ): LoadAdminAddDeviceManufacturersUseCase = LoadAdminAddDeviceManufacturersUseCase(repository)
+
+    @Provides
+    @Singleton
+    fun provideAdminCreateDeviceUseCase(
+        repository: AdminRepository
+    ): AdminCreateDeviceUseCase = AdminCreateDeviceUseCase(repository)
 
     @Provides
     @Singleton

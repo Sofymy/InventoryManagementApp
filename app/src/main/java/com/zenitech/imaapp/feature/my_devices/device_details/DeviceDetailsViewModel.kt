@@ -1,14 +1,9 @@
-package com.zenitech.imaapp.feature.device_details
+package com.zenitech.imaapp.feature.my_devices.device_details
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.zenitech.imaapp.domain.model.DeviceAsset
-import com.zenitech.imaapp.domain.model.DeviceSearchRequest
-import com.zenitech.imaapp.domain.model.DeviceStatus
 import com.zenitech.imaapp.domain.model.toDeviceSearchRequestUi
 import com.zenitech.imaapp.domain.usecases.device_details.DeviceDetailsUseCases
-import com.zenitech.imaapp.domain.usecases.my_devices.MyDevicesUseCases
-import com.zenitech.imaapp.feature.my_devices.MyDevicesState
 import com.zenitech.imaapp.ui.model.DeviceSearchRequestUi
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -31,12 +26,12 @@ class DeviceDetailsViewModel @Inject constructor(
     private val _state = MutableStateFlow<DeviceDetailsState>(DeviceDetailsState.Loading)
     val state = _state.asStateFlow()
 
-    fun loadDeviceDetails(){
+    fun loadDeviceDetails(inventoryId: String) {
 
         viewModelScope.launch {
             try {
                 _state.value = DeviceDetailsState.Loading
-                val deviceDetails = deviceDetailsOperations.loadDeviceDetails().getOrThrow().toDeviceSearchRequestUi()
+                val deviceDetails = deviceDetailsOperations.loadDeviceDetails(inventoryId).getOrThrow().toDeviceSearchRequestUi()
                 _state.value = DeviceDetailsState.Success(
                     deviceDetailsList = deviceDetails
                 )

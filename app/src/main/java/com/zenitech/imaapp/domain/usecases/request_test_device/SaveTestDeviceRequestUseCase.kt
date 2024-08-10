@@ -1,6 +1,9 @@
 package com.zenitech.imaapp.domain.usecases.request_test_device
 
+import android.content.ContentValues.TAG
+import android.util.Log
 import com.zenitech.imaapp.data.repository.RequestTestDeviceRepository
+import com.zenitech.imaapp.domain.model.TestDeviceRequest
 import kotlinx.coroutines.flow.first
 import java.io.IOException
 
@@ -8,12 +11,11 @@ class SaveTestDeviceRequestUseCase (
     private val repository: RequestTestDeviceRepository
 ) {
 
-    suspend operator fun invoke(): Result<List<String>> {
-        return try {
-            val devices = repository.getDeviceTypes().first()
-            Result.success(devices)
+    operator fun invoke(testDeviceRequest: TestDeviceRequest) {
+        try {
+            repository.saveTestDeviceRequest(testDeviceRequest)
         } catch (e: IOException) {
-            Result.failure(e)
+            Log.e(TAG, e.message.toString())
         }
     }
 }

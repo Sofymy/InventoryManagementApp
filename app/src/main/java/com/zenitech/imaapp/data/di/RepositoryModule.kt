@@ -4,8 +4,6 @@ import com.zenitech.imaapp.data.repository.AdminRepository
 import com.zenitech.imaapp.data.repository.AdminRepositoryImpl
 import com.zenitech.imaapp.data.repository.DeviceDetailsRepository
 import com.zenitech.imaapp.data.repository.DeviceDetailsRepositoryImpl
-import com.zenitech.imaapp.data.repository.DeviceListRepository
-import com.zenitech.imaapp.data.repository.DeviceListRepositoryImpl
 import com.zenitech.imaapp.data.repository.MyDevicesRepository
 import com.zenitech.imaapp.data.repository.MyDevicesRepositoryImpl
 import com.zenitech.imaapp.data.repository.QRReaderRepository
@@ -27,10 +25,6 @@ object RepositoryModule {
     @Provides
     @Singleton
     fun providesMyDevicesRepository(): MyDevicesRepository = MyDevicesRepositoryImpl()
-
-    @Provides
-    @Singleton
-    fun providesDeviceListRepository(): DeviceListRepository = DeviceListRepositoryImpl()
 
     @Provides
     @Singleton

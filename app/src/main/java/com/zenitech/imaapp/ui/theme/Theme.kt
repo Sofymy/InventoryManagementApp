@@ -63,11 +63,20 @@ data class ButtonColorScheme(
     val roundedButtonColorDisabledContentColor: Color = Color.Unspecified
 )
 
+@Immutable
+data class AdminFolderColorScheme(
+    val contentColor: Color = Color.Unspecified,
+    val headColor: Color = Color.Unspecified,
+    val iconColor: Color = Color.Unspecified,
+)
+
 val LocalNavigationBarColorsPalette = staticCompositionLocalOf { BottomNavigationBarColorScheme() }
 
 val LocalCardColorsPalette = staticCompositionLocalOf { CardColorScheme() }
 
 val LocalButtonColorsPalette = staticCompositionLocalOf { ButtonColorScheme() }
+
+val LocalAdminFolderColorsPalette = staticCompositionLocalOf { AdminFolderColorScheme() }
 
 val LightNavigationBarColorScheme = BottomNavigationBarColorScheme(
     topContainerBarColor = Grey,
@@ -123,6 +132,18 @@ val LightButtonColorScheme = ButtonColorScheme(
     roundedButtonColorDisabledContentColor = Color.Black.copy(0.2f),
 )
 
+val DarkAdminFolderColorScheme = AdminFolderColorScheme(
+    contentColor = Mint,
+    headColor = Mint30Black,
+    iconColor = Mint30Black
+)
+
+val LightAdminFolderColorScheme = AdminFolderColorScheme(
+    contentColor = Mint30White,
+    headColor = Mint,
+    iconColor = Mint
+)
+
 
 @Composable
 fun IMAAppTheme(
@@ -170,11 +191,16 @@ fun IMAAppTheme(
         if (darkTheme) DarkButtonColorScheme
         else LightButtonColorScheme
 
+    val folderColorScheme =
+        if (darkTheme) DarkAdminFolderColorScheme
+        else LightAdminFolderColorScheme
+
 
     CompositionLocalProvider(
         LocalCardColorsPalette provides cardColorScheme,
         LocalButtonColorsPalette provides buttonColorScheme,
-        LocalNavigationBarColorsPalette provides bottomNavigationBarColorScheme
+        LocalNavigationBarColorsPalette provides bottomNavigationBarColorScheme,
+        LocalAdminFolderColorsPalette provides folderColorScheme
     ) {
         MaterialTheme(
             colorScheme = colorScheme,

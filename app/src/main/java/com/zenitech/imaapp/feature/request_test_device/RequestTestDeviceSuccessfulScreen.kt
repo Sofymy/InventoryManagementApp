@@ -14,9 +14,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.zenitech.imaapp.R
 import com.zenitech.imaapp.ui.theme.LocalCardColorsPalette
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.Dispatchers
@@ -69,7 +71,7 @@ fun AnimatedCheckmark(
             delay(1000)
             redirectSeconds.intValue -= 1
         }
-        // Ensure the navigation call is made on the main thread
+
         withContext(Dispatchers.Main) {
             onNavigateToRequestTestDevice()
         }
@@ -97,13 +99,13 @@ fun AnimatedCheckmark(
 
     Spacer(modifier = Modifier.height(30.dp))
     Text(
-        text = "Successful test device request!",
+        text = stringResource(R.string.successful_test_device_request),
         fontWeight = FontWeight.Bold,
         color = MaterialTheme.colorScheme.onBackground
     )
     Spacer(modifier = Modifier.height(6.dp))
     Text(
-        text = "You will be redirected in ${redirectSeconds.intValue} seconds",
+        text = stringResource(R.string.you_will_be_redirected_in_seconds, redirectSeconds.intValue),
         color = MaterialTheme.colorScheme.onBackground
     )
     Spacer(modifier = Modifier.height(70.dp))

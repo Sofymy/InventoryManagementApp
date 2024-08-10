@@ -2,7 +2,6 @@
 
 package com.zenitech.imaapp.feature.my_devices
 
-import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.ExperimentalSharedTransitionApi
@@ -67,10 +66,8 @@ import com.zenitech.imaapp.ui.common.ScrollToTopButton
 import com.zenitech.imaapp.ui.common.pulsate
 import com.zenitech.imaapp.ui.common.shimmerBrush
 import com.zenitech.imaapp.ui.common.simpleVerticalScrollbar
-import com.zenitech.imaapp.ui.model.DeviceResponseUi
 import com.zenitech.imaapp.ui.model.DeviceSearchRequestUi
 import com.zenitech.imaapp.ui.theme.LocalCardColorsPalette
-import com.zenitech.imaapp.ui.theme.RaspberryRed30White
 import kotlinx.coroutines.launch
 
 @Composable
@@ -305,18 +302,16 @@ fun MyDevicesDeviceItem(
             Row(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                with(sharedTransitionScope) {
-                    Icon(
-                        imageVector = deviceResponseUi.asset.icon,
-                        contentDescription = null,
-                        modifier = Modifier
-                    )
-                    Spacer(modifier = Modifier.width(20.dp))
-                    Column {
-                        Text(deviceResponseUi.asset.name, )
-                        Spacer(modifier = Modifier.height(5.dp))
-                        Text(deviceResponseUi.manufacturer, color = LocalCardColorsPalette.current.secondaryContentColor,)
-                    }
+                Icon(
+                    imageVector = deviceResponseUi.assetName.icon,
+                    contentDescription = null,
+                    modifier = Modifier
+                )
+                Spacer(modifier = Modifier.width(20.dp))
+                Column {
+                    Text(deviceResponseUi.assetName.name )
+                    Spacer(modifier = Modifier.height(5.dp))
+                    Text(deviceResponseUi.manufacturer, color = LocalCardColorsPalette.current.secondaryContentColor)
                 }
             }
             Icon(
@@ -375,7 +370,7 @@ fun MyDevicesSortingDropDown(
                 .menuAnchor(),
             horizontalArrangement = Arrangement.End
         ) {
-            Text(stringResource(R.string.sort))
+            Text(stringResource(id = R.string.sort))
             Spacer(modifier = Modifier.width(10.dp))
             Icon(Icons.AutoMirrored.Filled.Sort, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
         }

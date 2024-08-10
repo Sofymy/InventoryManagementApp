@@ -1,8 +1,6 @@
 package com.zenitech.imaapp.data.repository
 
-import com.zenitech.imaapp.domain.model.DeviceAsset
-import com.zenitech.imaapp.domain.model.DeviceSearchRequest
-import com.zenitech.imaapp.domain.model.DeviceStatus
+import com.zenitech.imaapp.domain.model.TestDeviceRequest
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
@@ -63,5 +61,9 @@ class RequestTestDeviceRepositoryImpl : RequestTestDeviceRepository {
             )
             emit(mockedDeviceTypes)
         }
+    }
+
+    override fun saveTestDeviceRequest(testDeviceRequest: TestDeviceRequest) {
+        // TODO("Not yet implemented")
     }
 }
