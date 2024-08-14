@@ -85,6 +85,7 @@ fun PrimaryButton(
 @Composable
 fun SecondaryButton(
     onClick: () -> Unit,
+    backgroundColor: Color = MaterialTheme.colorScheme.secondary,
     content: @Composable () -> Unit
 ) {
     val interactionSource: MutableInteractionSource = remember { MutableInteractionSource() }
@@ -99,7 +100,7 @@ fun SecondaryButton(
             .fillMaxWidth()
             .pulsate()
             .border(1.dp, LocalButtonColorsPalette.current.borderColor, RoundedCornerShape(15.dp))
-            .background(MaterialTheme.colorScheme.secondary, RoundedCornerShape(15.dp))
+            .background(backgroundColor, RoundedCornerShape(15.dp))
             .padding(15.dp, 20.dp)
         ,
         horizontalArrangement = Arrangement.Center,

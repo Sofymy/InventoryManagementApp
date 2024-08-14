@@ -79,33 +79,25 @@ class SignInViewModel @Inject constructor(
         viewModelScope.launch {
             _state.value = SignInState.Loading
             try {
-                Log.d("SignInButton", "Starting credential retrieval")
                 val response = credentialManager.getCredential(
                     request = GoogleSignInHelper.request,
                     context = context
                 )
-                Log.d("SignInButton", "Credential retrieval successful: $response")
                 val result = signInOperations.signInWithGoogle(response)
-                Log.d("SignInButton", "Sign-in operation result: $result")
                 _state.value = if (result.isSuccess) {
                     SignInState.Success
                 } else {
                     SignInState.Error(Throwable(result.exceptionOrNull()))
                 }
             } catch (e: GetCredentialCancellationException) {
-                Log.e("SignInButton", "Sign-in process was unexpectedly cancelled", e)
                 _state.value = SignInState.Error(e)
             } catch (e: GetCredentialException) {
-                Log.e("SignInButton", "Error during credential retrieval", e)
                 _state.value = SignInState.Error(e)
             } catch (e: Exception) {
-                Log.e("SignInButton", "Unexpected error during sign-in", e)
                 _state.value = SignInState.Error(e)
             }
         }
     }
-
-
 
     private fun signOut() {
         viewModelScope.launch {

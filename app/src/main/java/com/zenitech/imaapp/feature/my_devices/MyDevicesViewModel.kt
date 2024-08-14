@@ -63,7 +63,7 @@ class MyDevicesViewModel @Inject constructor(
             if (currentState is MyDevicesState.Success) {
                 val sortedList = when (sortingOption) {
                     SortingOption.Manufacturer -> currentState.myDeviceList.sortedBy { it.manufacturer }
-                    SortingOption.Asset -> currentState.myDeviceList.sortedBy { it.asset.name }
+                    SortingOption.Asset -> currentState.myDeviceList.sortedBy { it.assetName.name }
                 }
                 currentState.copy(myDeviceList = sortedList)
             } else {

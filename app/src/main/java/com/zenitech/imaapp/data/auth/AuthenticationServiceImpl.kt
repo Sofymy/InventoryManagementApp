@@ -31,7 +31,7 @@ class AuthenticationServiceImpl(
                                         if (task.isSuccessful) {
                                             cont.resume(Result.success(idToken))
                                         } else {
-                                            cont.resume(Result.failure(Throwable()))
+                                            cont.resume(Result.failure(Throwable(task.exception)))
                                         }
                                     }
                             }

@@ -28,8 +28,26 @@ android {
         }
     }
 
+    signingConfigs {
+
+        getByName("debug") {
+            storeFile = file("IMA_debug.keystore")
+        }
+        create("release") {
+            storeFile = file("IMA.keystore")
+            storePassword = "VRdwxxAkHU8uxW0wsGdTjdlmD7q05HsL"
+            keyAlias = "IMA"
+            keyPassword = "VRdwxxAkHU8uxW0wsGdTjdlmD7q05HsL"
+        }
+    }
+
     buildTypes {
+        debug {
+            signingConfig = signingConfigs.getByName("debug")
+        }
+
         release {
+            signingConfig = signingConfigs.getByName("release")
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
@@ -37,6 +55,12 @@ android {
             )
         }
     }
+    /*
+    SHA1: DF:CC:BC:B3:11:26:43:7A:E1:71:BB:B8:7D:6B:AA:7F:98:2A:2E:ED
+    SHA256: 84:FC:F8:38:20:7F:42:0D:B5:25:10:DF:8F:C7:B0:68:02:2A:D4:D2:C5:A7:6B:DF:8E:D3:40:F5:C3:47:36:90
+    SHA1-BASE64: 38y8sxEmQ3rhcbu4fWuqf5gqLu0=
+    */
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
@@ -118,17 +142,26 @@ dependencies {
     implementation(kotlin("reflect"))
 
     implementation(libs.firebase.auth.ktx)
-    implementation(libs.play.services.auth)
+
     implementation(libs.google.firebase.auth.ktx)
 
     implementation(libs.kotlin.reflect)
 
-    implementation(libs.androidx.credentials)
-    implementation(libs.androidx.credentials.play.services.auth)
     implementation(libs.googleid)
 
     implementation(libs.play.services.identity)
 
+    implementation(libs.androidx.credentials)
+    implementation(libs.androidx.credentials.play.services.auth)
 
+    implementation(libs.google.accompanist.pager)
+    implementation(libs.accompanist.pager.indicators)
+
+    implementation(libs.lazytable)
+
+    implementation(libs.androidx.paging.compose.v100alpha16)
+    implementation(libs.androidx.paging.runtime)
+
+    implementation(libs.poi.ooxml)
 
 }

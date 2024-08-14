@@ -8,6 +8,8 @@ import kotlinx.serialization.Serializable
 sealed class Screen(
     @StringRes val resourceId: Int
 ){
+
+
     @Serializable
     data object SignIn: Screen(R.string.sign_in)
 
@@ -18,13 +20,34 @@ sealed class Screen(
     data object Admin: Screen(R.string.admin)
 
     @Serializable
+    data object AdminDevices: Screen(R.string.admin)
+
+    @Serializable
+    data object AdminDevicesAddDevice: Screen(R.string.admin_add_device)
+
+    @Serializable
+    data object AdminDevicesAddDeviceAssets: Screen(R.string.asset_name)
+
+    @Serializable
+    data object AdminDevicesAddDeviceSites: Screen(R.string.site)
+
+    @Serializable
+    data object AdminDevicesAddDeviceSuccessful: Screen(R.string.successful_device_creation)
+
+    @Serializable
+    data object AdminDevicesAddDeviceTypes: Screen(R.string.device_type)
+
+    @Serializable
+    data object AdminDevicesAddDeviceManufacturers: Screen(R.string.manufacturer)
+
+    @Serializable
+    data class AdminDeviceDetails(val inventoryId: String): Screen(R.string.admin_device_details)
+
+    @Serializable
     data object MyDevices: Screen(R.string.my_devices)
 
     @Serializable
-    data class DeviceDetails(val id: String) : Screen(R.string.device_details)
-
-    @Serializable
-    data object DeviceList: Screen(R.string.device_list)
+    data class DeviceDetails(val inventoryId: String) : Screen(R.string.device_details)
 
     @Serializable
     data class RequestTestDevice(
@@ -38,6 +61,7 @@ sealed class Screen(
 
     @Serializable
     data class RequestTestDeviceType(val manufacturer: String? = null): Screen(R.string.request_type)
+
 
     @Serializable
     data class RequestTestDeviceManufacturer(val type: String ?= null): Screen(R.string.request_manufacturer)

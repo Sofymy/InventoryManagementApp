@@ -36,8 +36,13 @@
     <string name="lease">Lease</string>
     <string name="site">Site</string>
     <string name="location">Location</string>
-    <string name="note">Note</string>
+
+    <string name="shipment_date_begin">Shipment Date Begin</string>
+    <string name="shipment_date_end">Shipment Date End</string>
+    <string name="warranty_begin">Warranty Begin</string>
+    <string name="warranty_end">Warranty End</string>
     <string name="tags">Tags</string>
+    <string name="note">Note</string>
     <string name="shipment_date_range">Shipment date range</string>
     <string name="warranty_range">Warranty range</string>
     <string name="sign_in_with_google">Sign in with Google</string>
@@ -55,5 +60,40 @@
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
     <string name="device_manufacturer">Device manufacturer</string>
+    <string name="search">Search</string>
+    <string name="admin_add_device">Add Device</string>
+    <string name="item_number">Item number</string>
+    <string name="lease_start_date">Lease start date</string>
+    <string name="lease_end_date">Lease end date</string>
+    <string name="you_will_be_redirected_in_seconds">You will be redirected in %1$s seconds</string>
+    <string name="successful_test_device_request">Successful test device request!</string>
+    <string name="enter_invoice_number">Enter invoice number</string>
+    <string name="enter_serial_number">Enter serial number</string>
+    <string name="enter_supplier">Enter supplier</string>
+    <string name="enter_note">Enter note</string>
+    <string name="asset">Asset</string>
+    <string name="general">General</string>
+    <string name="dates">Dates</string>
+    <string name="budapest">Budapest</string>
+    <string name="lease_id">Lease ID</string>
+    <string name="enter_lease_id">Enter lease ID</string>
+    <string name="start_date">Start date</string>
+    <string name="enter_start_date">Enter start date</string>
+    <string name="end_date">End date</string>
+    <string name="enter_end_date">Enter end date</string>
+    <string name="user_id">User ID</string>
+    <string name="enter_user_id">Enter user ID</string>
+    <string name="user_name">User name</string>
+    <string name="enter_user_name">Enter user name</string>
+    <string name="add">Add</string>
+    <string name="successful_device_creation">Successful device creation</string>
+    <string name="export">Export</string>
+    <string name="enter_a_new_tag">Enter a new tag</string>
+    <string name="add_tag">Add tag</string>
+    <string name="admin_device_details">Admin device details</string>
+    <string name="is_test_device">Test</string>
+    <string name="back">Back</string>
+    <string name="next">Next</string>
+    <string name="add_device">Add device</string>
 
 </resources>

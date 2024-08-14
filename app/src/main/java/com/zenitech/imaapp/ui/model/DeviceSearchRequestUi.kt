@@ -1,30 +1,34 @@
 package com.zenitech.imaapp.ui.model
 
 data class DeviceSearchRequestUi(
-    val inventoryId: String,
-    val type: String,
-    val asset: DeviceAssetUi,
-    val manufacturer: String,
-    val serialNumber: String,
-    val itemNumber: String,
-    val supplier: String,
-    val invoiceNumber: String,
-    val shipmentDate: String,
-    val warranty: String,
-    val status: DeviceStatusUi,
-    val leaseStartDate: String,
-    val leaseEndDate: String,
-    val userName: String,
-    val site: String,
-    val location: String
+    val inventoryId: String = "",
+    val type: String = "",
+    val manufacturer: String = "",
+    val serialNumber: String = "",
+    val assetName: DeviceAssetUi = DeviceAssetUi.Laptop,
+    val supplier: String = "",
+    val invoiceNumber: String = "",
+    val shipmentDateBegin: String = "",
+    val shipmentDateEnd: String = "",
+    val warrantyBegin: String = "",
+    val warrantyEnd: String = "",
+    val condition: DeviceConditionUi = DeviceConditionUi.NEW,
+    val status: DeviceStatusUi = DeviceStatusUi.DRAFT,
+    val leaseStartDate: String = "",
+    val leaseEndDate: String = "",
+    val userName: String = "",
+    val site: String = "",
+    val location: String = "",
+    val note: String = "",
+    val tags: List<String> = emptyList(),
+    val isTestDevice: Boolean = false
 ){
     fun getDeviceDetails(): List<DeviceDetail> {
         return listOf(
             DeviceDetail(
-                sectionTitle = "Basic Information",
+                sectionTitle = "General Information",
                 details = listOf(
                     "Inventory ID" to this.inventoryId,
-                    "Item number" to this.itemNumber,
                     "Serial number" to this.serialNumber,
                     "Invoice number" to this.invoiceNumber,
                 )
@@ -40,10 +44,53 @@ data class DeviceSearchRequestUi(
             DeviceDetail(
                 sectionTitle = "Lease Information",
                 details = listOf(
-                    "Shipment date" to this.shipmentDate,
+                    "Shipment date" to this.shipmentDateBegin,
                     "Lease start date" to this.leaseStartDate,
                     "Lease end date" to this.leaseEndDate,
-                    "Warranty" to this.warranty
+                )
+            )
+        )
+    }
+
+    fun getAdminDeviceDetails(): List<AdminDeviceDetail> {
+        return listOf(
+            AdminDeviceDetail(
+                sectionTitle = "General Information",
+                details = listOf(
+                    "Inventory ID" to this.inventoryId,
+                    "Asset name" to this.assetName,
+                    "Type" to this.type,
+                    "Serial number" to this.serialNumber,
+                    "Invoice number" to this.invoiceNumber,
+                )
+            ),
+            AdminDeviceDetail(
+                sectionTitle = "Dates",
+                details = listOf(
+                    "Shipment date start" to this.shipmentDateBegin,
+                    "Shipment date end" to this.shipmentDateEnd,
+                    "Warranty start" to this.warrantyBegin,
+                    "Warranty end" to this.warrantyEnd,
+                )
+            ),
+            AdminDeviceDetail(
+                sectionTitle = "Status",
+                details = listOf(
+                    "Status" to this.status,
+                    "Condition" to this.condition,
+                    "Lease ID" to "98764637",
+                    "Lease start date" to this.leaseStartDate,
+                    "Lease end date" to this.leaseEndDate,
+                    "User" to this.userName
+                )
+            ),
+            AdminDeviceDetail(
+                sectionTitle = "Location",
+                details = listOf(
+                    "Location" to this.location,
+                    "Site" to this.site,
+                    "Supplier" to this.supplier,
+                    "Note" to this.note
                 )
             )
         )
@@ -51,4 +98,7 @@ data class DeviceSearchRequestUi(
 }
 
 data class DeviceDetail(val sectionTitle: String, val details: List<Pair<String, String>>)
+
+data class AdminDeviceDetail(val sectionTitle: String, val details: List<Pair<String, Any>>)
+
 

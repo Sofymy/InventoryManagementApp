@@ -14,6 +14,22 @@
       },
       "oauth_client": [
         {
+          "client_id": "756383197869-8ahuh5amdr42q0516p9rnmu5a92tbltc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.zenitech.imaapp",
+            "certificate_hash": "e2c3ec0fba344e7e02d457b879561859d6641943"
+          }
+        },
+        {
+          "client_id": "756383197869-ffq1mri3ud2bdg4pvm151gg3uhu8nrn1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.zenitech.imaapp",
+            "certificate_hash": "dfccbcb31126437ae171bbb87d6baa7f982a2eed"
+          }
+        },
+        {
           "client_id": "756383197869-p01ve0lvqqplfs455hvlc78jdhfg7hrr.apps.googleusercontent.com",
           "client_type": 3
         }

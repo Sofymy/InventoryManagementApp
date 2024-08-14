@@ -1,5 +1,6 @@
 package com.zenitech.imaapp.ui.common
 
+import android.util.Log
 import androidx.compose.animation.*
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -109,6 +110,9 @@ fun TopNavigationBar(
                 }
             }
         )
-        HorizontalDivider(color = LocalNavigationBarColorsPalette.current.bottomContainerBarDividerColor)
+
+        if(topNavigationBarTitle != "Devices"){
+            HorizontalDivider(color = LocalNavigationBarColorsPalette.current.bottomContainerBarDividerColor)
+        }
     }
 }

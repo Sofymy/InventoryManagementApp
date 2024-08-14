@@ -6,8 +6,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.zenitech.imaapp.domain.model.toTestDeviceRequest
 import com.zenitech.imaapp.domain.usecases.request_test_device.RequestTestDeviceUseCases
-import com.zenitech.imaapp.ui.model.RequestTestDeviceUi
+import com.zenitech.imaapp.ui.model.TestDeviceRequestUi
 import com.zenitech.imaapp.ui.utils.validation.ValidateState
 import com.zenitech.imaapp.ui.utils.validation.ValidationError
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -40,24 +41,24 @@ class RequestTestDeviceViewModel @Inject constructor(
     private val _state = MutableStateFlow<RequestTestDeviceState>(RequestTestDeviceState.Loading)
     val state = _state.asStateFlow()
 
-    private var uiState by mutableStateOf(RequestTestDeviceUi())
+    private var uiState by mutableStateOf(TestDeviceRequestUi())
 
     fun onEvent(event: RequestTestDeviceUserEvent) {
         when (event) {
             is RequestTestDeviceUserEvent.ChangeAdditionalRequests -> {
-                uiState = uiState.copy(additionalRequests = event.text)
+                uiState = uiState.copy(note = event.text)
             }
             is RequestTestDeviceUserEvent.ChangeDeviceManufacturer -> {
                 uiState = uiState.copy(manufacturer = event.text)
             }
             is RequestTestDeviceUserEvent.ChangeDeviceType -> {
-                uiState = uiState.copy(type = event.text)
+                uiState = uiState.copy(asset = event.text)
             }
             is RequestTestDeviceUserEvent.ChangeRequestDate -> {
-                uiState = uiState.copy(requestDate = event.date)
+                uiState = uiState.copy(startDate = event.date)
             }
             is RequestTestDeviceUserEvent.ChangeReturnDate -> {
-                uiState = uiState.copy(returnDate = event.date)
+                uiState = uiState.copy(endDate = event.date)
             }
             RequestTestDeviceUserEvent.SaveRequest -> {
                 onSave()
@@ -69,13 +70,13 @@ class RequestTestDeviceViewModel @Inject constructor(
     }
 
     private fun onSave() {
-        val stateValidator = ValidateState(RequestTestDeviceUi::class)
+        val stateValidator = ValidateState(TestDeviceRequestUi::class)
         val errors = stateValidator.validate(uiState)
 
         viewModelScope.launch {
             if (errors.isEmpty()) {
                 try {
-                    requestTestDeviceOperations.saveTestDeviceRequestUseCase()
+                    requestTestDeviceOperations.saveTestDeviceRequest(uiState.toTestDeviceRequest())
                     _state.value = RequestTestDeviceState.Success
                     Log.d(LOG_TAG, "Save request successful")
                 } catch (e: Exception) {
@@ -89,7 +90,7 @@ class RequestTestDeviceViewModel @Inject constructor(
     }
 
     private fun resetForm() {
-        uiState = RequestTestDeviceUi()
+        uiState = TestDeviceRequestUi()
         _state.value = RequestTestDeviceState.Success
     }
 

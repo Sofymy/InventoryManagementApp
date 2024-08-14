@@ -16,7 +16,11 @@ val EerieBlack40Black = Color(0xFF0D0F19)
 val EerieBlack40BlackTransparent = Color(0xB30D0F19)
 val TeaGreen = Color(0xFFC9E4CA)
 val Grey = Color(0xFFF3F3F3)
+
+val Mint30Black = Color(0xFF677f85)
 val Mint = Color(0xFF96B6B3)
+val Mint30White = Color(0xFFB4CCD2)
+
 val DarkGrey = Color(0xFFE0E0E0)
 val White = Color(0xFFFFFFFF)
 val WhiteTransparent = Color(0xB3FFFFFF)

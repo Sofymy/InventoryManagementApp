@@ -1,6 +1,6 @@
 @file:OptIn(ExperimentalSharedTransitionApi::class)
 
-package com.zenitech.imaapp.feature.device_details
+package com.zenitech.imaapp.feature.my_devices.device_details
 
 import android.annotation.SuppressLint
 import androidx.compose.animation.AnimatedVisibilityScope
@@ -77,7 +77,7 @@ import com.zenitech.imaapp.ui.theme.RaspberryRed
 
 @Composable
 fun DeviceDetailsScreen(
-    device: String,
+    inventoryId: String,
     sharedTransitionScope: SharedTransitionScope,
     animatedVisibilityScope: AnimatedVisibilityScope
 ) {
@@ -86,7 +86,7 @@ fun DeviceDetailsScreen(
             .fillMaxSize()
     ) {
         DeviceDetailsContent(
-            device = device,
+            inventoryId = inventoryId,
             sharedTransitionScope = sharedTransitionScope,
             animatedVisibilityScope = animatedVisibilityScope
         )
@@ -96,7 +96,7 @@ fun DeviceDetailsScreen(
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun DeviceDetailsContent(
-    device: String,
+    inventoryId: String,
     viewModel: DeviceDetailsViewModel = hiltViewModel(),
     animatedVisibilityScope: AnimatedVisibilityScope,
     sharedTransitionScope: SharedTransitionScope,
@@ -107,7 +107,7 @@ fun DeviceDetailsContent(
     DisposableEffect(lifecycleOwner) {
         val observer = LifecycleEventObserver { _, event ->
             if (event == Lifecycle.Event.ON_RESUME) {
-                viewModel.loadDeviceDetails()
+                viewModel.loadDeviceDetails(inventoryId)
             }
         }
         lifecycleOwner.lifecycle.addObserver(observer)
@@ -418,7 +418,7 @@ fun DeviceDetailsIconContent(device: DeviceSearchRequestUi) {
     ) {
         Image(
             modifier = Modifier.size(80.dp),
-            imageVector = device.asset.icon,
+            imageVector = device.assetName.icon,
             colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground),
             contentDescription = null,
         )

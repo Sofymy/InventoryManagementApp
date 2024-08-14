@@ -6,9 +6,7 @@ import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -22,11 +20,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.text.BasicTextField
-import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.twotone.Devices
 import androidx.compose.material.icons.twotone.Factory
 import androidx.compose.material.icons.twotone.Textsms
@@ -49,21 +43,19 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.zenitech.imaapp.R
-import com.zenitech.imaapp.ui.common.RowWithBorder
+import com.zenitech.imaapp.ui.common.PrimaryBasicTextField
+import com.zenitech.imaapp.ui.common.PrimaryInputField
 import com.zenitech.imaapp.ui.common.SecondaryButton
 import com.zenitech.imaapp.ui.common.simpleVerticalScrollbar
 import com.zenitech.imaapp.ui.theme.LocalCardColorsPalette
@@ -234,36 +226,6 @@ fun RequestTestDeviceSendRequestButton(
 }
 
 @Composable
-fun RequestTestDeviceTopAnimation() {
-    val rotationText = remember { Animatable(-10f) }
-
-    LaunchedEffect(Unit) {
-        launch {
-            rotationText.animateTo(
-                targetValue = 10f,
-                animationSpec = infiniteRepeatable(
-                    animation = tween(durationMillis = 10000, easing = LinearEasing),
-                    repeatMode = RepeatMode.Reverse
-                )
-            )
-        }
-    }
-
-    Column(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Image(
-            painter = painterResource(R.drawable.ic_text_light),
-            contentDescription = null,
-            modifier = Modifier
-                .size(120.dp)
-                .graphicsLayer { rotationZ = rotationText.value }
-        )
-    }
-}
-
-@Composable
 fun RequestTestDeviceDeviceTypeInput(
     onNavigateToDeviceType: () -> Unit,
     type: String?,
@@ -277,7 +239,7 @@ fun RequestTestDeviceDeviceTypeInput(
     }
 
     RequestDeviceInput(
-        type = stringResource(R.string.device_type),
+        title = stringResource(R.string.device_type),
         value = {
             Icon(imageVector = Icons.TwoTone.Devices, contentDescription = null, tint = LocalCardColorsPalette.current.borderColor)
             Spacer(modifier = Modifier.width(10.dp))
@@ -321,7 +283,7 @@ fun RequestTestDeviceAdditionalRequestsInput(
     ) {
         RequestDeviceInput(
             onClick = { focusRequester.requestFocus() },
-            type = stringResource(R.string.additional_requests),
+            title = stringResource(R.string.additional_requests),
             value = {
                 Icon(
                     imageVector = Icons.TwoTone.Textsms,
@@ -329,22 +291,14 @@ fun RequestTestDeviceAdditionalRequestsInput(
                     tint = LocalCardColorsPalette.current.borderColor
                 )
                 Spacer(modifier = Modifier.width(10.dp))
-                BasicTextField(
-                    modifier = Modifier.focusRequester(focusRequester),
-                    textStyle = TextStyle(
-                        color = MaterialTheme.colorScheme.secondary,
-                        fontWeight = FontWeight.Bold
-                    ),
+                PrimaryBasicTextField(
+                    focusRequester = focusRequester,
+                    focusManager = focusManager,
                     value = additionalRequestsField.value,
-                    onValueChange = {
+                    onValueChanged = {
                         additionalRequestsField.value = it
                         onTestDeviceAdditionalRequestsChange(additionalRequestsField.value)
-                    },
-                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
-                    keyboardActions = KeyboardActions(onDone = {
-                        focusManager.clearFocus()
                     })
-                )
             },
             showArrowDown = false,
         )
@@ -370,7 +324,7 @@ fun RequestDeviceDateInput(
     var expanded by remember { mutableStateOf(false) }
 
     RequestDeviceInput(
-        type = type,
+        title = type,
         value = {
             RequestTestDeviceDatePickerWithDialog(
                 expanded = expanded,
@@ -437,7 +391,7 @@ fun RequestTestDeviceDeviceManufacturerInput(
     }
 
     RequestDeviceInput(
-        type = stringResource(R.string.device_manufacturer),
+        title = stringResource(R.string.device_manufacturer),
         value = {
             Icon(imageVector = Icons.TwoTone.Factory, contentDescription = null, tint = LocalCardColorsPalette.current.borderColor)
             Spacer(modifier = Modifier.width(10.dp))
@@ -452,47 +406,19 @@ fun RequestTestDeviceDeviceManufacturerInput(
 
 @Composable
 fun RequestDeviceInput(
-    type: String,
+    title: String,
     value: @Composable () -> Unit,
     onClick: () -> Unit = {},
     showArrowDown: Boolean = true,
     isError: Boolean = false
 ) {
-    val interactionSource = remember { MutableInteractionSource() }
+    PrimaryInputField(
+        label = title,
+        value = { value() },
+        onClick = { onClick() },
+        showArrowDown = showArrowDown,
+        isError = isError,
 
-    Row(
-        modifier = Modifier
-            .clickable(
-                interactionSource = interactionSource,
-                indication = null,
-                onClick = onClick
-            )
-            .fillMaxWidth(),
-    ) {
-
-        Column {
-            RowWithBorder(
-                isError = isError,
-                content = {
-                Column {
-                    Text(type, style = MaterialTheme.typography.bodySmall)
-                    Row(
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier.padding(top = 10.dp, bottom = 0.dp)
-                    ) {
-                        value()
-                    }
-                }
-                if (showArrowDown) {
-                    Icon(
-                        imageVector = Icons.Default.KeyboardArrowDown,
-                        contentDescription = null,
-                        tint = LocalCardColorsPalette.current.arrowColor
-                    )
-                }
-            })
-        }
-    }
+    )
 }
 

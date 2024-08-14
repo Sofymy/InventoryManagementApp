@@ -1,8 +1,7 @@
 package com.zenitech.imaapp.domain.model
 
 import com.zenitech.imaapp.ui.model.DeviceResponseUi
-import com.zenitech.imaapp.ui.model.asDeviceAsset
-import com.zenitech.imaapp.ui.model.asDeviceAssetUi
+import com.zenitech.imaapp.ui.model.toDeviceStatusUi
 import java.util.Date
 
 data class DeviceResponse(
@@ -12,8 +11,8 @@ data class DeviceResponse(
     val type: String,
     val serialNumber: String,
     val shipmentDate: Date,
-    val status: String,
-    val condition: String,
+    val status: DeviceStatus,
+    val condition: DeviceCondition,
     val dateOfHandover: Date,
     val userName: String,
     val site: String,
@@ -31,8 +30,8 @@ fun DeviceResponse.asDeviceResponseUi(): DeviceResponseUi = DeviceResponseUi(
     type = this.type,
     serialNumber = this.serialNumber,
     shipmentDate = this.shipmentDate,
-    status = this.status,
-    condition = this.condition,
+    status = this.status.toDeviceStatusUi(),
+    condition = this.condition.toDeviceConditionUi(),
     dateOfHandover = this.dateOfHandover,
     userName = this.userName,
     site = this.site,
@@ -50,8 +49,8 @@ fun DeviceResponseUi.asDeviceResponse(): DeviceResponse = DeviceResponse(
     type = this.type,
     serialNumber = this.serialNumber,
     shipmentDate = this.shipmentDate,
-    status = this.status,
-    condition = this.condition,
+    status = this.status.toDeviceStatus(),
+    condition = this.condition.toDeviceCondition(),
     dateOfHandover = this.dateOfHandover,
     userName = this.userName,
     site = this.site,
