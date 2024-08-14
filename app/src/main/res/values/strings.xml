@@ -92,5 +92,8 @@
     <string name="add_tag">Add tag</string>
     <string name="admin_device_details">Admin device details</string>
     <string name="is_test_device">Test</string>
+    <string name="back">Back</string>
+    <string name="next">Next</string>
+    <string name="add_device">Add device</string>
 
 </resources>

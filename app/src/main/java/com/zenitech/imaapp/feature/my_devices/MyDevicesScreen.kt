@@ -54,6 +54,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
@@ -67,14 +68,13 @@ import com.zenitech.imaapp.ui.common.pulsate
 import com.zenitech.imaapp.ui.common.shimmerBrush
 import com.zenitech.imaapp.ui.common.simpleVerticalScrollbar
 import com.zenitech.imaapp.ui.model.DeviceSearchRequestUi
+import com.zenitech.imaapp.ui.theme.IMAAppTheme
 import com.zenitech.imaapp.ui.theme.LocalCardColorsPalette
 import kotlinx.coroutines.launch
 
 @Composable
 fun MyDevicesScreen(
     onNavigateToDeviceDetails: (String) -> Unit,
-    sharedTransitionScope: SharedTransitionScope,
-    animatedVisibilityScope: AnimatedVisibilityScope
 ) {
     Column(
         modifier = Modifier
@@ -84,8 +84,6 @@ fun MyDevicesScreen(
     ) {
         MyDevicesContent(
             onNavigateToDeviceDetails = onNavigateToDeviceDetails,
-            sharedTransitionScope = sharedTransitionScope,
-            animatedVisibilityScope = animatedVisibilityScope
         )
     }
 }
@@ -94,8 +92,6 @@ fun MyDevicesScreen(
 fun MyDevicesContent(
     viewModel: MyDevicesViewModel = hiltViewModel(),
     onNavigateToDeviceDetails: (String) -> Unit,
-    sharedTransitionScope: SharedTransitionScope,
-    animatedVisibilityScope: AnimatedVisibilityScope
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val lifecycleOwner = LocalLifecycleOwner.current
@@ -139,8 +135,6 @@ fun MyDevicesContent(
             MyDevicesList(
                 deviceResponseUiList = (state as MyDevicesState.Success).myDeviceList,
                 onNavigateToDeviceDetails = onNavigateToDeviceDetails,
-                animatedVisibilityScope = animatedVisibilityScope,
-                sharedTransitionScope = sharedTransitionScope
             )
         }
     }
@@ -160,9 +154,7 @@ fun MyDevicesCounter(
 @Composable
 fun MyDevicesList(
     deviceResponseUiList: List<DeviceSearchRequestUi>,
-    onNavigateToDeviceDetails: (String) -> Unit,
-    sharedTransitionScope: SharedTransitionScope,
-    animatedVisibilityScope: AnimatedVisibilityScope
+    onNavigateToDeviceDetails: (String) -> Unit
 ) {
     val listState = rememberLazyListState()
     val showButtonAndDivider by remember {
@@ -202,8 +194,6 @@ fun MyDevicesList(
                     deviceResponseUi = device,
                     modifier = Modifier,
                     onNavigateToDeviceDetails = onNavigateToDeviceDetails,
-                    animatedVisibilityScope = animatedVisibilityScope,
-                    sharedTransitionScope = sharedTransitionScope
                 )
             }
         }
@@ -236,40 +226,10 @@ fun MyDevicesList(
 }
 
 @Composable
-fun MyDevicesShimmerItem() {
-    Card(
-        shape = RoundedCornerShape(15.dp),
-        modifier = Modifier
-            .padding(bottom = 15.dp)
-            .fillMaxWidth()
-            .clip(RoundedCornerShape(15.dp))
-            .background(shimmerBrush(targetValue = 1300f))
-    ) {
-        Row(
-            modifier = Modifier
-                .padding(20.dp)
-                .fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Column {
-                    Text("")
-                    Spacer(modifier = Modifier.height(5.dp))
-                    Text("")
-                }
-            }
-        }
-    }
-}
-
-@Composable
 fun MyDevicesDeviceItem(
     deviceResponseUi: DeviceSearchRequestUi,
     modifier: Modifier,
     onNavigateToDeviceDetails: (String) -> Unit,
-    sharedTransitionScope: SharedTransitionScope,
-    animatedVisibilityScope: AnimatedVisibilityScope
 ) {
 
     Card(

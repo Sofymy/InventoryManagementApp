@@ -1,4 +1,4 @@
-package com.zenitech.imaapp.feature.admin.devices.add_device
+package com.zenitech.imaapp.feature.admin.devices.add_device_assets
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

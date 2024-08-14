@@ -1,4 +1,4 @@
-package com.zenitech.imaapp.feature.admin.devices.add_device
+package com.zenitech.imaapp.feature.admin.devices.add_device_successful
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateDpAsState
@@ -16,13 +16,25 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.zenitech.imaapp.R
+import com.zenitech.imaapp.ui.theme.IMAAppTheme
 import com.zenitech.imaapp.ui.theme.LocalCardColorsPalette
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+
+@Preview(showBackground = true)
+@Composable
+fun AdminDevicesAddDeviceSuccessfulScreenPreview() {
+    IMAAppTheme {
+        AdminDevicesAddDeviceSuccessfulScreen(
+            onNavigateToAdminDevices = { }
+        )
+    }
+}
 
 @Composable
 fun AdminDevicesAddDeviceSuccessfulScreen(

@@ -1,4 +1,4 @@
-package com.zenitech.imaapp.feature.admin.devices.add_device
+package com.zenitech.imaapp.feature.admin.devices.add_device_types
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -15,25 +15,27 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.zenitech.imaapp.feature.admin.devices.add_device.AdminDevicesAddDeviceList
+import com.zenitech.imaapp.feature.admin.devices.add_device.AdminDevicesAddDeviceSearchField
 import com.zenitech.imaapp.ui.common.CircularLoadingIndicator
 
 @Composable
-fun AdminDevicesAddDeviceSitesScreen(
+fun AdminDevicesAddDeviceTypesScreen(
     onNavigateToAdminAddDevice: (String) -> Unit
 ) {
     Column(
         modifier = Modifier
             .fillMaxSize()
     ) {
-        AdminDevicesAddDeviceSitesContent(
+        AdminDevicesAddDeviceTypeContent(
             onNavigateToAdminAddDevice = onNavigateToAdminAddDevice
         )
     }
 }
 
 @Composable
-fun AdminDevicesAddDeviceSitesContent(
-    viewModel: AdminDevicesAddDeviceSitesViewModel = hiltViewModel(),
+fun AdminDevicesAddDeviceTypeContent(
+    viewModel: AdminDevicesAddDeviceTypesViewModel = hiltViewModel(),
     onNavigateToAdminAddDevice: (String) -> Unit
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -42,7 +44,7 @@ fun AdminDevicesAddDeviceSitesContent(
     DisposableEffect(lifecycleOwner) {
         val observer = LifecycleEventObserver { _, event ->
             if (event == Lifecycle.Event.ON_RESUME) {
-                viewModel.loadDeviceSites()
+                viewModel.loadDeviceTypes()
             }
         }
         lifecycleOwner.lifecycle.addObserver(observer)
@@ -52,10 +54,10 @@ fun AdminDevicesAddDeviceSitesContent(
     }
 
     when (state) {
-        is AdminDevicesAddDeviceSitesState.Error -> {
-            Text((state as AdminDevicesAddDeviceSitesState.Error).error.message.toString())
+        is AdminDevicesAddDeviceTypeState.Error -> {
+            Text((state as AdminDevicesAddDeviceTypeState.Error).error.message.toString())
         }
-        is AdminDevicesAddDeviceSitesState.Loading -> {
+        is AdminDevicesAddDeviceTypeState.Loading -> {
             Column(
                 modifier = Modifier.fillMaxSize(),
                 verticalArrangement = Arrangement.Center
@@ -63,9 +65,9 @@ fun AdminDevicesAddDeviceSitesContent(
                 CircularLoadingIndicator()
             }
         }
-        is AdminDevicesAddDeviceSitesState.Success -> {
-            AdminDevicesAddDeviceSites(
-                list = (state as AdminDevicesAddDeviceSitesState.Success).deviceSites,
+        is AdminDevicesAddDeviceTypeState.Success -> {
+            AdminDevicesAddDeviceTypes(
+                list = (state as AdminDevicesAddDeviceTypeState.Success).deviceTypes,
                 onNavigateToAdminAddDevice = onNavigateToAdminAddDevice,
             )
         }
@@ -73,7 +75,7 @@ fun AdminDevicesAddDeviceSitesContent(
 }
 
 @Composable
-fun AdminDevicesAddDeviceSites(
+fun AdminDevicesAddDeviceTypes(
     list: List<String>,
     onNavigateToAdminAddDevice: (String) -> Unit
 ) {

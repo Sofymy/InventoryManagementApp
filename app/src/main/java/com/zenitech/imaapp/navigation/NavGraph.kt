@@ -12,13 +12,13 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import com.google.firebase.analytics.FirebaseAnalytics
-import com.zenitech.imaapp.feature.admin.devices.add_device.AdminDevicesAddDeviceAssetsScreen
-import com.zenitech.imaapp.feature.admin.devices.add_device.AdminDevicesAddDeviceManufacturersScreen
+import com.zenitech.imaapp.feature.admin.devices.add_device_assets.AdminDevicesAddDeviceAssetsScreen
+import com.zenitech.imaapp.feature.admin.devices.add_device_manufacturers.AdminDevicesAddDeviceManufacturersScreen
 import com.zenitech.imaapp.feature.admin.devices.add_device.AdminDevicesAddDeviceScreen
-import com.zenitech.imaapp.feature.admin.devices.add_device.AdminDevicesAddDeviceSitesScreen
-import com.zenitech.imaapp.feature.admin.devices.add_device.AdminDevicesAddDeviceSuccessfulScreen
-import com.zenitech.imaapp.feature.admin.devices.add_device.AdminDevicesAddDeviceTypesScreen
-import com.zenitech.imaapp.feature.admin.devices.AdminDevicesScreen
+import com.zenitech.imaapp.feature.admin.devices.add_device_sites.AdminDevicesAddDeviceSitesScreen
+import com.zenitech.imaapp.feature.admin.devices.add_device_successful.AdminDevicesAddDeviceSuccessfulScreen
+import com.zenitech.imaapp.feature.admin.devices.add_device_types.AdminDevicesAddDeviceTypesScreen
+import com.zenitech.imaapp.feature.admin.devices.devices.AdminDevicesScreen
 import com.zenitech.imaapp.feature.admin.AdminScreen
 import com.zenitech.imaapp.feature.admin.devices.device_details.AdminDeviceDetailsScreen
 import com.zenitech.imaapp.feature.my_devices.device_details.DeviceDetailsScreen
@@ -272,8 +272,6 @@ fun NavGraph(
                         onNavigateToDeviceDetails = { inventoryId ->
                             navController.navigate(Screen.DeviceDetails(inventoryId = inventoryId))
                         },
-                        this@SharedTransitionLayout,
-                        this@composable
                     )
                 }
 

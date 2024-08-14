@@ -1,4 +1,4 @@
-package com.zenitech.imaapp.feature.admin.devices
+package com.zenitech.imaapp.feature.admin.devices.devices
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

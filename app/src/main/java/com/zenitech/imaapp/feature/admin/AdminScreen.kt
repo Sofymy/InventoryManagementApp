@@ -30,11 +30,23 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.zenitech.imaapp.ui.common.TrapezoidShapeLower
 import com.zenitech.imaapp.ui.common.TrapezoidShapeUpper
 import com.zenitech.imaapp.ui.common.pulsate
+import com.zenitech.imaapp.ui.theme.IMAAppTheme
 import com.zenitech.imaapp.ui.theme.LocalAdminFolderColorsPalette
+
+@Preview(showBackground = true)
+@Composable
+fun AdminScreenPreview() {
+    IMAAppTheme {
+        AdminScreen(
+            onNavigateToAdminDevices = {}
+        )
+    }
+}
 
 @Composable
 fun AdminScreen(

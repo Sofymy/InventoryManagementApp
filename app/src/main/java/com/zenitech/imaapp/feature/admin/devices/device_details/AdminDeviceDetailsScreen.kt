@@ -38,6 +38,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -45,16 +46,24 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.zenitech.imaapp.feature.admin.devices.AdminDevicesIcon
-import com.zenitech.imaapp.feature.admin.devices.AdminDevicesState
-import com.zenitech.imaapp.feature.admin.devices.generateExcelReport
-import com.zenitech.imaapp.feature.admin.devices.shareFile
+import com.zenitech.imaapp.feature.admin.devices.devices.generateExcelReport
+import com.zenitech.imaapp.feature.admin.devices.devices.shareFile
 import com.zenitech.imaapp.ui.common.CircularLoadingIndicator
 import com.zenitech.imaapp.ui.common.pulsate
 import com.zenitech.imaapp.ui.common.simpleVerticalScrollbar
 import com.zenitech.imaapp.ui.model.DeviceSearchRequestUi
 import com.zenitech.imaapp.ui.theme.LocalCardColorsPalette
 import java.io.File
+
+@Preview(showBackground = true)
+@Composable
+fun AdminDeviceDetailsListPreview() {
+    AdminDeviceDetailsList(
+        device = DeviceSearchRequestUi(),
+        onClickExport = {}
+    )
+}
+
 
 @Composable
 fun AdminDeviceDetailsScreen(
