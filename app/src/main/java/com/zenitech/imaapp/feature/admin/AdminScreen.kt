@@ -29,9 +29,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.zenitech.imaapp.navigation.Screen
 import com.zenitech.imaapp.ui.common.TrapezoidShapeLower
 import com.zenitech.imaapp.ui.common.TrapezoidShapeUpper
 import com.zenitech.imaapp.ui.common.pulsate
@@ -43,26 +43,29 @@ import com.zenitech.imaapp.ui.theme.LocalAdminFolderColorsPalette
 fun AdminScreenPreview() {
     IMAAppTheme {
         AdminScreen(
-            onNavigateToAdminDevices = {}
+            onNavigateToAdminDevices = {},
+            onNavigateToManageRequests = {}
         )
     }
 }
 
 @Composable
 fun AdminScreen(
-    onNavigateToAdminDevices: () -> Unit
+    onNavigateToAdminDevices: () -> Unit,
+    onNavigateToManageRequests: () -> Unit
 ) {
     Column(
         modifier = Modifier
             .fillMaxSize()
     ) {
-        AdminContent(onNavigateToAdminDevices)
+        AdminContent(onNavigateToAdminDevices, onNavigateToManageRequests)
     }
 }
 
 @Composable
 fun AdminContent(
-    onNavigateToAdminDevices: () -> Unit
+    onNavigateToAdminDevices: () -> Unit,
+    onNavigateToManageRequests: () -> Unit
 ) {
     val folderColor = LocalAdminFolderColorsPalette.current.contentColor
     val headColor = LocalAdminFolderColorsPalette.current.headColor
@@ -70,9 +73,9 @@ fun AdminContent(
     val folders = listOf(
         Folder(text = "Devices", icon = Icons.TwoTone.Devices, onClick = onNavigateToAdminDevices),
         Folder(text = "Users", icon = Icons.TwoTone.SupervisorAccount) {},
-        Folder(text = "Manage Requests", icon = Icons.TwoTone.Textsms) {},
-        Folder(text = "Tags", icon = Icons.TwoTone.Tag) {},
-        Folder(text = "Filters", icon = Icons.TwoTone.FilterAlt) {}
+        Folder(text = "Manage Requests", icon = Icons.TwoTone.Textsms, onClick = onNavigateToManageRequests),
+        //Folder(text = "Tags", icon = Icons.TwoTone.Tag) {},
+        //Folder(text = "Filters", icon = Icons.TwoTone.FilterAlt) {}
     )
 
     LazyColumn {

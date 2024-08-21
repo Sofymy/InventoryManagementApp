@@ -1,10 +1,13 @@
-package com.zenitech.imaapp.data.network.api
+package org.openapitools.client.apis
 
+import org.openapitools.client.infrastructure.CollectionFormats.*
 import retrofit2.http.*
 import retrofit2.Call
+import okhttp3.RequestBody
+import com.squareup.moshi.Json
 
-import com.zenitech.imaapp.data.model.UserPage
-import com.zenitech.imaapp.data.model.UserSearchRequest
+import org.openapitools.client.models.UserPage
+import org.openapitools.client.models.UserSearchRequest
 
 interface UserApi {
     /**

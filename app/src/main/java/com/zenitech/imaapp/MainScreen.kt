@@ -80,7 +80,7 @@ fun MainScreen(
                         topNavigationBarTitle = topNavigationBarTitle,
                         onShowBottomSheet = {
                             showBottomSheet = true
-                        }
+                        },
                     )
             },
             bottomBar = {

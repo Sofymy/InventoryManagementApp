@@ -8,7 +8,8 @@ data class TestDeviceRequest(
     val asset: String,
     val startDate: String,
     val endDate: String,
-    val note: String
+    val note: String,
+    val status: RequestStatus
 )
 
 fun TestDeviceRequestUi.toTestDeviceRequest(): TestDeviceRequest {
@@ -18,16 +19,19 @@ fun TestDeviceRequestUi.toTestDeviceRequest(): TestDeviceRequest {
         asset = asset,
         startDate = startDate,
         endDate = endDate,
-        note = note
+        note = note,
+        status = status.toRequestStatus()
     )
 }
 
 fun TestDeviceRequest.toTestDeviceRequestUi(): TestDeviceRequestUi {
     return TestDeviceRequestUi(
+        requestId = requestId,
         manufacturer = manufacturer,
         asset = asset,
         startDate = startDate,
         endDate = endDate,
-        note = note
+        note = note,
+        status = status.toRequestStatusUi()
     )
 }

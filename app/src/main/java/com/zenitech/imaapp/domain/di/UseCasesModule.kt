@@ -6,13 +6,16 @@ import com.zenitech.imaapp.data.repository.MyDevicesRepository
 import com.zenitech.imaapp.data.repository.QRReaderRepository
 import com.zenitech.imaapp.data.repository.RequestTestDeviceRepository
 import com.zenitech.imaapp.data.auth.AuthenticationService
-import com.zenitech.imaapp.domain.usecases.admin.AdminCreateDeviceUseCase
+import com.zenitech.imaapp.domain.usecases.admin.devices.AdminCreateDeviceUseCase
 import com.zenitech.imaapp.domain.usecases.admin.AdminUseCases
-import com.zenitech.imaapp.domain.usecases.admin.LoadAdminAddDeviceAssetsUseCase
-import com.zenitech.imaapp.domain.usecases.admin.LoadAdminAddDeviceManufacturersUseCase
-import com.zenitech.imaapp.domain.usecases.admin.LoadAdminAddDeviceSitesUseCase
-import com.zenitech.imaapp.domain.usecases.admin.LoadAdminAddDeviceTypesUseCase
-import com.zenitech.imaapp.domain.usecases.admin.LoadAdminDevicesUseCase
+import com.zenitech.imaapp.domain.usecases.admin.devices.LoadAdminAddDeviceAssetsUseCase
+import com.zenitech.imaapp.domain.usecases.admin.devices.LoadAdminAddDeviceManufacturersUseCase
+import com.zenitech.imaapp.domain.usecases.admin.devices.LoadAdminAddDeviceSitesUseCase
+import com.zenitech.imaapp.domain.usecases.admin.devices.LoadAdminAddDeviceTypesUseCase
+import com.zenitech.imaapp.domain.usecases.admin.devices.LoadAdminDevicesUseCase
+import com.zenitech.imaapp.domain.usecases.admin.manage_requests.ApproveRequestUseCase
+import com.zenitech.imaapp.domain.usecases.admin.manage_requests.LoadRequestsUseCase
+import com.zenitech.imaapp.domain.usecases.admin.manage_requests.RejectRequestUseCase
 import com.zenitech.imaapp.domain.usecases.device_details.DeviceDetailsUseCases
 import com.zenitech.imaapp.domain.usecases.device_details.LoadDeviceDetailsUseCase
 import com.zenitech.imaapp.domain.usecases.my_devices.LoadMyDevicesUseCase
@@ -71,8 +74,21 @@ object UseCasesModule {
         loadAdminAddDeviceTypes: LoadAdminAddDeviceTypesUseCase,
         loadAdminAddDeviceManufacturers: LoadAdminAddDeviceManufacturersUseCase,
         loadAdminAddDevicesSites: LoadAdminAddDeviceSitesUseCase,
+        loadRequests: LoadRequestsUseCase,
+        approveRequest: ApproveRequestUseCase,
+        rejectRequest: RejectRequestUseCase,
         createDevice: AdminCreateDeviceUseCase
-    ): AdminUseCases = AdminUseCases(repository, loadAdminDevices, loadAdminAddDeviceAssets, loadAdminAddDeviceTypes, loadAdminAddDeviceManufacturers, loadAdminAddDevicesSites, createDevice)
+    ): AdminUseCases = AdminUseCases(
+        repository,
+        loadAdminDevices,
+        loadAdminAddDeviceAssets,
+        loadAdminAddDeviceTypes,
+        loadAdminAddDeviceManufacturers,
+        loadAdminAddDevicesSites,
+        loadRequests,
+        rejectRequest,
+        approveRequest,
+        createDevice)
 
     @Provides
     @Singleton
@@ -82,9 +98,27 @@ object UseCasesModule {
 
     @Provides
     @Singleton
+    fun provideApproveRequestUseCase(
+        repository: AdminRepository
+    ): ApproveRequestUseCase = ApproveRequestUseCase(repository)
+
+    @Provides
+    @Singleton
+    fun provideRejectRequestUseCase(
+        repository: AdminRepository
+    ): RejectRequestUseCase = RejectRequestUseCase(repository)
+
+    @Provides
+    @Singleton
     fun provideLoadAdminDeviceAssetsUseCase(
         repository: AdminRepository
     ): LoadAdminAddDeviceAssetsUseCase = LoadAdminAddDeviceAssetsUseCase(repository)
+
+    @Provides
+    @Singleton
+    fun provideLoadRequestsUseCase(
+        repository: AdminRepository
+    ): LoadRequestsUseCase = LoadRequestsUseCase(repository)
 
     @Provides
     @Singleton

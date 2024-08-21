@@ -249,7 +249,7 @@ fun AdminDevicesTabLayout(
 
 @Composable
 fun AdminDevicesTabs(
-    pagerTabs: List<PagerTab>,
+    pagerTabs: List<AdminDevicesPagerTab>,
     currentPage: Int,
     onClick: (Int) -> Unit
 ) {
@@ -285,7 +285,7 @@ fun AdminDevicesTabs(
 fun AdminDevicesTabContent(
     state: AdminDevicesState,
     pagerState: PagerState,
-    pagerTabs: List<PagerTab>,
+    pagerTabs: List<AdminDevicesPagerTab>,
     searchQuery: String,
     onNavigateToAdminDeviceDetails: (String) -> Unit,
     pullRefreshState: PullRefreshState
@@ -321,7 +321,7 @@ fun AdminDevicesLoading() {
 fun AdminDevicesTabsContent(
     pagerState: PagerState,
     adminDevices: List<DeviceSearchRequestUi>,
-    pagerTabs: List<PagerTab>,
+    pagerTabs: List<AdminDevicesPagerTab>,
     searchQuery: String,
     onNavigateToAdminDeviceDetails: (String) -> Unit,
     pullRefreshState: PullRefreshState,
@@ -372,12 +372,12 @@ fun AdminDevicesTabsContent(
 }
 
 @Composable
-fun createPagerTabs(): List<PagerTab> = listOf(
-    PagerTab.All,
-    PagerTab.InStock,
-    PagerTab.Leased,
-    PagerTab.UnderRepair,
-    PagerTab.Test
+fun createPagerTabs(): List<AdminDevicesPagerTab> = listOf(
+    AdminDevicesPagerTab.All,
+    AdminDevicesPagerTab.InStock,
+    AdminDevicesPagerTab.Leased,
+    AdminDevicesPagerTab.UnderRepair,
+    AdminDevicesPagerTab.Test
 )
 
 fun generateExcelReport(data: List<DeviceSearchRequestUi>, filePath: String) {
@@ -448,14 +448,14 @@ fun shareFile(context: Context, file: File) {
     context.startActivity(Intent.createChooser(intent, "Share file"))
 }
 
-sealed class PagerTab(
+sealed class AdminDevicesPagerTab(
     val title: String,
     val padding: PaddingValues,
     val shape: RoundedCornerShape
 ) {
-    data object All : PagerTab("All", PaddingValues(start = 15.dp), RoundedCornerShape(topStart = 15.dp))
-    data object InStock : PagerTab("In stock", PaddingValues(0.dp), RoundedCornerShape(0.dp))
-    data object Leased : PagerTab("Leased", PaddingValues(0.dp), RoundedCornerShape(0.dp))
-    data object UnderRepair : PagerTab("Under repair", PaddingValues(0.dp), RoundedCornerShape(0.dp))
-    data object Test : PagerTab("Test", PaddingValues(end = 15.dp), RoundedCornerShape(topEnd = 15.dp))
+    data object All : AdminDevicesPagerTab("All", PaddingValues(start = 15.dp), RoundedCornerShape(topStart = 15.dp))
+    data object InStock : AdminDevicesPagerTab("In stock", PaddingValues(0.dp), RoundedCornerShape(0.dp))
+    data object Leased : AdminDevicesPagerTab("Leased", PaddingValues(0.dp), RoundedCornerShape(0.dp))
+    data object UnderRepair : AdminDevicesPagerTab("Under repair", PaddingValues(0.dp), RoundedCornerShape(0.dp))
+    data object Test : AdminDevicesPagerTab("Test", PaddingValues(end = 15.dp), RoundedCornerShape(topEnd = 15.dp))
 }
