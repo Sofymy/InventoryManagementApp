@@ -59,7 +59,7 @@ import com.zenitech.imaapp.ui.theme.LocalCardColorsPalette
 
 @Preview(showBackground = true)
 @Composable
-fun PreviewAdminDevicesDeviceList() {
+fun AdminDevicesDeviceListPreview() {
     val mockedPullRefreshState = rememberPullRefreshState(
         refreshing = false,
         onRefresh = { }

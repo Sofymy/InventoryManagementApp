@@ -50,7 +50,7 @@ import kotlinx.coroutines.launch
 
 @Preview(showBackground = true)
 @Composable
-fun PreviewManageRequestsTabLayout() {
+fun ManageRequestsTabLayoutPreview() {
     val mockedPullRefreshState = rememberPullRefreshState(
         refreshing = false,
         onRefresh = { }
@@ -130,8 +130,6 @@ fun ManageRequestsTabLayout(
             onClick = {
                 scope.launch {
                     pagerState.scrollToPage(it)
-                    // animateScrollToPage is lagging :(
-                    // pagerState.animateScrollToPage(it)
                 }
             },
             pagerTabs = pagerTabs

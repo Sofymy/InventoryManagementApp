@@ -1,5 +1,9 @@
 package com.zenitech.imaapp.feature.admin
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -16,13 +20,13 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.twotone.Devices
-import androidx.compose.material.icons.twotone.FilterAlt
 import androidx.compose.material.icons.twotone.SupervisorAccount
-import androidx.compose.material.icons.twotone.Tag
 import androidx.compose.material.icons.twotone.Textsms
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -31,7 +35,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.zenitech.imaapp.navigation.Screen
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.zenitech.imaapp.ui.common.TrapezoidShapeLower
 import com.zenitech.imaapp.ui.common.TrapezoidShapeUpper
 import com.zenitech.imaapp.ui.common.pulsate
@@ -65,24 +73,41 @@ fun AdminScreen(
 @Composable
 fun AdminContent(
     onNavigateToAdminDevices: () -> Unit,
-    onNavigateToManageRequests: () -> Unit
+    onNavigateToManageRequests: () -> Unit,
+    viewModel: AdminViewModel = hiltViewModel()
 ) {
     val folderColor = LocalAdminFolderColorsPalette.current.contentColor
     val headColor = LocalAdminFolderColorsPalette.current.headColor
+    val state by viewModel.state.collectAsStateWithLifecycle()
 
     val folders = listOf(
         Folder(text = "Devices", icon = Icons.TwoTone.Devices, onClick = onNavigateToAdminDevices),
-        Folder(text = "Users", icon = Icons.TwoTone.SupervisorAccount) {},
-        Folder(text = "Manage Requests", icon = Icons.TwoTone.Textsms, onClick = onNavigateToManageRequests),
+        Folder(text = "Users", icon = Icons.TwoTone.SupervisorAccount, onClick = {}),
+        Folder(text = "Manage Requests", icon = Icons.TwoTone.Textsms, onClick = onNavigateToManageRequests, state = state),
         //Folder(text = "Tags", icon = Icons.TwoTone.Tag) {},
         //Folder(text = "Filters", icon = Icons.TwoTone.FilterAlt) {}
     )
+
+    val lifecycleOwner = LocalLifecycleOwner.current
+
+    DisposableEffect(lifecycleOwner) {
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_RESUME) {
+                viewModel.loadRequests()
+            }
+        }
+        lifecycleOwner.lifecycle.addObserver(observer)
+        onDispose {
+            lifecycleOwner.lifecycle.removeObserver(observer)
+        }
+    }
 
     LazyColumn {
         items(folders.chunked(2)) { folderRow ->
             Row {
                 folderRow.forEach { folder ->
                     AdminFolderCard(
+                        state = folder.state,
                         folderName = folder.text,
                         folderIcon = folder.icon,
                         containerColor = folderColor,
@@ -106,7 +131,8 @@ fun AdminFolderCard(
     folderName: String,
     folderIcon: ImageVector,
     onClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    state: AdminState?
 ) {
     val interactionSource = remember { MutableInteractionSource() }
 
@@ -122,7 +148,7 @@ fun AdminFolderCard(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         AdminFolderHead(modifier = Modifier.align(Alignment.Start), headColor = headColor)
-        AdminFolderContent(icon = folderIcon, headColor = headColor, containerColor = containerColor)
+        AdminFolderContent(icon = folderIcon, headColor = headColor, containerColor = containerColor, state = state)
         Spacer(modifier = Modifier.height(20.dp))
         Text(text = folderName)
     }
@@ -147,7 +173,8 @@ fun AdminFolderHead(
 fun AdminFolderContent(
     icon: ImageVector,
     headColor: Color,
-    containerColor: Color
+    containerColor: Color,
+    state: AdminState?
 ) {
     Box {
         Box(
@@ -174,13 +201,18 @@ fun AdminFolderContent(
                         .fillMaxSize()
                 )
             }
-            AdminTrapezoid(headColor)
+            AdminTrapezoid(headColor, state)
         }
     }
 }
 
 @Composable
-fun AdminTrapezoid(headColor: Color) {
+fun AdminTrapezoid(
+    headColor: Color,
+    state: AdminState?
+) {
+    val showFolderContent = (state is AdminState.Success && state.requestsSize != 0) || state == null
+
     Box {
         Box(
             modifier = Modifier
@@ -189,15 +221,20 @@ fun AdminTrapezoid(headColor: Color) {
                 .clip(TrapezoidShapeLower(0.75f))
                 .background(headColor)
         )
-        Box(
-            Modifier
-                .padding(start = 10.dp, end = 10.dp, top = 8.dp)
-                .clip(RoundedCornerShape(4.dp, 0.dp, 0.dp, 0.dp))
-                .clip(TrapezoidShapeLower(0.85f))
-                .fillMaxWidth(0.43f)
-                .height(5.dp)
-                .background(Color.White)
-        )
+        AnimatedVisibility (
+            visible = showFolderContent,
+            enter = slideInVertically { it } + expandVertically { it }
+        ) {
+            Box(
+                Modifier
+                    .padding(start = 10.dp, end = 10.dp, top = 8.dp)
+                    .clip(RoundedCornerShape(4.dp, 0.dp, 0.dp, 0.dp))
+                    .clip(TrapezoidShapeLower(0.85f))
+                    .fillMaxWidth(0.43f)
+                    .height(5.dp)
+                    .background(Color.White)
+            )
+        }
         Box(
             Modifier
                 .clip(RoundedCornerShape(0.dp, 8.dp, 0.dp, 0.dp))
@@ -211,5 +248,6 @@ fun AdminTrapezoid(headColor: Color) {
 data class Folder(
     val text: String,
     val icon: ImageVector,
-    val onClick: () -> Unit
+    val onClick: () -> Unit,
+    val state: AdminState? = null
 )

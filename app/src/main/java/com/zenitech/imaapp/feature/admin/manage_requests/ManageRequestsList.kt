@@ -1,4 +1,6 @@
-@file:OptIn(ExperimentalMaterialApi::class, ExperimentalFoundationApi::class)
+@file:OptIn(ExperimentalMaterialApi::class, ExperimentalFoundationApi::class,
+    ExperimentalMaterialApi::class
+)
 
 package com.zenitech.imaapp.feature.admin.manage_requests
 
@@ -58,7 +60,7 @@ import com.zenitech.imaapp.ui.theme.LocalCardColorsPalette
 
 @Preview(showBackground = true)
 @Composable
-fun PreviewManageRequestList(){
+fun ManageRequestListPreview(){
     val mockedPullRefreshState = rememberPullRefreshState(
         refreshing = false,
         onRefresh = { }

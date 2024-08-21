@@ -67,7 +67,7 @@ import java.io.IOException
 
 @Preview(showBackground = true)
 @Composable
-fun PreviewAdminDevicesTabLayout() {
+fun AdminDevicesTabLayoutPreview() {
     val mockedPullRefreshState = rememberPullRefreshState(
         refreshing = false,
         onRefresh = { }
