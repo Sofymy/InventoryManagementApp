@@ -97,5 +97,6 @@
     <string name="add_device">Add device</string>
     <string name="manage_requests">Manage Requests</string>
     <string name="request_id">Request ID</string>
+    <string name="save_modifications">Save modifications</string>
 
 </resources>

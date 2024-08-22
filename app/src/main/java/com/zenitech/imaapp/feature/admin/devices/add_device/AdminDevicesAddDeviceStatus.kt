@@ -52,6 +52,7 @@ import com.zenitech.imaapp.ui.model.DeviceConditionUi
 import com.zenitech.imaapp.ui.model.DeviceStatusUi
 import com.zenitech.imaapp.ui.model.LeasingUi
 import com.zenitech.imaapp.ui.theme.LocalCardColorsPalette
+import com.zenitech.imaapp.ui.utils.validation.ValidationError
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -63,7 +64,8 @@ fun PreviewAdminDevicesAddDeviceStatus() {
     AdminDevicesAddDeviceStatus(
         pagerState = mockedPagerState,
         page = 2,
-        onChange = {}
+        onChange = {},
+        errors = emptyList()
     )
 }
 
@@ -104,7 +106,8 @@ fun PreviewAdminDevicesAddDeviceLeasingForm() {
 fun AdminDevicesAddDeviceStatus(
     pagerState: PagerState,
     page: Int,
-    onChange: (AdminDevicesAddDeviceUserEvent) -> Unit
+    onChange: (AdminDevicesAddDeviceUserEvent) -> Unit,
+    errors: List<ValidationError?>
 ) {
     val selectedStatus = rememberSaveable {
         mutableStateOf(DeviceStatusUi.DRAFT)
@@ -140,7 +143,8 @@ fun AdminDevicesAddDeviceStatus(
                         )
                     },
                     onClick = {
-                    })
+                    },
+                    isError = false)
 
                 AdminDevicesAddDeviceInputField(
                     label = stringResource(R.string.condition),
@@ -154,7 +158,9 @@ fun AdminDevicesAddDeviceStatus(
                         )
                     },
                     onClick = {
-                    })
+                    },
+                    isError = false
+                )
             }
         }
         item {
@@ -179,7 +185,8 @@ fun AdminDevicesAddDeviceStatus(
                         )
                     },
                     onClick = {
-                    }
+                    },
+                    isError = false
                 )
             }
         }

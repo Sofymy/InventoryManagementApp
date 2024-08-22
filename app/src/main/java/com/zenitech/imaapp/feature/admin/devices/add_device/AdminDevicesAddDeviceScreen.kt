@@ -1,5 +1,7 @@
 package com.zenitech.imaapp.feature.admin.devices.add_device
 
+import android.annotation.SuppressLint
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -13,6 +15,9 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -20,17 +25,16 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.zenitech.imaapp.R
-import com.zenitech.imaapp.ui.common.PrimaryBasicTextField
+import com.zenitech.imaapp.feature.sign_in.SignInAnimatedBackground
+import com.zenitech.imaapp.feature.sign_in.SignInContent
 import com.zenitech.imaapp.ui.common.PrimaryButton
 import com.zenitech.imaapp.ui.common.PrimaryInputField
 import com.zenitech.imaapp.ui.common.SecondaryButton
@@ -38,6 +42,7 @@ import com.zenitech.imaapp.ui.theme.IMAAppTheme
 import com.zenitech.imaapp.ui.theme.LocalCardColorsPalette
 import com.zenitech.imaapp.ui.utils.validation.ValidationError
 import kotlinx.coroutines.launch
+import kotlin.time.Duration
 
 @Composable
 @Preview(showBackground = true)
@@ -56,54 +61,65 @@ fun PreviewAdminDevicesAddDeviceInputField() {
     AdminDevicesAddDeviceInputField(
         label = "Label",
         value = { Text(text = "Value") },
-        onClick = null
+        onClick = null,
+        isError = false
     )
 }
 
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun AdminDevicesAddDeviceScreen(
-    onNavigateToAdminAddDeviceAssets: () -> Unit,
+    onNavigateToAdminDeviceAssets: () -> Unit,
     asset: String,
-    onNavigateToAdminAddDeviceTypes: () -> Unit,
+    onNavigateToAdminDeviceTypes: () -> Unit,
     type: String,
-    onNavigateToAdminAddDeviceManufacturers: () -> Unit,
+    onNavigateToAdminDeviceManufacturers: () -> Unit,
     manufacturer: String,
-    onNavigateToAdminAddDeviceSites: () -> Unit,
+    onNavigateToAdminDeviceSites: () -> Unit,
     site: String,
     onNavigateToAdminAddDeviceSuccessful: () -> Unit
 ) {
-    Column(modifier = Modifier
-        .padding(top = 15.dp)
-        .fillMaxSize()) {
-        AdminDevicesAddDeviceContent(
-            onNavigateToAdminAddDeviceTypes = onNavigateToAdminAddDeviceTypes,
-            type = type,
-            onNavigateToAdminAddDeviceManufacturers = onNavigateToAdminAddDeviceManufacturers,
-            manufacturer = manufacturer,
-            onNavigateToAdminAddDeviceAssets = onNavigateToAdminAddDeviceAssets,
-            asset = asset,
-            onNavigateToAdminAddDeviceSites = onNavigateToAdminAddDeviceSites,
-            site = site,
-            onNavigateToAdminAddDeviceSuccessful = onNavigateToAdminAddDeviceSuccessful
-        )
+    val snackBarHostState = remember { SnackbarHostState() }
+
+    Scaffold(
+        snackbarHost = { SnackbarHost(snackBarHostState) }
+    ) {
+        Column(modifier = Modifier
+            .padding(top = 15.dp)
+            .fillMaxSize()) {
+            AdminDevicesAddDeviceContent(
+                onNavigateToAdminDeviceTypes = onNavigateToAdminDeviceTypes,
+                type = type,
+                onNavigateToAdminDeviceManufacturers = onNavigateToAdminDeviceManufacturers,
+                manufacturer = manufacturer,
+                onNavigateToAdminDeviceAssets = onNavigateToAdminDeviceAssets,
+                asset = asset,
+                onNavigateToAdminDeviceSites = onNavigateToAdminDeviceSites,
+                site = site,
+                onNavigateToAdminAddDeviceSuccessful = onNavigateToAdminAddDeviceSuccessful,
+                snackBarHostState = snackBarHostState
+            )
+        }
     }
 }
 
 @Composable
 fun AdminDevicesAddDeviceContent(
+    snackBarHostState: SnackbarHostState,
     viewModel: AdminDevicesAddDeviceViewModel = hiltViewModel(),
-    onNavigateToAdminAddDeviceTypes: () -> Unit,
-    type: String,
-    onNavigateToAdminAddDeviceManufacturers: () -> Unit,
-    manufacturer: String,
-    onNavigateToAdminAddDeviceAssets: () -> Unit,
+    onNavigateToAdminDeviceAssets: () -> Unit,
     asset: String,
-    onNavigateToAdminAddDeviceSites: () -> Unit,
+    onNavigateToAdminDeviceTypes: () -> Unit,
+    type: String,
+    onNavigateToAdminDeviceManufacturers: () -> Unit,
+    manufacturer: String,
+    onNavigateToAdminDeviceSites: () -> Unit,
     site: String,
     onNavigateToAdminAddDeviceSuccessful: () -> Unit
 ) {
     val pagerState = rememberPagerState(pageCount = { 4 })
     val state by viewModel.state.collectAsStateWithLifecycle()
+    val scope = rememberCoroutineScope()
 
     val errors = remember {
         mutableStateOf(emptyList<ValidationError?>())
@@ -116,6 +132,9 @@ fun AdminDevicesAddDeviceContent(
             }
             is AdminDevicesAddDeviceState.Failure -> {
                 errors.value = (state as AdminDevicesAddDeviceState.Failure).error
+                scope.launch {
+                    snackBarHostState.showSnackbar("Required field is empty.")
+                }
             }
             else -> {}
         }
@@ -129,15 +148,16 @@ fun AdminDevicesAddDeviceContent(
     ) { page ->
         Column(modifier = Modifier.fillMaxSize()) {
             AdminDevicesAddDeviceDisplayPageContent(
+                errors = errors.value,
                 page = page,
                 pagerState = pagerState,
-                onNavigateToAdminAddDeviceTypes = onNavigateToAdminAddDeviceTypes,
+                onNavigateToAdminDeviceTypes = onNavigateToAdminDeviceTypes,
                 type = type,
-                onNavigateToAdminAddDeviceManufacturers = onNavigateToAdminAddDeviceManufacturers,
+                onNavigateToAdminDeviceManufacturers = onNavigateToAdminDeviceManufacturers,
                 manufacturer = manufacturer,
-                onNavigateToAdminAddDeviceAssets = onNavigateToAdminAddDeviceAssets,
+                onNavigateToAdminDeviceAssets = onNavigateToAdminDeviceAssets,
                 asset = asset,
-                onNavigateToAdminAddDeviceSites = onNavigateToAdminAddDeviceSites,
+                onNavigateToAdminDeviceSites = onNavigateToAdminDeviceSites,
                 site = site,
                 onChange = { viewModel.onEvent(it) },
                 onSave = { viewModel.onEvent(AdminDevicesAddDeviceUserEvent.SaveRequest) }
@@ -150,45 +170,50 @@ fun AdminDevicesAddDeviceContent(
 fun AdminDevicesAddDeviceDisplayPageContent(
     onChange: (AdminDevicesAddDeviceUserEvent) -> Unit,
     page: Int,
-    onNavigateToAdminAddDeviceTypes: () -> Unit,
-    type: String,
-    onNavigateToAdminAddDeviceManufacturers: () -> Unit,
-    manufacturer: String,
-    onNavigateToAdminAddDeviceAssets: () -> Unit,
+    onNavigateToAdminDeviceAssets: () -> Unit,
     asset: String,
-    onNavigateToAdminAddDeviceSites: () -> Unit,
+    onNavigateToAdminDeviceTypes: () -> Unit,
+    type: String,
+    onNavigateToAdminDeviceManufacturers: () -> Unit,
+    manufacturer: String,
+    onNavigateToAdminDeviceSites: () -> Unit,
     site: String,
     pagerState: PagerState,
-    onSave: (() -> Unit)?
+    onSave: (() -> Unit)?,
+    errors: List<ValidationError?>
 ) {
     when (page) {
         0 -> AdminDevicesAddDeviceGeneral(
+            errors = errors,
             onChange = onChange,
             pagerState = pagerState,
             page = page,
-            onNavigateToAdminAddDeviceTypes = onNavigateToAdminAddDeviceTypes,
+            onNavigateToAdminDeviceTypes = onNavigateToAdminDeviceTypes,
             type = type,
-            onNavigateToAdminAddDeviceManufacturers = onNavigateToAdminAddDeviceManufacturers,
+            onNavigateToAdminDeviceManufacturers = onNavigateToAdminDeviceManufacturers,
             manufacturer = manufacturer,
-            onNavigateToAdminAddDeviceAssets = onNavigateToAdminAddDeviceAssets,
-            asset = asset
+            onNavigateToAdminDeviceAssets = onNavigateToAdminDeviceAssets,
+            asset = asset,
         )
         1 -> AdminDevicesAddDeviceDates(
+            errors = errors,
             onChange = onChange,
             pagerState = pagerState,
             page = page,
         )
         2 -> AdminDevicesAddDeviceStatus(
+            errors = errors,
             onChange = onChange,
             pagerState = pagerState,
             page = page,
         )
         else -> AdminDevicesAddDeviceLocation(
+            errors = errors,
             onChange = onChange,
             pagerState = pagerState,
             page = page,
             site = site,
-            onNavigateToAdminAddDeviceSites = onNavigateToAdminAddDeviceSites,
+            onNavigateToAdminDeviceSites = onNavigateToAdminDeviceSites,
             onSave = onSave
         )
     }
@@ -270,13 +295,15 @@ fun AdminDevicesAddDeviceInputField(
     label: String,
     value: @Composable () -> Unit,
     onClick: (() -> Unit)?,
-    showArrowDown: Boolean = true
+    showArrowDown: Boolean = true,
+    isError: Boolean
 ) {
     PrimaryInputField(
         label = label,
         value = {
             value()
         },
+        isError = isError,
         onClick = onClick,
         showArrowDown = showArrowDown
     )

@@ -8,6 +8,8 @@ import com.zenitech.imaapp.data.repository.RequestTestDeviceRepository
 import com.zenitech.imaapp.data.auth.AuthenticationService
 import com.zenitech.imaapp.domain.usecases.admin.devices.AdminCreateDeviceUseCase
 import com.zenitech.imaapp.domain.usecases.admin.AdminUseCases
+import com.zenitech.imaapp.domain.usecases.admin.devices.AdminDeleteDeviceUseCase
+import com.zenitech.imaapp.domain.usecases.admin.devices.AdminSaveModificationsUseCase
 import com.zenitech.imaapp.domain.usecases.admin.devices.LoadAdminAddDeviceAssetsUseCase
 import com.zenitech.imaapp.domain.usecases.admin.devices.LoadAdminAddDeviceManufacturersUseCase
 import com.zenitech.imaapp.domain.usecases.admin.devices.LoadAdminAddDeviceSitesUseCase
@@ -29,6 +31,7 @@ import com.zenitech.imaapp.domain.usecases.sign_in.HasUserUseCase
 import com.zenitech.imaapp.domain.usecases.sign_in.SignInUseCases
 import com.zenitech.imaapp.domain.usecases.sign_in.SignInWithGoogleUseCase
 import com.zenitech.imaapp.domain.usecases.sign_in.SignOutUseCase
+import com.zenitech.imaapp.feature.admin.devices.device_details.AdminDevicesUserEvent
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -77,7 +80,9 @@ object UseCasesModule {
         loadRequests: LoadRequestsUseCase,
         approveRequest: ApproveRequestUseCase,
         rejectRequest: RejectRequestUseCase,
-        createDevice: AdminCreateDeviceUseCase
+        createDevice: AdminCreateDeviceUseCase,
+        saveModifications: AdminSaveModificationsUseCase,
+        deleteDevice: AdminDeleteDeviceUseCase
     ): AdminUseCases = AdminUseCases(
         repository,
         loadAdminDevices,
@@ -88,13 +93,28 @@ object UseCasesModule {
         loadRequests,
         rejectRequest,
         approveRequest,
-        createDevice)
+        createDevice,
+        saveModifications,
+        deleteDevice
+    )
 
     @Provides
     @Singleton
     fun provideLoadAdminDevicesUseCase(
         repository: AdminRepository
     ): LoadAdminDevicesUseCase = LoadAdminDevicesUseCase(repository)
+
+    @Provides
+    @Singleton
+    fun provideAdminSaveModificationsUseCase(
+        repository: AdminRepository
+    ): AdminSaveModificationsUseCase = AdminSaveModificationsUseCase(repository)
+
+    @Provides
+    @Singleton
+    fun provideAdminDeleteDeviceUseCase(
+        repository: AdminRepository
+    ): AdminDeleteDeviceUseCase = AdminDeleteDeviceUseCase(repository)
 
     @Provides
     @Singleton

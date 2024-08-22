@@ -1,4 +1,4 @@
-package com.zenitech.imaapp.feature.admin.devices.add_device_types
+package com.zenitech.imaapp.feature.admin.devices.device_types
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -9,19 +9,19 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-sealed class AdminDevicesAddDeviceTypeState {
-    data object Loading : AdminDevicesAddDeviceTypeState()
-    data class Error(val error: Throwable) : AdminDevicesAddDeviceTypeState()
-    data class Success(var deviceTypes : List<String>) : AdminDevicesAddDeviceTypeState()
+sealed class AdminDevicesDeviceTypeState {
+    data object Loading : AdminDevicesDeviceTypeState()
+    data class Error(val error: Throwable) : AdminDevicesDeviceTypeState()
+    data class Success(var deviceTypes : List<String>) : AdminDevicesDeviceTypeState()
 }
 
 @HiltViewModel
-class AdminDevicesAddDeviceTypesViewModel @Inject constructor(
+class AdminDevicesDeviceTypesViewModel @Inject constructor(
     private val adminOperations: AdminUseCases
 ): ViewModel() {
 
-    private val _state = MutableStateFlow<AdminDevicesAddDeviceTypeState>(
-        AdminDevicesAddDeviceTypeState.Loading
+    private val _state = MutableStateFlow<AdminDevicesDeviceTypeState>(
+        AdminDevicesDeviceTypeState.Loading
     )
     val state = _state.asStateFlow()
 
@@ -29,13 +29,13 @@ class AdminDevicesAddDeviceTypesViewModel @Inject constructor(
 
         viewModelScope.launch {
             try {
-                _state.value = AdminDevicesAddDeviceTypeState.Loading
+                _state.value = AdminDevicesDeviceTypeState.Loading
                 val deviceTypes = adminOperations.loadAdminAddDeviceTypes().getOrThrow()
-                _state.value = AdminDevicesAddDeviceTypeState.Success(
+                _state.value = AdminDevicesDeviceTypeState.Success(
                     deviceTypes = deviceTypes
                 )
             } catch (e: Exception) {
-                _state.value = AdminDevicesAddDeviceTypeState.Error(e)
+                _state.value = AdminDevicesDeviceTypeState.Error(e)
             }
         }
 

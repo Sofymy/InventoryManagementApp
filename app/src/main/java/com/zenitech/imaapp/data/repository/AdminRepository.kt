@@ -16,4 +16,6 @@ interface AdminRepository {
     fun createDevice(createDeviceRequest: CreateDeviceRequest): Flow<DeviceResponse>
     fun assignDevice(assignDeviceRequest: String)
     fun rejectRequest(assignDeviceRequest: String)
+    fun deleteDevice(device: DeviceSearchRequest)
+    fun saveModifications(device: DeviceSearchRequest)
 }

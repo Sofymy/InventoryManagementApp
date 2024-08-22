@@ -64,7 +64,7 @@ class ManageRequestsViewModel @Inject constructor(
     private fun approveRequest(requestId: String) {
         viewModelScope.launch {
             try {
-                adminOperations.approveRequestUseCase(requestId)
+                adminOperations.approveRequest(requestId)
             } catch (e: Exception) {
                 _state.value = ManageRequestsState.Error(e)
             }
@@ -74,7 +74,7 @@ class ManageRequestsViewModel @Inject constructor(
     private fun rejectRequest(requestId: String) {
         viewModelScope.launch {
             try {
-                adminOperations.rejectRequestUseCase(requestId)
+                adminOperations.rejectRequest(requestId)
             } catch (e: Exception) {
                 _state.value = ManageRequestsState.Error(e)
             }

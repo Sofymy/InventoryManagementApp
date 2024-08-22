@@ -7,11 +7,16 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.zenitech.imaapp.domain.model.toCreateDeviceRequest
+import com.zenitech.imaapp.domain.model.toTestDeviceRequest
 import com.zenitech.imaapp.domain.usecases.admin.AdminUseCases
+import com.zenitech.imaapp.feature.request_test_device.RequestTestDeviceState
+import com.zenitech.imaapp.feature.request_test_device.RequestTestDeviceViewModel
+import com.zenitech.imaapp.feature.request_test_device.RequestTestDeviceViewModel.Companion
 import com.zenitech.imaapp.ui.model.CreateDeviceRequestUi
 import com.zenitech.imaapp.ui.model.DeviceConditionUi
 import com.zenitech.imaapp.ui.model.DeviceStatusUi
 import com.zenitech.imaapp.ui.model.LeasingUi
+import com.zenitech.imaapp.ui.model.TestDeviceRequestUi
 import com.zenitech.imaapp.ui.utils.validation.ValidateState
 import com.zenitech.imaapp.ui.utils.validation.ValidationError
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -121,17 +126,22 @@ class AdminDevicesAddDeviceViewModel @Inject constructor(
         viewModelScope.launch {
             if (errors.isEmpty()) {
                 try {
-                    val result = adminOperations.createDevice(uiState.toCreateDeviceRequest())
-                    if(result.isSuccess) _state.value = AdminDevicesAddDeviceState.Success
-                    Log.d(LOG_TAG, "Save request successful")
+                    adminOperations.createDevice(uiState.toCreateDeviceRequest())
+                    _state.value = AdminDevicesAddDeviceState.Success
+                    Log.d(LOG_TAG, "Save successful")
                 } catch (e: Exception) {
-                    Log.e(LOG_TAG, "Save request failed", e)
+                    Log.e(LOG_TAG, "Save failed", e)
+                    _state.value = AdminDevicesAddDeviceState.Failure(listOf(ValidationError(message = e.message.toString())))
                 }
             } else {
-                Log.d(LOG_TAG, "")
+                _state.value = AdminDevicesAddDeviceState.Failure(errors)
             }
         }
+
+
     }
+
+
 
     companion object {
         private const val LOG_TAG = "RequestTestDeviceVM"
