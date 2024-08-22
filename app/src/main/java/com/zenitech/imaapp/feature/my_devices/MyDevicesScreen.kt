@@ -1,11 +1,6 @@
-@file:OptIn(ExperimentalSharedTransitionApi::class)
-
 package com.zenitech.imaapp.feature.my_devices
 
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.AnimatedVisibilityScope
-import androidx.compose.animation.ExperimentalSharedTransitionApi
-import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
@@ -52,9 +47,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
@@ -65,12 +58,11 @@ import com.zenitech.imaapp.R
 import com.zenitech.imaapp.ui.common.CircularLoadingIndicator
 import com.zenitech.imaapp.ui.common.ScrollToTopButton
 import com.zenitech.imaapp.ui.common.pulsate
-import com.zenitech.imaapp.ui.common.shimmerBrush
 import com.zenitech.imaapp.ui.common.simpleVerticalScrollbar
 import com.zenitech.imaapp.ui.model.DeviceSearchRequestUi
-import com.zenitech.imaapp.ui.theme.IMAAppTheme
 import com.zenitech.imaapp.ui.theme.LocalCardColorsPalette
 import kotlinx.coroutines.launch
+
 
 @Composable
 fun MyDevicesScreen(
@@ -269,7 +261,7 @@ fun MyDevicesDeviceItem(
                 )
                 Spacer(modifier = Modifier.width(20.dp))
                 Column {
-                    Text(deviceResponseUi.assetName.name )
+                    Text(deviceResponseUi.assetName.name)
                     Spacer(modifier = Modifier.height(5.dp))
                     Text(deviceResponseUi.manufacturer, color = LocalCardColorsPalette.current.secondaryContentColor)
                 }
@@ -295,8 +287,7 @@ fun MyDevicesSorting(
     Row(
         modifier = Modifier
             .padding(0.dp, 15.dp, 15.dp, 15.dp)
-            .fillMaxWidth()
-        ,
+            .fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.End
     ) {

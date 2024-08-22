@@ -59,7 +59,7 @@ import com.zenitech.imaapp.ui.theme.LocalCardColorsPalette
 
 @Preview(showBackground = true)
 @Composable
-fun PreviewAdminDevicesDeviceList() {
+fun AdminDevicesDeviceListPreview() {
     val mockedPullRefreshState = rememberPullRefreshState(
         refreshing = false,
         onRefresh = { }
@@ -86,7 +86,7 @@ fun PreviewAdminDevicesDeviceList() {
         adminFields = listOf("Inventory ID", "Type", "Status"),
         selectedField = "Type",
         onFieldSelected = {},
-        selectedTab = PagerTab.Leased,
+        selectedTab = AdminDevicesPagerTab.Leased,
         onNavigateToAdminDeviceDetails = {},
         pullRefreshState = mockedPullRefreshState,
         isRefreshing = false
@@ -100,7 +100,7 @@ fun AdminDevicesDeviceList(
     adminFields: List<String>,
     selectedField: String,
     onFieldSelected: (String) -> Unit,
-    selectedTab: PagerTab,
+    selectedTab: AdminDevicesPagerTab,
     onNavigateToAdminDeviceDetails: (String) -> Unit,
     pullRefreshState: PullRefreshState,
     isRefreshing: Boolean

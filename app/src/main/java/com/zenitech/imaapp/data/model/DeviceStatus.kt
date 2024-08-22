@@ -13,7 +13,7 @@
     "UnusedImport"
 )
 
-package com.zenitech.imaapp.data.model
+package org.openapitools.client.models
 
 
 import com.squareup.moshi.Json
@@ -22,11 +22,14 @@ import com.squareup.moshi.JsonClass
 /**
  * 
  *
- * Values: LEASED,IN_STORAGE,DISCARDED,ON_REPAIR,MISSING
+ * Values: DRAFT,LEASED,IN_STORAGE,DISCARDED,ON_REPAIR,MISSING,ARCHIVED,DELETED
  */
 
 @JsonClass(generateAdapter = false)
 enum class DeviceStatus(val value: kotlin.String) {
+
+    @Json(name = "DRAFT")
+    DRAFT("DRAFT"),
 
     @Json(name = "LEASED")
     LEASED("LEASED"),
@@ -41,7 +44,13 @@ enum class DeviceStatus(val value: kotlin.String) {
     ON_REPAIR("ON_REPAIR"),
 
     @Json(name = "MISSING")
-    MISSING("MISSING");
+    MISSING("MISSING"),
+
+    @Json(name = "ARCHIVED")
+    ARCHIVED("ARCHIVED"),
+
+    @Json(name = "DELETED")
+    DELETED("DELETED");
 
     /**
      * Override [toString()] to avoid using the enum variable name as the value, and instead use

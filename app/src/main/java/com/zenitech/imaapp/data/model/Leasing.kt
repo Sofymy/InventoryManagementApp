@@ -13,38 +13,43 @@
     "UnusedImport"
 )
 
-package com.zenitech.imaapp.data.model
+package org.openapitools.client.models
 
 
 import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 
 /**
  * 
  *
- * @param deviceId 
+ * @param leaseId 
+ * @param inventoryId 
  * @param startDate 
- * @param endDate 
  * @param userId 
  * @param userName 
+ * @param endDate 
  */
 
 
 data class Leasing (
 
-    @Json(name = "deviceId")
-    val deviceId: java.util.UUID? = null,
+    @Json(name = "leaseId")
+    val leaseId: java.util.UUID,
+
+    @Json(name = "inventoryId")
+    val inventoryId: kotlin.String,
 
     @Json(name = "startDate")
-    val startDate: java.time.LocalDate? = null,
-
-    @Json(name = "endDate")
-    val endDate: java.time.LocalDate? = null,
+    val startDate: java.time.LocalDate,
 
     @Json(name = "userId")
-    val userId: java.util.UUID? = null,
+    val userId: java.util.UUID,
 
     @Json(name = "userName")
-    val userName: kotlin.String? = null
+    val userName: kotlin.String,
+
+    @Json(name = "endDate")
+    val endDate: java.time.LocalDate? = null
 
 ) {
 

@@ -13,73 +13,94 @@
     "UnusedImport"
 )
 
-package com.zenitech.imaapp.data.model
+package org.openapitools.client.models
+
+import org.openapitools.client.models.DeviceCondition
+import org.openapitools.client.models.DeviceStatus
+import org.openapitools.client.models.Leasing
+import org.openapitools.client.models.Tag
 
 import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 
 /**
  * 
  *
- * @param id 
  * @param inventoryId 
  * @param type 
  * @param manufacturer 
  * @param serialNumber 
- * @param itemNumber 
+ * @param assetName 
  * @param supplier 
  * @param invoiceNumber 
  * @param shipmentDate 
  * @param warranty 
+ * @param condition 
  * @param status 
- * @param lease 
  * @param site 
  * @param location 
+ * @param note 
+ * @param tags 
+ * @param isTestDevice 
+ * @param lease 
  */
 
 
 data class DeviceResponse (
 
-    @Json(name = "id")
-    val id: java.util.UUID? = null,
-
     @Json(name = "inventoryId")
-    val inventoryId: kotlin.String? = null,
+    val inventoryId: kotlin.String,
 
     @Json(name = "type")
-    val type: kotlin.String? = null,
+    val type: kotlin.String,
 
     @Json(name = "manufacturer")
-    val manufacturer: kotlin.String? = null,
+    val manufacturer: kotlin.String,
 
     @Json(name = "serialNumber")
-    val serialNumber: kotlin.String? = null,
+    val serialNumber: kotlin.String,
 
-    @Json(name = "itemNumber")
-    val itemNumber: kotlin.String? = null,
+    @Json(name = "assetName")
+    val assetName: kotlin.String,
 
     @Json(name = "supplier")
-    val supplier: kotlin.String? = null,
+    val supplier: kotlin.String,
 
     @Json(name = "invoiceNumber")
-    val invoiceNumber: kotlin.String? = null,
+    val invoiceNumber: kotlin.String,
 
     @Json(name = "shipmentDate")
-    val shipmentDate: java.time.LocalDate? = null,
+    val shipmentDate: java.time.LocalDate,
 
     @Json(name = "warranty")
-    val warranty: java.time.LocalDate? = null,
+    val warranty: java.time.LocalDate,
+
+    @Json(name = "condition")
+    val condition: DeviceCondition,
 
     @Json(name = "status")
-    val status: DeviceStatus? = null,
-
-    @Json(name = "lease")
-    val lease: Leasing? = null,
+    val status: DeviceStatus,
 
     @Json(name = "site")
-    val site: kotlin.String? = null,
+    val site: kotlin.String,
 
     @Json(name = "location")
-    val location: kotlin.String? = null
+    val location: kotlin.String,
 
-)
+    @Json(name = "note")
+    val note: kotlin.String,
+
+    @Json(name = "tags")
+    val tags: kotlin.collections.List<Tag>,
+
+    @Json(name = "isTestDevice")
+    val isTestDevice: kotlin.Boolean,
+
+    @Json(name = "lease")
+    val lease: Leasing? = null
+
+) {
+
+
+}
 

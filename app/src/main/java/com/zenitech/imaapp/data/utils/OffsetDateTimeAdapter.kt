@@ -1,4 +1,4 @@
-package com.zenitech.imaapp.data.utils
+package org.openapitools.client.infrastructure
 
 import com.squareup.moshi.FromJson
 import com.squareup.moshi.ToJson

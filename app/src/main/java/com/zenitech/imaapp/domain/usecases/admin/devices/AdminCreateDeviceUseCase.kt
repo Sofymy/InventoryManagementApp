@@ -1,4 +1,4 @@
-package com.zenitech.imaapp.domain.usecases.admin
+package com.zenitech.imaapp.domain.usecases.admin.devices
 
 import com.zenitech.imaapp.data.repository.AdminRepository
 import com.zenitech.imaapp.domain.model.CreateDeviceRequest

@@ -12,6 +12,7 @@ import com.zenitech.imaapp.data.repository.RequestTestDeviceRepository
 import com.zenitech.imaapp.data.repository.RequestTestDeviceRepositoryImpl
 import com.zenitech.imaapp.data.auth.AuthenticationService
 import com.zenitech.imaapp.data.auth.AuthenticationServiceImpl
+import com.zenitech.imaapp.data.network.api.DeviceApi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -24,7 +25,9 @@ object RepositoryModule {
 
     @Provides
     @Singleton
-    fun providesMyDevicesRepository(): MyDevicesRepository = MyDevicesRepositoryImpl()
+    fun providesMyDevicesRepository(
+        deviceApi: DeviceApi
+    ): MyDevicesRepository = MyDevicesRepositoryImpl(deviceApi)
 
     @Provides
     @Singleton

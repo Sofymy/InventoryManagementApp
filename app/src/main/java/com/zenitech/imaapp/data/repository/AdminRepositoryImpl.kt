@@ -6,6 +6,8 @@ import com.zenitech.imaapp.domain.model.DeviceCondition
 import com.zenitech.imaapp.domain.model.DeviceResponse
 import com.zenitech.imaapp.domain.model.DeviceSearchRequest
 import com.zenitech.imaapp.domain.model.DeviceStatus
+import com.zenitech.imaapp.domain.model.RequestStatus
+import com.zenitech.imaapp.domain.model.TestDeviceRequest
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import java.util.Date
@@ -520,6 +522,50 @@ class AdminRepositoryImpl : AdminRepository {
         }
     }
 
+    override fun getRequests(): Flow<List<TestDeviceRequest>> {
+        return flow {
+            val mockedRequests = listOf(
+                TestDeviceRequest(
+                    requestId = "1a2b3c4d",
+                    manufacturer = "Company A",
+                    asset = "Device 1",
+                    startDate = "2024-08-01",
+                    endDate = "2024-08-07",
+                    note = "First test device request",
+                    status = RequestStatus.PENDING
+                ),
+                TestDeviceRequest(
+                    requestId = "2b3c4d5e",
+                    manufacturer = "Company B",
+                    asset = "Device 2",
+                    startDate = "2024-08-08",
+                    endDate = "2024-08-14",
+                    note = "Second test device request",
+                    status = RequestStatus.PENDING
+                ),
+                TestDeviceRequest(
+                    requestId = "2b3c4d5e",
+                    manufacturer = "Company F",
+                    asset = "Device 5",
+                    startDate = "2024-08-01",
+                    endDate = "2024-08-02",
+                    note = "Fourth test device request",
+                    status = RequestStatus.PENDING
+                ),
+                TestDeviceRequest(
+                    requestId = "3c4d5e6f",
+                    manufacturer = "Company C",
+                    asset = "Device 3",
+                    startDate = "2024-08-15",
+                    endDate = "2024-08-21",
+                    note = "Third test device request",
+                    status = RequestStatus.REJECTED
+                )
+            )
+            emit(mockedRequests)
+        }
+    }
+
     override fun createDevice(createDeviceRequest: CreateDeviceRequest): Flow<DeviceResponse> {
         return flow{
             val mockDeviceResponse = DeviceResponse(
@@ -542,6 +588,14 @@ class AdminRepositoryImpl : AdminRepository {
             )
             emit(mockDeviceResponse)
         }
+    }
+
+    override fun assignDevice(assignDeviceRequest: String) {
+
+    }
+
+    override fun rejectRequest(assignDeviceRequest: String) {
+
     }
 
     override fun getDeviceManufacturers(): Flow<List<String>> {

@@ -4,8 +4,7 @@ import kotlin.reflect.KClass
 import kotlin.reflect.full.memberProperties
 
 class ValidateState<State: Any>(
-    // we are going to use reflection so we pass the KClass instance
-    val kClass: KClass<State>
+    private val kClass: KClass<State>
 ) {
     fun validate(state: State): List<ValidationError?> {
         val errors = mutableListOf<ValidationError>()

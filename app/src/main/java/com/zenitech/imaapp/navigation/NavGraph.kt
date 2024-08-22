@@ -21,6 +21,7 @@ import com.zenitech.imaapp.feature.admin.devices.add_device_types.AdminDevicesAd
 import com.zenitech.imaapp.feature.admin.devices.devices.AdminDevicesScreen
 import com.zenitech.imaapp.feature.admin.AdminScreen
 import com.zenitech.imaapp.feature.admin.devices.device_details.AdminDeviceDetailsScreen
+import com.zenitech.imaapp.feature.admin.manage_requests.ManageRequestsScreen
 import com.zenitech.imaapp.feature.my_devices.device_details.DeviceDetailsScreen
 import com.zenitech.imaapp.feature.my_devices.MyDevicesScreen
 import com.zenitech.imaapp.feature.qr_reader.QRReaderScreen
@@ -144,6 +145,9 @@ fun NavGraph(
                     AdminScreen(
                         onNavigateToAdminDevices = {
                             navController.navigate(Screen.AdminDevices)
+                        },
+                        onNavigateToManageRequests = {
+                            navController.navigate(Screen.ManageRequests)
                         }
                     )
                 }
@@ -158,6 +162,11 @@ fun NavGraph(
                             navController.navigate(Screen.AdminDevicesAddDevice)
                         }
                     )
+                }
+
+                composable<Screen.ManageRequests> {
+                    onTopNavigationBarTitleChange("Test device requests")
+                    ManageRequestsScreen()
                 }
 
                 composable<Screen.AdminDeviceDetails> {backStackEntry ->

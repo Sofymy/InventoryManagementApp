@@ -95,5 +95,7 @@
     <string name="back">Back</string>
     <string name="next">Next</string>
     <string name="add_device">Add device</string>
+    <string name="manage_requests">Manage Requests</string>
+    <string name="request_id">Request ID</string>
 
 </resources>

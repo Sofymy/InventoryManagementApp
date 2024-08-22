@@ -13,9 +13,12 @@
     "UnusedImport"
 )
 
-package com.zenitech.imaapp.data.model
+package org.openapitools.client.models
+
+import org.openapitools.client.models.UserResponse
 
 import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 
 /**
  * 

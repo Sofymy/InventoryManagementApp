@@ -4,6 +4,7 @@ import com.zenitech.imaapp.data.repository.MyDevicesRepository
 import com.zenitech.imaapp.domain.model.DeviceResponse
 import com.zenitech.imaapp.domain.model.DeviceSearchRequest
 import kotlinx.coroutines.flow.first
+import org.openapitools.client.models.MyDeviceResponse
 import java.io.IOException
 
 class LoadMyDevicesUseCase(

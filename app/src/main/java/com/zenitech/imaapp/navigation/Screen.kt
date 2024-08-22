@@ -20,6 +20,9 @@ sealed class Screen(
     data object Admin: Screen(R.string.admin)
 
     @Serializable
+    data object ManageRequests: Screen(R.string.manage_requests)
+
+    @Serializable
     data object AdminDevices: Screen(R.string.admin)
 
     @Serializable
