@@ -15,6 +15,7 @@ class AuthenticationServiceImpl(
     private val firebaseAuth: FirebaseAuth
 ): AuthenticationService {
 
+    override val isAdmin: Boolean get() = true // TODO
     override val hasUser: Boolean get() = firebaseAuth.currentUser != null
 
     override suspend fun signInWithGoogle(result: GetCredentialResponse): Result<String> {

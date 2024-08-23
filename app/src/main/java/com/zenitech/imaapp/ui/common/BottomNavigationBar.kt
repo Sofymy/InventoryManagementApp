@@ -28,28 +28,47 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
+import com.zenitech.imaapp.ui.theme.IMAAppTheme
 import com.zenitech.imaapp.ui.theme.LocalNavigationBarColorsPalette
 
-
-val items = listOf(
-    BottomNavigationBarItem.MyDevices,
-    BottomNavigationBarItem.Request,
-    BottomNavigationBarItem.QRReader,
-    BottomNavigationBarItem.Admin,
-)
+@Composable
+@Preview
+fun BottomNavigationBarPreview(){
+    IMAAppTheme {
+        Column {
+            BottomNavigationBar(
+                navController = rememberNavController(),
+                isAdmin = false
+            )
+            BottomNavigationBar(
+                navController = rememberNavController(),
+                isAdmin = true
+            )
+        }
+    }
+}
 
 @Composable
 fun BottomNavigationBar(
     navController: NavHostController,
+    isAdmin: Boolean,
 ) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
+
+    val items = listOf(
+        BottomNavigationBarItem.MyDevices,
+        BottomNavigationBarItem.Request,
+        BottomNavigationBarItem.QRReader
+    ) + if (isAdmin) listOf(BottomNavigationBarItem.Admin) else emptyList()
 
     Box(
         modifier = Modifier

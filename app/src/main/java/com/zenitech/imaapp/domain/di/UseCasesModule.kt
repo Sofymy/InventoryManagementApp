@@ -28,6 +28,7 @@ import com.zenitech.imaapp.domain.usecases.request_test_device.LoadTestDeviceTyp
 import com.zenitech.imaapp.domain.usecases.request_test_device.RequestTestDeviceUseCases
 import com.zenitech.imaapp.domain.usecases.request_test_device.SaveTestDeviceRequestUseCase
 import com.zenitech.imaapp.domain.usecases.sign_in.HasUserUseCase
+import com.zenitech.imaapp.domain.usecases.sign_in.IsAdminUseCase
 import com.zenitech.imaapp.domain.usecases.sign_in.SignInUseCases
 import com.zenitech.imaapp.domain.usecases.sign_in.SignInWithGoogleUseCase
 import com.zenitech.imaapp.domain.usecases.sign_in.SignOutUseCase
@@ -212,8 +213,9 @@ object UseCasesModule {
         repository: AuthenticationService,
         signInWithGoogle: SignInWithGoogleUseCase,
         hasUser: HasUserUseCase,
+        isAdmin: IsAdminUseCase,
         signOut: SignOutUseCase
-    ): SignInUseCases = SignInUseCases(repository, signInWithGoogle, hasUser, signOut)
+    ): SignInUseCases = SignInUseCases(repository, signInWithGoogle, hasUser, isAdmin, signOut)
 
     @Provides
     @Singleton
@@ -228,6 +230,14 @@ object UseCasesModule {
     fun provideHasUserUseCase(
         repository: AuthenticationService,
     ): HasUserUseCase = HasUserUseCase(
+        repository
+    )
+
+    @Provides
+    @Singleton
+    fun provideIsAdminUseCase(
+        repository: AuthenticationService,
+    ): IsAdminUseCase = IsAdminUseCase(
         repository
     )
 

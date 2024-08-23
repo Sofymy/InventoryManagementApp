@@ -37,13 +37,32 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
 import com.zenitech.imaapp.ui.theme.EerieBlack10White
+import com.zenitech.imaapp.ui.theme.IMAAppTheme
 import com.zenitech.imaapp.ui.theme.LocalNavigationBarColorsPalette
 import kotlinx.coroutines.delay
+
+
+@Composable
+@Preview
+fun TopNavigationBarPreview(){
+    IMAAppTheme {
+        Column {
+            TopNavigationBar(
+                navController = rememberNavController(),
+                topNavigationBarTitle = "Top Nav Title",
+                onShowBottomSheet = { },
+                isAdmin = false
+            )
+        }
+    }
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -51,10 +70,17 @@ fun TopNavigationBar(
     navController: NavHostController,
     topNavigationBarTitle: String,
     onShowBottomSheet: () -> Unit,
+    isAdmin: Boolean
 ) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
     val show = remember { mutableStateOf(false) }
+
+    val items = listOf(
+        BottomNavigationBarItem.MyDevices,
+        BottomNavigationBarItem.Request,
+        BottomNavigationBarItem.QRReader
+    ) + if (isAdmin) listOf(BottomNavigationBarItem.Admin) else emptyList()
 
     LaunchedEffect(currentDestination?.route) {
         delay(1500)
