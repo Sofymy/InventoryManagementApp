@@ -29,19 +29,19 @@ sealed class Screen(
     data object AdminDevicesAddDevice: Screen(R.string.admin_add_device)
 
     @Serializable
-    data object AdminDevicesAddDeviceAssets: Screen(R.string.asset_name)
+    data object AdminDevicesDeviceAssets: Screen(R.string.asset_name)
 
     @Serializable
-    data object AdminDevicesAddDeviceSites: Screen(R.string.site)
+    data object AdminDevicesDeviceSites: Screen(R.string.site)
 
     @Serializable
     data object AdminDevicesAddDeviceSuccessful: Screen(R.string.successful_device_creation)
 
     @Serializable
-    data object AdminDevicesAddDeviceTypes: Screen(R.string.device_type)
+    data object AdminDevicesDeviceTypes: Screen(R.string.device_type)
 
     @Serializable
-    data object AdminDevicesAddDeviceManufacturers: Screen(R.string.manufacturer)
+    data object AdminDevicesDeviceManufacturers: Screen(R.string.manufacturer)
 
     @Serializable
     data class AdminDeviceDetails(val inventoryId: String): Screen(R.string.admin_device_details)

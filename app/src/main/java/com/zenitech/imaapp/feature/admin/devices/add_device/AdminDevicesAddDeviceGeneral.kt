@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.dp
 import com.zenitech.imaapp.R
 import com.zenitech.imaapp.ui.common.PrimaryBasicTextField
 import com.zenitech.imaapp.ui.theme.LocalCardColorsPalette
+import com.zenitech.imaapp.ui.utils.validation.ValidationError
 
 @Composable
 @Preview(showBackground = true)
@@ -36,13 +37,14 @@ fun PreviewAdminDevicesAddDeviceGeneral() {
     AdminDevicesAddDeviceGeneral(
         pagerState = mockedPagerState,
         page = 0,
-        onNavigateToAdminAddDeviceTypes = { },
+        onNavigateToAdminDeviceTypes = { },
         type = "Laptop",
-        onNavigateToAdminAddDeviceManufacturers = { },
+        onNavigateToAdminDeviceManufacturers = { },
         manufacturer = "Apple",
-        onNavigateToAdminAddDeviceAssets = { },
+        onNavigateToAdminDeviceAssets = { },
         asset = "MacBook Pro",
-        onChange = {}
+        onChange = {},
+        errors = emptyList()
     )
 }
 
@@ -50,13 +52,14 @@ fun PreviewAdminDevicesAddDeviceGeneral() {
 fun AdminDevicesAddDeviceGeneral(
     pagerState: PagerState,
     page: Int,
-    onNavigateToAdminAddDeviceTypes: () -> Unit,
+    onNavigateToAdminDeviceTypes: () -> Unit,
     type: String,
-    onNavigateToAdminAddDeviceManufacturers: () -> Unit,
+    onNavigateToAdminDeviceManufacturers: () -> Unit,
     manufacturer: String,
-    onNavigateToAdminAddDeviceAssets: () -> Unit,
+    onNavigateToAdminDeviceAssets: () -> Unit,
     asset: String,
-    onChange: (AdminDevicesAddDeviceUserEvent) -> Unit
+    onChange: (AdminDevicesAddDeviceUserEvent) -> Unit,
+    errors: List<ValidationError?>
 ) {
     val assetState by remember { mutableStateOf(asset) }
     val typeState by remember { mutableStateOf(type) }
@@ -84,7 +87,8 @@ fun AdminDevicesAddDeviceGeneral(
                             fontWeight = FontWeight.Bold
                         )
                     },
-                    onClick = onNavigateToAdminAddDeviceAssets,
+                    onClick = onNavigateToAdminDeviceAssets,
+                    isError = errors.any { it?.property == "assetName" },
                 )
                 AdminDevicesAddDeviceInputField(
                     label = stringResource(id = R.string.type),
@@ -95,7 +99,8 @@ fun AdminDevicesAddDeviceGeneral(
                             fontWeight = FontWeight.Bold
                         )
                     },
-                    onClick = onNavigateToAdminAddDeviceTypes,
+                    onClick = onNavigateToAdminDeviceTypes,
+                    isError = errors.any { it?.property == "type" },
                 )
                 AdminDevicesAddDeviceInputField(
                     label = stringResource(id = R.string.manufacturer),
@@ -106,7 +111,8 @@ fun AdminDevicesAddDeviceGeneral(
                             fontWeight = FontWeight.Bold
                         )
                     },
-                    onClick = onNavigateToAdminAddDeviceManufacturers,
+                    onClick = onNavigateToAdminDeviceManufacturers,
+                    isError = errors.any { it?.property == "manufacturer" },
                 )
             }
         }
@@ -123,7 +129,6 @@ fun AdminDevicesAddDeviceGeneral(
             Column(Modifier.padding(horizontal = 15.dp)) {
                 AdminDevicesAddDeviceInputField(
                     label = stringResource(R.string.invoice_number),
-                    showArrowDown = false,
                     value = {
                         PrimaryBasicTextField(
                             modifier = Modifier.focusRequester(invoiceNumberFocusRequester),
@@ -142,10 +147,11 @@ fun AdminDevicesAddDeviceGeneral(
                         focusManager.clearFocus()
                         invoiceNumberFocusRequester.requestFocus()
                     },
+                    showArrowDown = false,
+                    isError = errors.any { it?.property == "invoiceNumber" },
                 )
                 AdminDevicesAddDeviceInputField(
                     label = stringResource(id = R.string.serial_number),
-                    showArrowDown = false,
                     value = {
                         PrimaryBasicTextField(
                             modifier = Modifier.focusRequester(serialNumberFocusRequester),
@@ -164,6 +170,8 @@ fun AdminDevicesAddDeviceGeneral(
                         focusManager.clearFocus()
                         serialNumberFocusRequester.requestFocus()
                     },
+                    showArrowDown = false,
+                    isError = errors.any { it?.property == "serialNumber" },
                 )
             }
         }

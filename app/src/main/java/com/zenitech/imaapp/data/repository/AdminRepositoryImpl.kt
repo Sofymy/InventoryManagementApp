@@ -598,6 +598,14 @@ class AdminRepositoryImpl : AdminRepository {
 
     }
 
+    override fun deleteDevice(device: DeviceSearchRequest) {
+
+    }
+
+    override fun saveModifications(device: DeviceSearchRequest) {
+
+    }
+
     override fun getDeviceManufacturers(): Flow<List<String>> {
         return flow {
             val mockedDeviceManufacturers = mutableListOf(

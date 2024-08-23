@@ -1,4 +1,4 @@
-package com.zenitech.imaapp.feature.admin.devices.add_device_sites
+package com.zenitech.imaapp.feature.admin.devices.device_types
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -20,22 +20,22 @@ import com.zenitech.imaapp.feature.admin.devices.add_device.AdminDevicesAddDevic
 import com.zenitech.imaapp.ui.common.CircularLoadingIndicator
 
 @Composable
-fun AdminDevicesAddDeviceSitesScreen(
+fun AdminDevicesAddDeviceTypesScreen(
     onNavigateToAdminAddDevice: (String) -> Unit
 ) {
     Column(
         modifier = Modifier
             .fillMaxSize()
     ) {
-        AdminDevicesAddDeviceSitesContent(
+        AdminDevicesAddDeviceTypeContent(
             onNavigateToAdminAddDevice = onNavigateToAdminAddDevice
         )
     }
 }
 
 @Composable
-fun AdminDevicesAddDeviceSitesContent(
-    viewModel: AdminDevicesAddDeviceSitesViewModel = hiltViewModel(),
+fun AdminDevicesAddDeviceTypeContent(
+    viewModel: AdminDevicesDeviceTypesViewModel = hiltViewModel(),
     onNavigateToAdminAddDevice: (String) -> Unit
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -44,7 +44,7 @@ fun AdminDevicesAddDeviceSitesContent(
     DisposableEffect(lifecycleOwner) {
         val observer = LifecycleEventObserver { _, event ->
             if (event == Lifecycle.Event.ON_RESUME) {
-                viewModel.loadDeviceSites()
+                viewModel.loadDeviceTypes()
             }
         }
         lifecycleOwner.lifecycle.addObserver(observer)
@@ -54,10 +54,10 @@ fun AdminDevicesAddDeviceSitesContent(
     }
 
     when (state) {
-        is AdminDevicesAddDeviceSitesState.Error -> {
-            Text((state as AdminDevicesAddDeviceSitesState.Error).error.message.toString())
+        is AdminDevicesDeviceTypeState.Error -> {
+            Text((state as AdminDevicesDeviceTypeState.Error).error.message.toString())
         }
-        is AdminDevicesAddDeviceSitesState.Loading -> {
+        is AdminDevicesDeviceTypeState.Loading -> {
             Column(
                 modifier = Modifier.fillMaxSize(),
                 verticalArrangement = Arrangement.Center
@@ -65,9 +65,9 @@ fun AdminDevicesAddDeviceSitesContent(
                 CircularLoadingIndicator()
             }
         }
-        is AdminDevicesAddDeviceSitesState.Success -> {
-            AdminDevicesAddDeviceSites(
-                list = (state as AdminDevicesAddDeviceSitesState.Success).deviceSites,
+        is AdminDevicesDeviceTypeState.Success -> {
+            AdminDevicesAddDeviceTypes(
+                list = (state as AdminDevicesDeviceTypeState.Success).deviceTypes,
                 onNavigateToAdminAddDevice = onNavigateToAdminAddDevice,
             )
         }
@@ -75,7 +75,7 @@ fun AdminDevicesAddDeviceSitesContent(
 }
 
 @Composable
-fun AdminDevicesAddDeviceSites(
+fun AdminDevicesAddDeviceTypes(
     list: List<String>,
     onNavigateToAdminAddDevice: (String) -> Unit
 ) {

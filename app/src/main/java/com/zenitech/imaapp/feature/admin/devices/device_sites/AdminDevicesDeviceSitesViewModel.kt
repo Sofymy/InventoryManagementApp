@@ -1,4 +1,4 @@
-package com.zenitech.imaapp.feature.admin.devices.add_device_sites
+package com.zenitech.imaapp.feature.admin.devices.device_sites
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -9,19 +9,19 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-sealed class AdminDevicesAddDeviceSitesState {
-    data object Loading : AdminDevicesAddDeviceSitesState()
-    data class Error(val error: Throwable) : AdminDevicesAddDeviceSitesState()
-    data class Success(var deviceSites : List<String>) : AdminDevicesAddDeviceSitesState()
+sealed class AdminDevicesDeviceSitesState {
+    data object Loading : AdminDevicesDeviceSitesState()
+    data class Error(val error: Throwable) : AdminDevicesDeviceSitesState()
+    data class Success(var deviceSites : List<String>) : AdminDevicesDeviceSitesState()
 }
 
 @HiltViewModel
-class AdminDevicesAddDeviceSitesViewModel @Inject constructor(
+class AdminDevicesDeviceSitesViewModel @Inject constructor(
     private val adminOperations: AdminUseCases
 ): ViewModel() {
 
-    private val _state = MutableStateFlow<AdminDevicesAddDeviceSitesState>(
-        AdminDevicesAddDeviceSitesState.Loading
+    private val _state = MutableStateFlow<AdminDevicesDeviceSitesState>(
+        AdminDevicesDeviceSitesState.Loading
     )
     val state = _state.asStateFlow()
 
@@ -29,13 +29,13 @@ class AdminDevicesAddDeviceSitesViewModel @Inject constructor(
 
         viewModelScope.launch {
             try {
-                _state.value = AdminDevicesAddDeviceSitesState.Loading
+                _state.value = AdminDevicesDeviceSitesState.Loading
                 val deviceSites = adminOperations.loadAdminAddDevicesSites().getOrThrow()
-                _state.value = AdminDevicesAddDeviceSitesState.Success(
+                _state.value = AdminDevicesDeviceSitesState.Success(
                     deviceSites = deviceSites
                 )
             } catch (e: Exception) {
-                _state.value = AdminDevicesAddDeviceSitesState.Error(e)
+                _state.value = AdminDevicesDeviceSitesState.Error(e)
             }
         }
 

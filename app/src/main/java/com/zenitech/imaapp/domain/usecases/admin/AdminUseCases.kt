@@ -2,6 +2,8 @@ package com.zenitech.imaapp.domain.usecases.admin
 
 import com.zenitech.imaapp.data.repository.AdminRepository
 import com.zenitech.imaapp.domain.usecases.admin.devices.AdminCreateDeviceUseCase
+import com.zenitech.imaapp.domain.usecases.admin.devices.AdminDeleteDeviceUseCase
+import com.zenitech.imaapp.domain.usecases.admin.devices.AdminSaveModificationsUseCase
 import com.zenitech.imaapp.domain.usecases.admin.devices.LoadAdminAddDeviceAssetsUseCase
 import com.zenitech.imaapp.domain.usecases.admin.devices.LoadAdminAddDeviceManufacturersUseCase
 import com.zenitech.imaapp.domain.usecases.admin.devices.LoadAdminAddDeviceSitesUseCase
@@ -19,7 +21,9 @@ class AdminUseCases(
     val loadAdminAddDeviceManufacturers: LoadAdminAddDeviceManufacturersUseCase,
     val loadAdminAddDevicesSites: LoadAdminAddDeviceSitesUseCase,
     val loadRequests: LoadRequestsUseCase,
-    val rejectRequestUseCase: RejectRequestUseCase,
-    val approveRequestUseCase: ApproveRequestUseCase,
-    val createDevice: AdminCreateDeviceUseCase
+    val rejectRequest: RejectRequestUseCase,
+    val approveRequest: ApproveRequestUseCase,
+    val createDevice: AdminCreateDeviceUseCase,
+    val saveModifications: AdminSaveModificationsUseCase,
+    val deleteDevice: AdminDeleteDeviceUseCase
 )

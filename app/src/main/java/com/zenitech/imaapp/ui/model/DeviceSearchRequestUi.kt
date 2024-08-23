@@ -1,5 +1,9 @@
 package com.zenitech.imaapp.ui.model
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
+@Parcelize
 data class DeviceSearchRequestUi(
     val inventoryId: String = "",
     val type: String = "",
@@ -22,7 +26,7 @@ data class DeviceSearchRequestUi(
     val note: String = "",
     val tags: List<String> = emptyList(),
     val isTestDevice: Boolean = false
-){
+): Parcelable {
     fun getDeviceDetails(): List<DeviceDetail> {
         return listOf(
             DeviceDetail(

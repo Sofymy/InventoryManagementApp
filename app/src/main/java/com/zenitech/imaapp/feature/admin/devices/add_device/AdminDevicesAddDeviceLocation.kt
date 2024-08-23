@@ -28,6 +28,7 @@ import androidx.compose.ui.unit.dp
 import com.zenitech.imaapp.R
 import com.zenitech.imaapp.ui.common.PrimaryBasicTextField
 import com.zenitech.imaapp.ui.theme.LocalCardColorsPalette
+import com.zenitech.imaapp.ui.utils.validation.ValidationError
 
 @Composable
 @Preview(showBackground = true)
@@ -37,10 +38,11 @@ fun PreviewAdminDevicesAddDeviceLocation() {
     AdminDevicesAddDeviceLocation(
         pagerState = mockedPagerState,
         page = 0,
-        onNavigateToAdminAddDeviceSites = { },
+        onNavigateToAdminDeviceSites = { },
         site = "BME",
         onChange = { },
-        onSave = { }
+        onSave = { },
+        errors = emptyList()
     )
 }
 
@@ -48,10 +50,11 @@ fun PreviewAdminDevicesAddDeviceLocation() {
 fun AdminDevicesAddDeviceLocation(
     pagerState: PagerState,
     page: Int,
-    onNavigateToAdminAddDeviceSites: () -> Unit,
+    onNavigateToAdminDeviceSites: () -> Unit,
     site: String,
     onChange: (AdminDevicesAddDeviceUserEvent) -> Unit,
-    onSave: (() -> Unit)?
+    onSave: (() -> Unit)?,
+    errors: List<ValidationError?>
 ) {
     val siteState by remember { mutableStateOf(site) }
 
@@ -92,7 +95,8 @@ fun AdminDevicesAddDeviceLocation(
                                     fontWeight = FontWeight.Bold
                                 )
                             },
-                            onClick = null
+                            onClick = null,
+                            isError = errors.any { it?.property == "location" }
                         )
                     }
                     Spacer(modifier = Modifier.width(15.dp))
@@ -108,13 +112,13 @@ fun AdminDevicesAddDeviceLocation(
                                     fontWeight = FontWeight.Bold
                                 )
                             },
-                            onClick = onNavigateToAdminAddDeviceSites,
+                            onClick = onNavigateToAdminDeviceSites,
+                            isError = errors.any { it?.property == "site" },
                         )
                     }
                 }
                 Spacer(modifier = Modifier.height(20.dp))
                 AdminDevicesAddDeviceInputField(
-                    showArrowDown = false,
                     label = stringResource(R.string.supplier),
                     value = {
                         PrimaryBasicTextField(
@@ -132,7 +136,9 @@ fun AdminDevicesAddDeviceLocation(
                     onClick = {
                         focusManager.clearFocus()
                         supplierFocusRequester.requestFocus()
-                    }
+                    },
+                    showArrowDown = false,
+                    isError = errors.any { it?.property == "supplier" }
                 )
             }
         }
@@ -149,7 +155,6 @@ fun AdminDevicesAddDeviceLocation(
             Row(Modifier.padding(horizontal = 15.dp)) {
                 AdminDevicesAddDeviceInputField(
                     label = stringResource(id = R.string.note),
-                    showArrowDown = false,
                     value = {
                         PrimaryBasicTextField(
                             modifier = Modifier.focusRequester(noteFocusRequester),
@@ -167,6 +172,8 @@ fun AdminDevicesAddDeviceLocation(
                         focusManager.clearFocus()
                         noteFocusRequester.requestFocus()
                     },
+                    showArrowDown = false,
+                    isError = false,
                 )
             }
         }

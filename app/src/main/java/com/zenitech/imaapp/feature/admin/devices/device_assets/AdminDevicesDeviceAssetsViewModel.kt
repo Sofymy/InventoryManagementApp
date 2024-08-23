@@ -1,4 +1,4 @@
-package com.zenitech.imaapp.feature.admin.devices.add_device_assets
+package com.zenitech.imaapp.feature.admin.devices.device_assets
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -9,19 +9,19 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-sealed class AdminDevicesAddDeviceAssetsState {
-    data object Loading : AdminDevicesAddDeviceAssetsState()
-    data class Error(val error: Throwable) : AdminDevicesAddDeviceAssetsState()
-    data class Success(var deviceAssets: List<String>) : AdminDevicesAddDeviceAssetsState()
+sealed class AdminDevicesDeviceAssetsState {
+    data object Loading : AdminDevicesDeviceAssetsState()
+    data class Error(val error: Throwable) : AdminDevicesDeviceAssetsState()
+    data class Success(var deviceAssets: List<String>) : AdminDevicesDeviceAssetsState()
 }
 
 @HiltViewModel
-class AdminDevicesAddDeviceAssetsViewModel @Inject constructor(
+class AdminDevicesDeviceAssetsViewModel @Inject constructor(
     private val adminOperations: AdminUseCases
 ): ViewModel() {
 
-    private val _state = MutableStateFlow<AdminDevicesAddDeviceAssetsState>(
-        AdminDevicesAddDeviceAssetsState.Loading
+    private val _state = MutableStateFlow<AdminDevicesDeviceAssetsState>(
+        AdminDevicesDeviceAssetsState.Loading
     )
     val state = _state.asStateFlow()
 
@@ -29,13 +29,13 @@ class AdminDevicesAddDeviceAssetsViewModel @Inject constructor(
 
         viewModelScope.launch {
             try {
-                _state.value = AdminDevicesAddDeviceAssetsState.Loading
+                _state.value = AdminDevicesDeviceAssetsState.Loading
                 val deviceAssets = adminOperations.loadAdminDeviceAddDeviceAssets().getOrThrow()
-                _state.value = AdminDevicesAddDeviceAssetsState.Success(
+                _state.value = AdminDevicesDeviceAssetsState.Success(
                     deviceAssets = deviceAssets
                 )
             } catch (e: Exception) {
-                _state.value = AdminDevicesAddDeviceAssetsState.Error(e)
+                _state.value = AdminDevicesDeviceAssetsState.Error(e)
             }
         }
 

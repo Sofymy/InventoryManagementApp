@@ -31,6 +31,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
 import com.zenitech.imaapp.R
 import com.zenitech.imaapp.ui.theme.LocalCardColorsPalette
+import com.zenitech.imaapp.ui.utils.validation.ValidationError
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
@@ -42,7 +43,8 @@ fun PreviewAdminDevicesAddDeviceDates() {
     AdminDevicesAddDeviceDates(
         pagerState = mockedPagerState,
         page = 0,
-        onChange = { }
+        onChange = { },
+        errors = emptyList()
     )
 }
 
@@ -50,7 +52,8 @@ fun PreviewAdminDevicesAddDeviceDates() {
 fun AdminDevicesAddDeviceDates(
     pagerState: PagerState,
     page: Int,
-    onChange: (AdminDevicesAddDeviceUserEvent) -> Unit
+    onChange: (AdminDevicesAddDeviceUserEvent) -> Unit,
+    errors: List<ValidationError?>
 ) {
     val shipmentDate = remember {
         mutableStateOf("")
@@ -89,7 +92,8 @@ fun AdminDevicesAddDeviceDates(
                     },
                     onClick = {
                         shipmentDateExpanded.value = true
-                    })
+                    },
+                    isError = errors.any { it?.property == "shipmentDate" })
 
                 AdminDevicesAddDeviceInputField(
                     label = stringResource(R.string.warranty),
@@ -107,7 +111,9 @@ fun AdminDevicesAddDeviceDates(
                     },
                     onClick = {
                         warrantyExpanded.value = true
-                    })
+                    },
+                    isError = false
+                )
             }
         }
         item {

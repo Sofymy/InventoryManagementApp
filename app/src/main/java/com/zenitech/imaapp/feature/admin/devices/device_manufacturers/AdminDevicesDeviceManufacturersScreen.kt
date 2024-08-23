@@ -1,4 +1,4 @@
-package com.zenitech.imaapp.feature.admin.devices.add_device_manufacturers
+package com.zenitech.imaapp.feature.admin.devices.device_manufacturers
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -20,22 +20,22 @@ import com.zenitech.imaapp.feature.admin.devices.add_device.AdminDevicesAddDevic
 import com.zenitech.imaapp.ui.common.CircularLoadingIndicator
 
 @Composable
-fun AdminDevicesAddDeviceManufacturersScreen(
+fun AdminDevicesDeviceManufacturersScreen(
     onNavigateToAdminAddDevice: (String) -> Unit
 ) {
     Column(
         modifier = Modifier
             .fillMaxSize()
     ) {
-        AdminDevicesAddDeviceManufacturersContent(
+        AdminDevicesDeviceManufacturersContent(
             onNavigateToAdminAddDevice = onNavigateToAdminAddDevice
         )
     }
 }
 
 @Composable
-fun AdminDevicesAddDeviceManufacturersContent(
-    viewModel: AdminDevicesAddDeviceManufacturersViewModel = hiltViewModel(),
+fun AdminDevicesDeviceManufacturersContent(
+    viewModel: AdminDevicesDeviceManufacturersViewModel = hiltViewModel(),
     onNavigateToAdminAddDevice: (String) -> Unit
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -54,10 +54,10 @@ fun AdminDevicesAddDeviceManufacturersContent(
     }
 
     when (state) {
-        is AdminDevicesAddDeviceManufacturersState.Error -> {
-            Text((state as AdminDevicesAddDeviceManufacturersState.Error).error.message.toString())
+        is AdminDevicesDeviceManufacturersState.Error -> {
+            Text((state as AdminDevicesDeviceManufacturersState.Error).error.message.toString())
         }
-        is AdminDevicesAddDeviceManufacturersState.Loading -> {
+        is AdminDevicesDeviceManufacturersState.Loading -> {
             Column(
                 modifier = Modifier.fillMaxSize(),
                 verticalArrangement = Arrangement.Center
@@ -65,9 +65,9 @@ fun AdminDevicesAddDeviceManufacturersContent(
                 CircularLoadingIndicator()
             }
         }
-        is AdminDevicesAddDeviceManufacturersState.Success -> {
-            AdminDevicesAddDeviceManufacturers(
-                list = (state as AdminDevicesAddDeviceManufacturersState.Success).deviceManufacturers,
+        is AdminDevicesDeviceManufacturersState.Success -> {
+            AdminDevicesDeviceManufacturers(
+                list = (state as AdminDevicesDeviceManufacturersState.Success).deviceManufacturers,
                 onNavigateToAdminAddDevice = onNavigateToAdminAddDevice,
             )
         }
@@ -75,7 +75,7 @@ fun AdminDevicesAddDeviceManufacturersContent(
 }
 
 @Composable
-fun AdminDevicesAddDeviceManufacturers(
+fun AdminDevicesDeviceManufacturers(
     list: List<String>,
     onNavigateToAdminAddDevice: (String) -> Unit
 ) {

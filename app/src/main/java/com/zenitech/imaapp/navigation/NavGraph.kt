@@ -12,15 +12,15 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import com.google.firebase.analytics.FirebaseAnalytics
-import com.zenitech.imaapp.feature.admin.devices.add_device_assets.AdminDevicesAddDeviceAssetsScreen
-import com.zenitech.imaapp.feature.admin.devices.add_device_manufacturers.AdminDevicesAddDeviceManufacturersScreen
 import com.zenitech.imaapp.feature.admin.devices.add_device.AdminDevicesAddDeviceScreen
-import com.zenitech.imaapp.feature.admin.devices.add_device_sites.AdminDevicesAddDeviceSitesScreen
 import com.zenitech.imaapp.feature.admin.devices.add_device_successful.AdminDevicesAddDeviceSuccessfulScreen
-import com.zenitech.imaapp.feature.admin.devices.add_device_types.AdminDevicesAddDeviceTypesScreen
+import com.zenitech.imaapp.feature.admin.devices.device_types.AdminDevicesAddDeviceTypesScreen
 import com.zenitech.imaapp.feature.admin.devices.devices.AdminDevicesScreen
 import com.zenitech.imaapp.feature.admin.AdminScreen
+import com.zenitech.imaapp.feature.admin.devices.device_assets.AdminDevicesDeviceAssetsScreen
 import com.zenitech.imaapp.feature.admin.devices.device_details.AdminDeviceDetailsScreen
+import com.zenitech.imaapp.feature.admin.devices.device_manufacturers.AdminDevicesDeviceManufacturersScreen
+import com.zenitech.imaapp.feature.admin.devices.device_sites.AdminDevicesDeviceSitesScreen
 import com.zenitech.imaapp.feature.admin.manage_requests.ManageRequestsScreen
 import com.zenitech.imaapp.feature.my_devices.device_details.DeviceDetailsScreen
 import com.zenitech.imaapp.feature.my_devices.MyDevicesScreen
@@ -171,9 +171,39 @@ fun NavGraph(
 
                 composable<Screen.AdminDeviceDetails> {backStackEntry ->
                     onTopNavigationBarTitleChange("Device Details")
+
+                    val type = backStackEntry.savedStateHandle.get<String>("type")
+                    val manufacturer = backStackEntry.savedStateHandle.get<String>("manufacturer")
+                    val asset = backStackEntry.savedStateHandle.get<String>("asset")
+                    val site = backStackEntry.savedStateHandle.get<String>("site")
                     val inventoryId = backStackEntry.arguments?.getString("inventoryId")
+
                     AdminDeviceDetailsScreen(
                         inventoryId = inventoryId ?: "",
+                        type = type,
+                        manufacturer = manufacturer,
+                        asset = asset,
+                        site = site,
+                        onNavigateToAdminDeviceTypes = {
+                            navController.navigate(
+                                Screen.AdminDevicesDeviceTypes
+                            )
+                        },
+                        onNavigateToAdminDeviceManufacturers = {
+                            navController.navigate(
+                                Screen.AdminDevicesDeviceManufacturers
+                            )
+                        },
+                        onNavigateToAdminDeviceAssets = {
+                            navController.navigate(
+                                Screen.AdminDevicesDeviceAssets
+                            )
+                        },
+                        onNavigateToAdminDeviceSites = {
+                            navController.navigate(
+                                Screen.AdminDevicesDeviceSites
+                            )
+                        }
                     )
                 }
 
@@ -185,27 +215,27 @@ fun NavGraph(
 
                     onTopNavigationBarTitleChange("Add device")
                     AdminDevicesAddDeviceScreen(
-                        onNavigateToAdminAddDeviceTypes = {
+                        onNavigateToAdminDeviceTypes = {
                             navController.navigate(
-                                Screen.AdminDevicesAddDeviceTypes
+                                Screen.AdminDevicesDeviceTypes
                             )
                         },
                         type = type ?: "",
-                        onNavigateToAdminAddDeviceManufacturers = {
+                        onNavigateToAdminDeviceManufacturers = {
                             navController.navigate(
-                                Screen.AdminDevicesAddDeviceManufacturers
+                                Screen.AdminDevicesDeviceManufacturers
                             )
                         },
                         manufacturer = manufacturer ?: "",
-                        onNavigateToAdminAddDeviceAssets = {
+                        onNavigateToAdminDeviceAssets = {
                             navController.navigate(
-                                Screen.AdminDevicesAddDeviceAssets
+                                Screen.AdminDevicesDeviceAssets
                             )
                         },
                         asset = asset ?: "",
-                        onNavigateToAdminAddDeviceSites = {
+                        onNavigateToAdminDeviceSites = {
                             navController.navigate(
-                                Screen.AdminDevicesAddDeviceSites
+                                Screen.AdminDevicesDeviceSites
                             )
                         },
                         site = site ?: "",
@@ -219,7 +249,7 @@ fun NavGraph(
                     )
                 }
 
-                composable<Screen.AdminDevicesAddDeviceTypes> {backStackEntry ->
+                composable<Screen.AdminDevicesDeviceTypes> {backStackEntry ->
 
                     onTopNavigationBarTitleChange("Add device > type")
                     AdminDevicesAddDeviceTypesScreen(
@@ -229,30 +259,30 @@ fun NavGraph(
                     })
                 }
 
-                composable<Screen.AdminDevicesAddDeviceManufacturers> {backStackEntry ->
+                composable<Screen.AdminDevicesDeviceManufacturers> {backStackEntry ->
 
                     onTopNavigationBarTitleChange("Add device > manufacturer")
-                    AdminDevicesAddDeviceManufacturersScreen(
+                    AdminDevicesDeviceManufacturersScreen(
                         onNavigateToAdminAddDevice = {
                             navController.previousBackStackEntry?.savedStateHandle?.set("manufacturer", it)
                             navController.popBackStack()
                         })
                 }
 
-                composable<Screen.AdminDevicesAddDeviceAssets> {backStackEntry ->
+                composable<Screen.AdminDevicesDeviceAssets> {backStackEntry ->
 
                     onTopNavigationBarTitleChange("Add device > asset")
-                    AdminDevicesAddDeviceAssetsScreen(
+                    AdminDevicesDeviceAssetsScreen(
                         onNavigateToAdminAddDevice = {
                             navController.previousBackStackEntry?.savedStateHandle?.set("asset", it)
                             navController.popBackStack()
                         })
                 }
 
-                composable<Screen.AdminDevicesAddDeviceSites> {backStackEntry ->
+                composable<Screen.AdminDevicesDeviceSites> {backStackEntry ->
 
                     onTopNavigationBarTitleChange("Add device > site")
-                    AdminDevicesAddDeviceSitesScreen(
+                    AdminDevicesDeviceSitesScreen(
                         onNavigateToAdminAddDevice = {
                             navController.previousBackStackEntry?.savedStateHandle?.set("site", it)
                             navController.popBackStack()
