@@ -26,12 +26,13 @@ sealed class SignInState {
     data object Init : SignInState()
     data object Loading : SignInState()
     data class Error(val error: Throwable) : SignInState()
-    data object Success : SignInState()
+    data class Success(val isAdmin: Boolean? = false) : SignInState()
 }
 
 sealed class SignInUserEvent {
     data class SignIn(val context: Context) : SignInUserEvent()
     data object HasUser: SignInUserEvent()
+    data object IsAdmin: SignInUserEvent()
     data object SignOut: SignInUserEvent()
 }
 
@@ -51,8 +52,27 @@ class SignInViewModel @Inject constructor(
             is SignInUserEvent.SignIn -> {
                 signInWithGoogle(event.context)
             }
-            SignInUserEvent.SignOut -> {
+            is SignInUserEvent.SignOut -> {
                 signOut()
+            }
+            is SignInUserEvent.IsAdmin -> {
+                isAdmin()
+            }
+        }
+    }
+
+    private fun isAdmin() {
+        viewModelScope.launch {
+            try {
+                _state.value = SignInState.Loading
+                val result = signInOperations.isAdmin()
+                if(result){
+                    _state.value = SignInState.Success(isAdmin = result)
+                }
+                else
+                    _state.value = SignInState.Init
+            } catch (e: Exception) {
+                _state.value = SignInState.Error(e)
             }
         }
     }
@@ -63,7 +83,7 @@ class SignInViewModel @Inject constructor(
                 _state.value = SignInState.Loading
                 val result = signInOperations.hasUser()
                 if(result){
-                    _state.value = SignInState.Success
+                    _state.value = SignInState.Success()
                 }
                 else
                     _state.value = SignInState.Init
@@ -85,7 +105,7 @@ class SignInViewModel @Inject constructor(
                 )
                 val result = signInOperations.signInWithGoogle(response)
                 _state.value = if (result.isSuccess) {
-                    SignInState.Success
+                    SignInState.Success()
                 } else {
                     SignInState.Error(Throwable(result.exceptionOrNull()))
                 }

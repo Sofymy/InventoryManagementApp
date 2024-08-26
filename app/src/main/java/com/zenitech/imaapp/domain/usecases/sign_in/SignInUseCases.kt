@@ -6,5 +6,6 @@ class SignInUseCases(
     val repository: AuthenticationService,
     val signInWithGoogle: SignInWithGoogleUseCase,
     val hasUser: HasUserUseCase,
+    val isAdmin: IsAdminUseCase,
     val signOut: SignOutUseCase
 )
