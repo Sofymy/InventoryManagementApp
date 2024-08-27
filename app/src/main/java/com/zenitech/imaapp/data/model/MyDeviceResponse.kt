@@ -55,8 +55,5 @@ data class MyDeviceResponse (
     @Json(name = "status")
     val status: DeviceStatus
 
-) {
-
-
-}
+)
 

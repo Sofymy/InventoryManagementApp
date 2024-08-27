@@ -30,6 +30,7 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.twotone.DateRange
+import androidx.compose.material.icons.twotone.Hardware
 import androidx.compose.material.icons.twotone.LocationOn
 import androidx.compose.material.icons.twotone.Warehouse
 import androidx.compose.material3.HorizontalDivider
@@ -65,8 +66,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.zenitech.imaapp.R
 import com.zenitech.imaapp.ui.common.CircularLoadingIndicator
 import com.zenitech.imaapp.ui.common.simpleVerticalScrollbar
-import com.zenitech.imaapp.ui.model.DeviceSearchRequestUi
 import com.zenitech.imaapp.ui.model.DeviceStatusUi
+import com.zenitech.imaapp.ui.model.MyDeviceResponseUi
 import com.zenitech.imaapp.ui.theme.LocalCardColorsPalette
 import com.zenitech.imaapp.ui.theme.RaspberryRed
 
@@ -120,7 +121,7 @@ fun DeviceDetailsContent(
 
         is DeviceDetailsState.Success -> {
             DeviceDetailsList(
-                device = (state as DeviceDetailsState.Success).deviceDetailsList,
+                device = (state as DeviceDetailsState.Success).deviceDetails,
             )
         }
     }
@@ -128,7 +129,7 @@ fun DeviceDetailsContent(
 
 @Composable
 fun DeviceDetailsList(
-    device: DeviceSearchRequestUi,
+    device: MyDeviceResponseUi,
 ) {
     val listState = rememberLazyListState()
 
@@ -165,7 +166,7 @@ fun DeviceDetailsList(
             item { DeviceDetailsHeaderIcon(Icons.TwoTone.Warehouse) }
             items(device.getDeviceDetails()[0].details) { detail -> DeviceDetailsItem(modifier = Modifier, fieldName = detail.first, fieldValue = detail.second) }
             item { HorizontalDivider(thickness = 20.dp, color = MaterialTheme.colorScheme.background) }
-            item { DeviceDetailsHeaderIcon(Icons.TwoTone.LocationOn) }
+            item { DeviceDetailsHeaderIcon(Icons.TwoTone.Hardware) }
             items(device.getDeviceDetails()[1].details) { detail -> DeviceDetailsItem(modifier = Modifier, fieldName = detail.first, fieldValue = detail.second) }
             item { HorizontalDivider(thickness = 20.dp, color = MaterialTheme.colorScheme.background) }
             item { DeviceDetailsHeaderIcon(Icons.TwoTone.DateRange) }
@@ -176,7 +177,7 @@ fun DeviceDetailsList(
 }
 
 @Composable
-fun DeviceDetailsTopSection(scale: Float, device: DeviceSearchRequestUi, listState: LazyListState) {
+fun DeviceDetailsTopSection(scale: Float, device: MyDeviceResponseUi, listState: LazyListState) {
     val state = remember { mutableStateOf(HexagonFace.Back) }
     val clickCounter = remember { mutableIntStateOf(0) }
 
@@ -200,7 +201,7 @@ fun DeviceDetailsFlippingHexagonSection(
     state: HexagonFace,
     scale: Float,
     listState: LazyListState,
-    device: DeviceSearchRequestUi,
+    device: MyDeviceResponseUi,
     onStateChange: (HexagonFace) -> Unit,
 ) {
     DeviceDetailsFlippingHexagon(
@@ -312,7 +313,7 @@ fun DeviceDetailsFlippingHexagon(
 fun DeviceDetailsHexagonBackContent(
     scale: Float,
     listState: LazyListState,
-    device: DeviceSearchRequestUi,
+    device: MyDeviceResponseUi,
 ) {
     DeviceDetailsHexagonContent(
         scale = scale,
@@ -394,7 +395,7 @@ fun DeviceDetailsHexagonContent(
 
 
 @Composable
-fun DeviceDetailsIconContent(device: DeviceSearchRequestUi) {
+fun DeviceDetailsIconContent(device: MyDeviceResponseUi) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
@@ -474,7 +475,7 @@ fun ColumnScope.DeviceDetailsStatusBox(status: DeviceStatusUi) {
             .padding(8.dp, 2.dp)
     ) {
         Text(
-            text = status.name,
+            text = status.name.replace("_", " "),
             color = Color.White,
             fontWeight = FontWeight.Bold
         )

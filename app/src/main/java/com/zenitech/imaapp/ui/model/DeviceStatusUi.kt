@@ -15,29 +15,3 @@ enum class DeviceStatusUi(
     ARCHIVED(Color(94, 94, 94, 255)),
     DELETED(Color(244, 81, 30, 255))
 }
-
-fun DeviceStatus.toDeviceStatusUi(): DeviceStatusUi {
-    return when (this) {
-        DeviceStatus.LEASED -> DeviceStatusUi.LEASED
-        DeviceStatus.IN_STORAGE -> DeviceStatusUi.IN_STORAGE
-        DeviceStatus.DISCARDED -> DeviceStatusUi.DISCARDED
-        DeviceStatus.ON_REPAIR -> DeviceStatusUi.ON_REPAIR
-        DeviceStatus.MISSING -> DeviceStatusUi.MISSING
-        DeviceStatus.DELETED -> DeviceStatusUi.DRAFT
-        DeviceStatus.ARCHIVED -> DeviceStatusUi.ARCHIVED
-        DeviceStatus.DRAFT -> DeviceStatusUi.DRAFT
-    }
-}
-
-fun DeviceStatusUi.toDeviceStatus(): DeviceStatus {
-    return when (this) {
-        DeviceStatusUi.LEASED -> DeviceStatus.LEASED
-        DeviceStatusUi.IN_STORAGE -> DeviceStatus.IN_STORAGE
-        DeviceStatusUi.DISCARDED -> DeviceStatus.DISCARDED
-        DeviceStatusUi.ON_REPAIR -> DeviceStatus.ON_REPAIR
-        DeviceStatusUi.MISSING -> DeviceStatus.MISSING
-        DeviceStatusUi.DRAFT -> DeviceStatus.DRAFT
-        DeviceStatusUi.ARCHIVED -> DeviceStatus.ARCHIVED
-        DeviceStatusUi.DELETED -> DeviceStatus.DELETED
-    }
-}

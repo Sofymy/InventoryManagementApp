@@ -4,5 +4,6 @@ import com.zenitech.imaapp.data.repository.DeviceDetailsRepository
 
 class DeviceDetailsUseCases(
     val repository: DeviceDetailsRepository,
-    val loadDeviceDetails: LoadDeviceDetailsUseCase
+    val loadDeviceDetails: LoadDeviceDetailsUseCase,
+    val loadMyDeviceDetails: LoadMyDeviceDetailsUseCase
 )

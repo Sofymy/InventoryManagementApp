@@ -59,7 +59,7 @@ import com.zenitech.imaapp.ui.common.CircularLoadingIndicator
 import com.zenitech.imaapp.ui.common.ScrollToTopButton
 import com.zenitech.imaapp.ui.common.pulsate
 import com.zenitech.imaapp.ui.common.simpleVerticalScrollbar
-import com.zenitech.imaapp.ui.model.DeviceSearchRequestUi
+import com.zenitech.imaapp.ui.model.MyDeviceResponseUi
 import com.zenitech.imaapp.ui.theme.LocalCardColorsPalette
 import kotlinx.coroutines.launch
 
@@ -145,7 +145,7 @@ fun MyDevicesCounter(
 
 @Composable
 fun MyDevicesList(
-    deviceResponseUiList: List<DeviceSearchRequestUi>,
+    deviceResponseUiList: List<MyDeviceResponseUi>,
     onNavigateToDeviceDetails: (String) -> Unit
 ) {
     val listState = rememberLazyListState()
@@ -219,7 +219,7 @@ fun MyDevicesList(
 
 @Composable
 fun MyDevicesDeviceItem(
-    deviceResponseUi: DeviceSearchRequestUi,
+    deviceResponseUi: MyDeviceResponseUi,
     modifier: Modifier,
     onNavigateToDeviceDetails: (String) -> Unit,
 ) {
@@ -261,7 +261,7 @@ fun MyDevicesDeviceItem(
                 )
                 Spacer(modifier = Modifier.width(20.dp))
                 Column {
-                    Text(deviceResponseUi.assetName.name)
+                    Text(deviceResponseUi.type)
                     Spacer(modifier = Modifier.height(5.dp))
                     Text(deviceResponseUi.manufacturer, color = LocalCardColorsPalette.current.secondaryContentColor)
                 }

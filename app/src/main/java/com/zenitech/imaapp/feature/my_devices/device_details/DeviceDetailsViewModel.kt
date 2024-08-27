@@ -2,9 +2,9 @@ package com.zenitech.imaapp.feature.my_devices.device_details
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.zenitech.imaapp.domain.model.toDeviceSearchRequestUi
+import com.zenitech.imaapp.domain.model.MyDeviceResponseUi
 import com.zenitech.imaapp.domain.usecases.device_details.DeviceDetailsUseCases
-import com.zenitech.imaapp.ui.model.DeviceSearchRequestUi
+import com.zenitech.imaapp.ui.model.MyDeviceResponseUi
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -15,7 +15,7 @@ import javax.inject.Inject
 sealed class DeviceDetailsState {
     data object Loading : DeviceDetailsState()
     data class Error(val error: Throwable) : DeviceDetailsState()
-    data class Success(var deviceDetailsList : DeviceSearchRequestUi) : DeviceDetailsState()
+    data class Success(var deviceDetails : MyDeviceResponseUi) : DeviceDetailsState()
 }
 
 @HiltViewModel
@@ -31,9 +31,9 @@ class DeviceDetailsViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 _state.value = DeviceDetailsState.Loading
-                val deviceDetails = deviceDetailsOperations.loadDeviceDetails(inventoryId).getOrThrow().toDeviceSearchRequestUi()
+                val deviceDetails = deviceDetailsOperations.loadMyDeviceDetails(inventoryId).getOrThrow().MyDeviceResponseUi()
                 _state.value = DeviceDetailsState.Success(
-                    deviceDetailsList = deviceDetails
+                    deviceDetails = deviceDetails
                 )
             } catch (e: Exception) {
                 _state.value = DeviceDetailsState.Error(e)

@@ -26,39 +26,6 @@ data class DeviceSearchRequestUi(
     val note: String = "",
     val tags: List<String> = emptyList(),
     val isTestDevice: Boolean = false
-): Parcelable {
-    fun getDeviceDetails(): List<DeviceDetail> {
-        return listOf(
-            DeviceDetail(
-                sectionTitle = "General Information",
-                details = listOf(
-                    "Inventory ID" to this.inventoryId,
-                    "Serial number" to this.serialNumber,
-                    "Invoice number" to this.invoiceNumber,
-                )
-            ),
-            DeviceDetail(
-                sectionTitle = "Location Information",
-                details = listOf(
-                    "Location" to this.location,
-                    "Site" to this.site,
-                    "Supplier" to this.supplier
-                )
-            ),
-            DeviceDetail(
-                sectionTitle = "Lease Information",
-                details = listOf(
-                    "Shipment date" to this.shipmentDateBegin,
-                    "Lease start date" to this.leaseStartDate,
-                    "Lease end date" to this.leaseEndDate,
-                )
-            )
-        )
-    }
-
-}
-
-data class DeviceDetail(val sectionTitle: String, val details: List<Pair<String, String>>)
-
+): Parcelable
 
 

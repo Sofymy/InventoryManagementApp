@@ -1,8 +1,6 @@
 package com.zenitech.imaapp.domain.model
 
 import com.zenitech.imaapp.ui.model.DeviceSearchRequestUi
-import com.zenitech.imaapp.ui.model.toDeviceStatus
-import com.zenitech.imaapp.ui.model.toDeviceStatusUi
 
 data class DeviceSearchRequest(
     val inventoryId: String,

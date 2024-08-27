@@ -1,7 +1,6 @@
 package com.zenitech.imaapp.domain.model
 
 import com.zenitech.imaapp.ui.model.DeviceResponseUi
-import com.zenitech.imaapp.ui.model.toDeviceStatusUi
 import java.util.Date
 
 data class DeviceResponse(

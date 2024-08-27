@@ -1,13 +1,13 @@
 package com.zenitech.imaapp.domain.di
 
+import com.zenitech.imaapp.data.auth.AuthenticationService
 import com.zenitech.imaapp.data.repository.AdminRepository
 import com.zenitech.imaapp.data.repository.DeviceDetailsRepository
 import com.zenitech.imaapp.data.repository.MyDevicesRepository
 import com.zenitech.imaapp.data.repository.QRReaderRepository
 import com.zenitech.imaapp.data.repository.RequestTestDeviceRepository
-import com.zenitech.imaapp.data.auth.AuthenticationService
-import com.zenitech.imaapp.domain.usecases.admin.devices.AdminCreateDeviceUseCase
 import com.zenitech.imaapp.domain.usecases.admin.AdminUseCases
+import com.zenitech.imaapp.domain.usecases.admin.devices.AdminCreateDeviceUseCase
 import com.zenitech.imaapp.domain.usecases.admin.devices.AdminDeleteDeviceUseCase
 import com.zenitech.imaapp.domain.usecases.admin.devices.AdminSaveModificationsUseCase
 import com.zenitech.imaapp.domain.usecases.admin.devices.LoadAdminAddDeviceAssetsUseCase
@@ -21,6 +21,7 @@ import com.zenitech.imaapp.domain.usecases.admin.manage_requests.LoadRequestsUse
 import com.zenitech.imaapp.domain.usecases.admin.manage_requests.RejectRequestUseCase
 import com.zenitech.imaapp.domain.usecases.device_details.DeviceDetailsUseCases
 import com.zenitech.imaapp.domain.usecases.device_details.LoadDeviceDetailsUseCase
+import com.zenitech.imaapp.domain.usecases.device_details.LoadMyDeviceDetailsUseCase
 import com.zenitech.imaapp.domain.usecases.my_devices.LoadMyDevicesUseCase
 import com.zenitech.imaapp.domain.usecases.my_devices.MyDevicesUseCases
 import com.zenitech.imaapp.domain.usecases.qr_reader.QRReaderUseCases
@@ -33,7 +34,6 @@ import com.zenitech.imaapp.domain.usecases.sign_in.IsAdminUseCase
 import com.zenitech.imaapp.domain.usecases.sign_in.SignInUseCases
 import com.zenitech.imaapp.domain.usecases.sign_in.SignInWithGoogleUseCase
 import com.zenitech.imaapp.domain.usecases.sign_in.SignOutUseCase
-import com.zenitech.imaapp.feature.admin.devices.device_info.device_details.AdminDevicesUserEvent
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -61,8 +61,15 @@ object UseCasesModule {
     @Singleton
     fun provideDeviceDetailsUseCase(
         repository: DeviceDetailsRepository,
-        loadDeviceDetails: LoadDeviceDetailsUseCase
-    ): DeviceDetailsUseCases = DeviceDetailsUseCases(repository, loadDeviceDetails)
+        loadDeviceDetails: LoadDeviceDetailsUseCase,
+        loadMyDeviceDetails: LoadMyDeviceDetailsUseCase
+    ): DeviceDetailsUseCases = DeviceDetailsUseCases(repository, loadDeviceDetails, loadMyDeviceDetails)
+
+    @Provides
+    @Singleton
+    fun provideLoadMyDeviceDetailsUseCase(
+        repository: DeviceDetailsRepository
+    ): LoadMyDeviceDetailsUseCase = LoadMyDeviceDetailsUseCase(repository)
 
     @Provides
     @Singleton

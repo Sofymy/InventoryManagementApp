@@ -2,9 +2,9 @@ package com.zenitech.imaapp.feature.my_devices
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.zenitech.imaapp.domain.model.toDeviceSearchRequestUi
+import com.zenitech.imaapp.domain.model.MyDeviceResponseUi
 import com.zenitech.imaapp.domain.usecases.my_devices.MyDevicesUseCases
-import com.zenitech.imaapp.ui.model.DeviceSearchRequestUi
+import com.zenitech.imaapp.ui.model.MyDeviceResponseUi
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -16,7 +16,7 @@ import javax.inject.Inject
 sealed class MyDevicesState {
     data object Loading : MyDevicesState()
     data class Error(val error: Throwable) : MyDevicesState()
-    data class Success(var myDeviceList: List<DeviceSearchRequestUi>) : MyDevicesState()
+    data class Success(var myDeviceList: List<MyDeviceResponseUi>) : MyDevicesState()
 }
 
 sealed class MyDevicesUserEvent {
@@ -44,7 +44,7 @@ class MyDevicesViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 _state.value = MyDevicesState.Loading
-                val myDevices = myDevicesOperations.loadMyDevices().getOrThrow().map { it.toDeviceSearchRequestUi() }
+                val myDevices = myDevicesOperations.loadMyDevices().getOrThrow().map { it.MyDeviceResponseUi() }
                 _state.value = MyDevicesState.Success(
                     myDeviceList = myDevices
                 )
@@ -60,7 +60,7 @@ class MyDevicesViewModel @Inject constructor(
             if (currentState is MyDevicesState.Success) {
                 val sortedList = when (sortingOption) {
                     SortingOption.Manufacturer -> currentState.myDeviceList.sortedBy { it.manufacturer }
-                    SortingOption.Asset -> currentState.myDeviceList.sortedBy { it.assetName }
+                    SortingOption.Asset -> currentState.myDeviceList.sortedBy { it.assetName.name }
                 }
                 currentState.copy(myDeviceList = sortedList)
             } else {
