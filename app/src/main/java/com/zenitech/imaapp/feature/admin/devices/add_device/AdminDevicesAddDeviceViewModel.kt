@@ -55,6 +55,7 @@ class AdminDevicesAddDeviceViewModel @Inject constructor(
     private var uiState by mutableStateOf(CreateDeviceRequestUi())
 
     fun onEvent(event: AdminDevicesAddDeviceUserEvent) {
+        Log.d("eeeeeee", uiState.toString())
         when (event) {
             is AdminDevicesAddDeviceUserEvent.ChangeDeviceAsset -> {
                 uiState = uiState.copy(assetName = event.assetName)

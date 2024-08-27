@@ -1,6 +1,7 @@
 package com.zenitech.imaapp.feature.admin.devices.add_device
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -119,6 +120,7 @@ fun AdminDevicesAddDeviceContent(
     val errors = remember {
         mutableStateOf(emptyList<ValidationError?>())
     }
+    Log.d("eeeeeee", errors.value.toString())
 
     LaunchedEffect(key1 = state) {
         when (state) {

@@ -40,8 +40,7 @@ data class CreateDeviceRequestUi(
     @property:EmptyFieldValidation
     val site: String = "",
 
-    @property:EmptyFieldValidation
-    val location: String = "",
+    val location: String = "Budapest",
 
     val note: String = ""
 ): Parcelable

@@ -11,6 +11,7 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -64,11 +65,24 @@ fun AdminDevicesAddDeviceGeneral(
     val assetState by remember { mutableStateOf(asset) }
     val typeState by remember { mutableStateOf(type) }
     val manufacturerState by remember { mutableStateOf(manufacturer) }
+
     val invoiceNumberState = rememberSaveable { mutableStateOf("") }
     val serialNumberState = rememberSaveable { mutableStateOf("") }
 
     val invoiceNumberFocusRequester = remember { FocusRequester() }
     val serialNumberFocusRequester = remember { FocusRequester() }
+
+    LaunchedEffect(assetState) {
+        onChange(AdminDevicesAddDeviceUserEvent.ChangeDeviceAsset(assetState))
+    }
+
+    LaunchedEffect(typeState) {
+        onChange(AdminDevicesAddDeviceUserEvent.ChangeDeviceType(typeState))
+    }
+
+    LaunchedEffect(manufacturerState) {
+        onChange(AdminDevicesAddDeviceUserEvent.ChangeDeviceManufacturer(manufacturerState))
+    }
 
     val focusManager = LocalFocusManager.current
 
