@@ -72,19 +72,13 @@ fun AdminDevicesAddDeviceGeneral(
     val invoiceNumberFocusRequester = remember { FocusRequester() }
     val serialNumberFocusRequester = remember { FocusRequester() }
 
-    LaunchedEffect(assetState) {
+    val focusManager = LocalFocusManager.current
+
+    LaunchedEffect(assetState, typeState, manufacturerState) {
         onChange(AdminDevicesAddDeviceUserEvent.ChangeDeviceAsset(assetState))
-    }
-
-    LaunchedEffect(typeState) {
         onChange(AdminDevicesAddDeviceUserEvent.ChangeDeviceType(typeState))
-    }
-
-    LaunchedEffect(manufacturerState) {
         onChange(AdminDevicesAddDeviceUserEvent.ChangeDeviceManufacturer(manufacturerState))
     }
-
-    val focusManager = LocalFocusManager.current
 
     LazyColumn {
         item{
