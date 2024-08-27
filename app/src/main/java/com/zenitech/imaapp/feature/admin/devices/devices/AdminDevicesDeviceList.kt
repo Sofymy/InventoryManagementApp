@@ -87,7 +87,7 @@ fun AdminDevicesDeviceListPreview() {
         selectedField = "Type",
         onFieldSelected = {},
         selectedTab = AdminDevicesPagerTab.Leased,
-        onNavigateToAdminDeviceDetails = {},
+        onNavigateToAdminDeviceInfo = {},
         pullRefreshState = mockedPullRefreshState,
         isRefreshing = false
     )
@@ -101,7 +101,7 @@ fun AdminDevicesDeviceList(
     selectedField: String,
     onFieldSelected: (String) -> Unit,
     selectedTab: AdminDevicesPagerTab,
-    onNavigateToAdminDeviceDetails: (String) -> Unit,
+    onNavigateToAdminDeviceInfo: (String) -> Unit,
     pullRefreshState: PullRefreshState,
     isRefreshing: Boolean
 ) {
@@ -133,7 +133,7 @@ fun AdminDevicesDeviceList(
                 AdminDevicesDeviceListItem(
                     device = device,
                     selectedField = selectedField,
-                    onNavigateToAdminDeviceDetails = onNavigateToAdminDeviceDetails
+                    onNavigateToAdminDeviceInfo = onNavigateToAdminDeviceInfo
                 )
             }
         }
@@ -204,7 +204,7 @@ fun AdminDevicesFields(
 fun AdminDevicesDeviceListItem(
     device: DeviceSearchRequestUi,
     selectedField: String,
-    onNavigateToAdminDeviceDetails: (String) -> Unit
+    onNavigateToAdminDeviceInfo: (String) -> Unit
 ) {
     val interactionSource = remember {
         MutableInteractionSource()
@@ -216,7 +216,7 @@ fun AdminDevicesDeviceListItem(
                 interactionSource = interactionSource,
                 indication = null
             ) {
-                onNavigateToAdminDeviceDetails(device.inventoryId)
+                onNavigateToAdminDeviceInfo(device.inventoryId)
             }
     ) {
         AdminDevicesTableCell(

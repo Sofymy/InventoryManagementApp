@@ -76,7 +76,7 @@ fun AdminDevicesTabLayoutPreview() {
     IMAAppTheme {
         AdminDevicesTabLayout(
             state = AdminDevicesState.Success(listOf(DeviceSearchRequestUi())),
-            onNavigateToAdminDeviceDetails = {},
+            onNavigateToAdminDeviceInfo = {},
             pullRefreshState = mockedPullRefreshState,
             onClickAddDevice = {},
             onClickExport = {}
@@ -86,11 +86,11 @@ fun AdminDevicesTabLayoutPreview() {
 
 @Composable
 fun AdminDevicesScreen(
-    onNavigateToAdminDeviceDetails: (String) -> Unit,
+    onNavigateToAdminDeviceInfo: (String) -> Unit,
     onNavigateToAdminDevicesAddDevice: () -> Unit
 ) {
     AdminDevicesScreenContent(
-        onNavigateToAdminDeviceDetails = onNavigateToAdminDeviceDetails,
+        onNavigateToAdminDeviceInfo = onNavigateToAdminDeviceInfo,
         onNavigateToAdminDevicesAddDevice = onNavigateToAdminDevicesAddDevice,
     )
 }
@@ -98,7 +98,7 @@ fun AdminDevicesScreen(
 @Composable
 fun AdminDevicesScreenContent(
     viewModel: AdminDevicesViewModel = hiltViewModel(),
-    onNavigateToAdminDeviceDetails: (String) -> Unit,
+    onNavigateToAdminDeviceInfo: (String) -> Unit,
     onNavigateToAdminDevicesAddDevice: () -> Unit,
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -143,7 +143,7 @@ fun AdminDevicesScreenContent(
             state = state,
             pullRefreshState = pullRefreshState,
             onClickAddDevice = onNavigateToAdminDevicesAddDevice,
-            onNavigateToAdminDeviceDetails = onNavigateToAdminDeviceDetails,
+            onNavigateToAdminDeviceInfo = onNavigateToAdminDeviceInfo,
             onClickExport = {
                 when {
                     ContextCompat.checkSelfPermission(context, WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED -> {
@@ -170,13 +170,13 @@ fun AdminDevicesScreenContent(
 @Composable
 fun AdminDevicesTabLayout(
     state: AdminDevicesState,
-    onNavigateToAdminDeviceDetails: (String) -> Unit,
+    onNavigateToAdminDeviceInfo: (String) -> Unit,
     pullRefreshState: PullRefreshState,
     onClickAddDevice: () -> Unit,
     onClickExport: () -> Unit
 ) {
     val pagerState = rememberPagerState(pageCount = { 5 })
-    val pagerTabs = createPagerTabs()
+    val pagerTabs = createAdminDevicesPagerTabs()
     val searchQuery = remember { mutableStateOf("") }
     val selectedTabIndex = remember { derivedStateOf { pagerState.currentPage } }
     val scope = rememberCoroutineScope()
@@ -241,7 +241,7 @@ fun AdminDevicesTabLayout(
             pagerState = pagerState,
             pagerTabs = pagerTabs,
             searchQuery = searchQuery.value,
-            onNavigateToAdminDeviceDetails = onNavigateToAdminDeviceDetails,
+            onNavigateToAdminDeviceInfo = onNavigateToAdminDeviceInfo,
             pullRefreshState = pullRefreshState
         )
     }
@@ -287,7 +287,7 @@ fun AdminDevicesTabContent(
     pagerState: PagerState,
     pagerTabs: List<AdminDevicesPagerTab>,
     searchQuery: String,
-    onNavigateToAdminDeviceDetails: (String) -> Unit,
+    onNavigateToAdminDeviceInfo: (String) -> Unit,
     pullRefreshState: PullRefreshState
 ) {
     when (state) {
@@ -301,7 +301,7 @@ fun AdminDevicesTabContent(
                 adminDevices = state.adminDevices,
                 searchQuery = searchQuery,
                 pullRefreshState = pullRefreshState,
-                onNavigateToAdminDeviceDetails = onNavigateToAdminDeviceDetails,
+                onNavigateToAdminDeviceInfo = onNavigateToAdminDeviceInfo,
             )
         }
     }
@@ -323,7 +323,7 @@ fun AdminDevicesTabsContent(
     adminDevices: List<DeviceSearchRequestUi>,
     pagerTabs: List<AdminDevicesPagerTab>,
     searchQuery: String,
-    onNavigateToAdminDeviceDetails: (String) -> Unit,
+    onNavigateToAdminDeviceInfo: (String) -> Unit,
     pullRefreshState: PullRefreshState,
     isRefreshing: Boolean
 ) {
@@ -366,13 +366,13 @@ fun AdminDevicesTabsContent(
             onFieldSelected = { selectedField = it },
             selectedTab = selectedTab,
             pullRefreshState = pullRefreshState,
-            onNavigateToAdminDeviceDetails = onNavigateToAdminDeviceDetails
+            onNavigateToAdminDeviceInfo = onNavigateToAdminDeviceInfo
         )
     }
 }
 
 @Composable
-fun createPagerTabs(): List<AdminDevicesPagerTab> = listOf(
+fun createAdminDevicesPagerTabs(): List<AdminDevicesPagerTab> = listOf(
     AdminDevicesPagerTab.All,
     AdminDevicesPagerTab.InStock,
     AdminDevicesPagerTab.Leased,

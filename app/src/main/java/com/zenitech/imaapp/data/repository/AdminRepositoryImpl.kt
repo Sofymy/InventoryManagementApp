@@ -6,6 +6,7 @@ import com.zenitech.imaapp.domain.model.DeviceCondition
 import com.zenitech.imaapp.domain.model.DeviceResponse
 import com.zenitech.imaapp.domain.model.DeviceSearchRequest
 import com.zenitech.imaapp.domain.model.DeviceStatus
+import com.zenitech.imaapp.domain.model.HistoryResponse
 import com.zenitech.imaapp.domain.model.RequestStatus
 import com.zenitech.imaapp.domain.model.TestDeviceRequest
 import kotlinx.coroutines.flow.Flow
@@ -568,7 +569,7 @@ class AdminRepositoryImpl : AdminRepository {
 
     override fun createDevice(createDeviceRequest: CreateDeviceRequest): Flow<DeviceResponse> {
         return flow{
-            val mockDeviceResponse = DeviceResponse(
+            val mockedDeviceResponse = DeviceResponse(
                 inventoryId = "inv123",
                 asset = DeviceAsset.ROUTER,
                 manufacturer = "Sample Manufacturer",
@@ -586,7 +587,35 @@ class AdminRepositoryImpl : AdminRepository {
                 invoiceNumber = "INV123456",
                 warranty = Date(1234567890L)
             )
-            emit(mockDeviceResponse)
+            emit(mockedDeviceResponse)
+        }
+    }
+
+    override fun getDeviceHistory(inventoryId: String): Flow<List<HistoryResponse>> {
+        return flow{
+            val mockedDeviceHistory = listOf(
+                HistoryResponse(
+                    timestamp = "2024-08-26",
+                    action = "Lease",
+                    modifierEmail = "admin1@zenitech.co.uk",
+                    description = "Leased device to user 1.",
+                    actorEmail = "user1@zenitech.co.uk",
+                ),
+                HistoryResponse(
+                    timestamp = "2024-08-25",
+                    action = "Modify",
+                    modifierEmail = "admin2@zenitech.co.uk",
+                    description = "Modified device condition.",
+                    actorEmail = "user1@zenitech.co.uk",
+                ),
+                HistoryResponse(
+                    timestamp = "2024-08-24",
+                    action = "Update",
+                    modifierEmail = "admin1@zenitech.co.uk",
+                    description = "",
+                    actorEmail = null
+                ))
+            emit(mockedDeviceHistory)
         }
     }
 

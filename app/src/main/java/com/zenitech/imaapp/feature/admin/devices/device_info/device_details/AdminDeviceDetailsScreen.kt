@@ -1,31 +1,26 @@
-package com.zenitech.imaapp.feature.admin.devices.device_details
+package com.zenitech.imaapp.feature.admin.devices.device_info.device_details
 
 import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
 import android.content.Context
 import android.content.pm.PackageManager.PERMISSION_GRANTED
 import android.os.Environment
-import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
@@ -47,7 +42,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -60,11 +54,11 @@ import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.zenitech.imaapp.R
+import com.zenitech.imaapp.feature.admin.devices.device_info.AdminDeviceInfoButton
 import com.zenitech.imaapp.feature.admin.devices.devices.generateExcelReport
 import com.zenitech.imaapp.feature.admin.devices.devices.shareFile
 import com.zenitech.imaapp.ui.common.CircularLoadingIndicator
 import com.zenitech.imaapp.ui.common.conditional
-import com.zenitech.imaapp.ui.common.pulsate
 import com.zenitech.imaapp.ui.common.simpleVerticalScrollbar
 import com.zenitech.imaapp.ui.model.DeviceAssetUi
 import com.zenitech.imaapp.ui.model.DeviceConditionUi
@@ -257,12 +251,21 @@ fun AdminDeviceDetailsButtonsRow(
     onClickEdit: () -> Unit
 ) {
     Row(horizontalArrangement = Arrangement.End, modifier = Modifier
-        .padding(horizontal = 15.dp, vertical = 10.dp)
+        .padding(horizontal = 15.dp)
         .fillMaxWidth()
     ) {
-        AdminDeviceDetailsButton(icon = Icons.TwoTone.Delete) { onClickDelete(device) }
-        AdminDeviceDetailsButton(icon = Icons.TwoTone.Edit) { onClickEdit() }
-        AdminDeviceDetailsButton(icon = Icons.TwoTone.IosShare) { onClickExport() }
+        AdminDeviceInfoButton(
+            icon = Icons.TwoTone.Delete,
+            onClick = { onClickDelete(device) },
+        )
+        AdminDeviceInfoButton(
+            icon = Icons.TwoTone.Edit,
+            onClick = { onClickEdit() },
+        )
+        AdminDeviceInfoButton(
+            icon = Icons.TwoTone.IosShare,
+            onClick = { onClickExport() },
+        )
     }
 }
 
@@ -393,49 +396,4 @@ fun AdminDeviceDetailsNavigableRow(
         }
     }
     HorizontalDivider(thickness = 1.dp, color = LocalCardColorsPalette.current.borderColor)
-}
-
-@Composable
-fun AdminDeviceDetailsButton(
-    icon: ImageVector,
-    onClick: () -> Unit
-) {
-    Row(
-        Modifier
-            .padding(vertical = 20.dp)
-            .height(IntrinsicSize.Max) ,
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        Spacer(modifier = Modifier.width(10.dp))
-        Column(
-            modifier = Modifier
-                .pulsate()
-                .clickable(
-                    interactionSource = remember {
-                        MutableInteractionSource()
-                    },
-                    indication = null
-                ) {
-                    onClick()
-                }
-                .border(
-                    width = 1.dp,
-                    color = LocalCardColorsPalette.current.borderColor,
-                    shape = RoundedCornerShape(20.dp)
-                )
-                .background(
-                    color = LocalCardColorsPalette.current.containerColor,
-                    shape = RoundedCornerShape(20.dp)
-                )
-                .padding(15.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
-        ) {
-            Icon(
-                imageVector = icon,
-                contentDescription = null,
-                modifier = Modifier.padding(5.dp)
-            )
-        }
-    }
 }

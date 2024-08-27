@@ -1,4 +1,4 @@
-package com.zenitech.imaapp.feature.admin.devices.device_details
+package com.zenitech.imaapp.feature.admin.devices.device_info.device_details
 
 import android.util.Log
 import androidx.compose.runtime.getValue

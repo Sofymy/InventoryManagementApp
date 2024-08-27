@@ -14,6 +14,7 @@ import com.zenitech.imaapp.domain.usecases.admin.devices.LoadAdminAddDeviceAsset
 import com.zenitech.imaapp.domain.usecases.admin.devices.LoadAdminAddDeviceManufacturersUseCase
 import com.zenitech.imaapp.domain.usecases.admin.devices.LoadAdminAddDeviceSitesUseCase
 import com.zenitech.imaapp.domain.usecases.admin.devices.LoadAdminAddDeviceTypesUseCase
+import com.zenitech.imaapp.domain.usecases.admin.devices.LoadAdminDeviceHistory
 import com.zenitech.imaapp.domain.usecases.admin.devices.LoadAdminDevicesUseCase
 import com.zenitech.imaapp.domain.usecases.admin.manage_requests.ApproveRequestUseCase
 import com.zenitech.imaapp.domain.usecases.admin.manage_requests.LoadRequestsUseCase
@@ -32,7 +33,7 @@ import com.zenitech.imaapp.domain.usecases.sign_in.IsAdminUseCase
 import com.zenitech.imaapp.domain.usecases.sign_in.SignInUseCases
 import com.zenitech.imaapp.domain.usecases.sign_in.SignInWithGoogleUseCase
 import com.zenitech.imaapp.domain.usecases.sign_in.SignOutUseCase
-import com.zenitech.imaapp.feature.admin.devices.device_details.AdminDevicesUserEvent
+import com.zenitech.imaapp.feature.admin.devices.device_info.device_details.AdminDevicesUserEvent
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -73,6 +74,7 @@ object UseCasesModule {
     @Singleton
     fun provideAdminUseCases(
         repository: AdminRepository,
+        loadAdminDeviceHistory: LoadAdminDeviceHistory,
         loadAdminDevices: LoadAdminDevicesUseCase,
         loadAdminAddDeviceAssets: LoadAdminAddDeviceAssetsUseCase,
         loadAdminAddDeviceTypes: LoadAdminAddDeviceTypesUseCase,
@@ -87,6 +89,7 @@ object UseCasesModule {
     ): AdminUseCases = AdminUseCases(
         repository,
         loadAdminDevices,
+        loadAdminDeviceHistory,
         loadAdminAddDeviceAssets,
         loadAdminAddDeviceTypes,
         loadAdminAddDeviceManufacturers,
@@ -98,6 +101,12 @@ object UseCasesModule {
         saveModifications,
         deleteDevice
     )
+
+    @Provides
+    @Singleton
+    fun provideLoadAdminDeviceHistoryUseCase(
+        repository: AdminRepository
+    ): LoadAdminDeviceHistory = LoadAdminDeviceHistory(repository)
 
     @Provides
     @Singleton

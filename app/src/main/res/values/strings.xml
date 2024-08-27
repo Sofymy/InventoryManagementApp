@@ -98,5 +98,7 @@
     <string name="manage_requests">Manage Requests</string>
     <string name="request_id">Request ID</string>
     <string name="save_modifications">Save modifications</string>
+    <string name="admin_device_history">Admin device history</string>
+    <string name="admin_device_info" />
 
 </resources>

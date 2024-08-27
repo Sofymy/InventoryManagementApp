@@ -77,9 +77,7 @@ import com.zenitech.imaapp.ui.theme.RaspberryRed
 
 @Composable
 fun DeviceDetailsScreen(
-    inventoryId: String,
-    sharedTransitionScope: SharedTransitionScope,
-    animatedVisibilityScope: AnimatedVisibilityScope
+    inventoryId: String
 ) {
     Column(
         modifier = Modifier
@@ -87,19 +85,14 @@ fun DeviceDetailsScreen(
     ) {
         DeviceDetailsContent(
             inventoryId = inventoryId,
-            sharedTransitionScope = sharedTransitionScope,
-            animatedVisibilityScope = animatedVisibilityScope
         )
     }
 }
 
-@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun DeviceDetailsContent(
     inventoryId: String,
     viewModel: DeviceDetailsViewModel = hiltViewModel(),
-    animatedVisibilityScope: AnimatedVisibilityScope,
-    sharedTransitionScope: SharedTransitionScope,
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val lifecycleOwner = LocalLifecycleOwner.current
@@ -133,8 +126,6 @@ fun DeviceDetailsContent(
         is DeviceDetailsState.Success -> {
             DeviceDetailsList(
                 device = (state as DeviceDetailsState.Success).deviceDetailsList,
-                sharedTransitionScope = sharedTransitionScope,
-                animatedVisibilityScope = animatedVisibilityScope
             )
         }
     }
@@ -143,8 +134,6 @@ fun DeviceDetailsContent(
 @Composable
 fun DeviceDetailsList(
     device: DeviceSearchRequestUi,
-    animatedVisibilityScope: AnimatedVisibilityScope,
-    sharedTransitionScope: SharedTransitionScope,
 ) {
     val listState = rememberLazyListState()
 

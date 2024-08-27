@@ -44,7 +44,13 @@ sealed class Screen(
     data object AdminDevicesDeviceManufacturers: Screen(R.string.manufacturer)
 
     @Serializable
+    data class AdminDeviceInfo(val inventoryId: String): Screen(R.string.admin_device_info)
+
+    @Serializable
     data class AdminDeviceDetails(val inventoryId: String): Screen(R.string.admin_device_details)
+
+    @Serializable
+    data class AdminDeviceHistory(val inventoryId: String): Screen(R.string.admin_device_history)
 
     @Serializable
     data object MyDevices: Screen(R.string.my_devices)
