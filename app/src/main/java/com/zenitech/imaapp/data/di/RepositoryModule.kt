@@ -25,9 +25,7 @@ object RepositoryModule {
 
     @Provides
     @Singleton
-    fun providesMyDevicesRepository(
-        deviceApi: DeviceApi
-    ): MyDevicesRepository = MyDevicesRepositoryImpl(deviceApi)
+    fun providesMyDevicesRepository(): MyDevicesRepository = MyDevicesRepositoryImpl()
 
     @Provides
     @Singleton

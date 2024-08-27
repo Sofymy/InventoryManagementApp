@@ -102,7 +102,7 @@ fun RequestTestDeviceTypeItem(
     Column(
         modifier = Modifier
             .background(LocalCardColorsPalette.current.containerColor)
-            .clickable() {
+            .clickable {
                 onClick()
             }
     ) {

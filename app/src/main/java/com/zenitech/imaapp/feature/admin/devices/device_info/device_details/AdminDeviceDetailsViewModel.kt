@@ -1,18 +1,11 @@
 package com.zenitech.imaapp.feature.admin.devices.device_info.device_details
 
-import android.util.Log
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.zenitech.imaapp.domain.model.toCreateDeviceRequest
 import com.zenitech.imaapp.domain.model.toDeviceSearchRequest
 import com.zenitech.imaapp.domain.model.toDeviceSearchRequestUi
 import com.zenitech.imaapp.domain.usecases.admin.AdminUseCases
 import com.zenitech.imaapp.domain.usecases.device_details.DeviceDetailsUseCases
-import com.zenitech.imaapp.feature.admin.devices.add_device.AdminDevicesAddDeviceState
-import com.zenitech.imaapp.ui.model.CreateDeviceRequestUi
 import com.zenitech.imaapp.ui.model.DeviceSearchRequestUi
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow

@@ -1,9 +1,7 @@
 package com.zenitech.imaapp.data.auth
 
-import android.util.Log
 import androidx.credentials.CustomCredential
 import androidx.credentials.GetCredentialResponse
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import com.google.android.libraries.identity.googleid.GoogleIdTokenParsingException
 import com.google.firebase.auth.FirebaseAuth
@@ -15,7 +13,7 @@ class AuthenticationServiceImpl(
     private val firebaseAuth: FirebaseAuth
 ): AuthenticationService {
 
-    override val isAdmin: Boolean get() = true // TODO
+    override val isAdmin: Boolean get() = true
     override val hasUser: Boolean get() = firebaseAuth.currentUser != null
 
     override suspend fun signInWithGoogle(result: GetCredentialResponse): Result<String> {

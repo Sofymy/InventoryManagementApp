@@ -1,4 +1,4 @@
-@file:OptIn(ExperimentalMaterialApi::class, ExperimentalMaterial3Api::class)
+@file:OptIn(ExperimentalMaterialApi::class)
 
 package com.zenitech.imaapp.feature.admin.devices.devices
 

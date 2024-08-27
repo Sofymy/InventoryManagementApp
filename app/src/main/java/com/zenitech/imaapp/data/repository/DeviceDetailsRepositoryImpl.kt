@@ -9,8 +9,6 @@ import kotlinx.coroutines.flow.flow
 
 class DeviceDetailsRepositoryImpl : DeviceDetailsRepository {
 
-    // todo
-
     override fun getDeviceDetails(inventoryId: String): Flow<DeviceSearchRequest> {
         return flow {
             val mockedDevices = listOf(

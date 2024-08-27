@@ -1,7 +1,5 @@
 package com.zenitech.imaapp.ui.utils
 
-import androidx.credentials.Credential
-import androidx.credentials.CredentialManager
 import androidx.credentials.GetCredentialRequest
 import com.google.android.libraries.identity.googleid.GetSignInWithGoogleOption
 

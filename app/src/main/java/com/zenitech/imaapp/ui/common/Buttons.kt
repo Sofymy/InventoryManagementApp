@@ -45,7 +45,7 @@ import com.zenitech.imaapp.ui.theme.LocalButtonColorsPalette
 fun ButtonPreview(){
     IMAAppTheme {
         Surface {
-            Column() {
+            Column {
                 PrimaryButton(onClick = { }) { Text("Primary Button") }
                 SecondaryButton(onClick = { }) { Text("Secondary Button") }
                 ScrollToTopButton { }

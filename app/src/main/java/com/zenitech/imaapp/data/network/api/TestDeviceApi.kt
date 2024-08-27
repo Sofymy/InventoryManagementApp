@@ -1,12 +1,9 @@
-package org.openapitools.client.apis
+package com.zenitech.imaapp.data.network.api
 
-import org.openapitools.client.infrastructure.CollectionFormats.*
 import retrofit2.http.*
 import retrofit2.Call
-import okhttp3.RequestBody
-import com.squareup.moshi.Json
 
-import org.openapitools.client.models.GetTestDeviceManufacturersResponse
+import com.zenitech.imaapp.data.model.GetTestDeviceManufacturersResponse
 
 interface TestDeviceApi {
     /**

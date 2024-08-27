@@ -2,15 +2,13 @@ package com.zenitech.imaapp.data.network.api
 
 import retrofit2.http.*
 import retrofit2.Call
-import okhttp3.RequestBody
-import com.squareup.moshi.Json
 
-import org.openapitools.client.models.DeviceCreateRequest
-import org.openapitools.client.models.DevicePage
-import org.openapitools.client.models.DeviceResponse
-import org.openapitools.client.models.DeviceSearchRequest
-import org.openapitools.client.models.MyDeviceResponse
-import org.openapitools.client.models.Tag
+import com.zenitech.imaapp.data.model.DeviceCreateRequest
+import com.zenitech.imaapp.data.model.DevicePage
+import com.zenitech.imaapp.data.model.DeviceResponse
+import com.zenitech.imaapp.data.model.DeviceSearchRequest
+import com.zenitech.imaapp.data.model.MyDeviceResponse
+import com.zenitech.imaapp.data.model.Tag
 
 interface DeviceApi {
     /**

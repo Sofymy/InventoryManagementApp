@@ -1,25 +1,13 @@
 package com.zenitech.imaapp.data.repository
 
-import android.util.Log
-import com.zenitech.imaapp.data.network.api.DeviceApi
 import com.zenitech.imaapp.domain.model.DeviceAsset
 import com.zenitech.imaapp.domain.model.DeviceCondition
 import com.zenitech.imaapp.domain.model.DeviceSearchRequest
 import com.zenitech.imaapp.domain.model.DeviceStatus
-import com.zenitech.imaapp.ui.model.DeviceSearchRequestUi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import org.openapitools.client.models.MyDeviceResponse
-import retrofit2.await
-import java.time.LocalDate
-import java.time.ZoneId
-import java.util.Date
 
-class MyDevicesRepositoryImpl(
-    val deviceApi: DeviceApi
-) : MyDevicesRepository {
-
-    // todo
+class MyDevicesRepositoryImpl : MyDevicesRepository {
 
     override fun getMyDevices(): Flow<List<DeviceSearchRequest>> {
         return flow {

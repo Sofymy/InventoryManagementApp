@@ -2,12 +2,7 @@ package com.zenitech.imaapp.feature.admin
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.zenitech.imaapp.data.repository.AdminRepository
-import com.zenitech.imaapp.data.repository.MyDevicesRepository
-import com.zenitech.imaapp.domain.model.toTestDeviceRequestUi
 import com.zenitech.imaapp.domain.usecases.admin.AdminUseCases
-import com.zenitech.imaapp.feature.admin.manage_requests.ManageRequestsState
-import com.zenitech.imaapp.ui.model.TestDeviceRequestUi
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow

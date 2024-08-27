@@ -1,11 +1,6 @@
-@file:OptIn(ExperimentalSharedTransitionApi::class)
-
 package com.zenitech.imaapp.feature.my_devices.device_details
 
 import android.annotation.SuppressLint
-import androidx.compose.animation.AnimatedVisibilityScope
-import androidx.compose.animation.ExperimentalSharedTransitionApi
-import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateFloatAsState

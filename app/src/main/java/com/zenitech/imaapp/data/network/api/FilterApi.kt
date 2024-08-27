@@ -2,10 +2,8 @@ package com.zenitech.imaapp.data.network.api
 
 import retrofit2.http.*
 import retrofit2.Call
-import okhttp3.RequestBody
-import com.squareup.moshi.Json
 
-import org.openapitools.client.models.Filter
+import com.zenitech.imaapp.data.model.Filter
 
 interface FilterApi {
     /**

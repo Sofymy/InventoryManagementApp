@@ -2,7 +2,6 @@ package com.zenitech.imaapp.feature.my_devices
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.zenitech.imaapp.domain.model.DeviceSearchRequest
 import com.zenitech.imaapp.domain.model.toDeviceSearchRequestUi
 import com.zenitech.imaapp.domain.usecases.my_devices.MyDevicesUseCases
 import com.zenitech.imaapp.ui.model.DeviceSearchRequestUi

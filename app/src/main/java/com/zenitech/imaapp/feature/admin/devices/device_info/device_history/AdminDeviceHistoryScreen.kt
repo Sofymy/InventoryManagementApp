@@ -16,7 +16,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.twotone.CalendarMonth
 import androidx.compose.material.icons.twotone.Clear
-import androidx.compose.material.icons.twotone.Note
 import androidx.compose.material.icons.twotone.Reviews
 import androidx.compose.material3.DateRangePicker
 import androidx.compose.material3.DisplayMode

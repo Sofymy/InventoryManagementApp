@@ -4,7 +4,6 @@ package com.zenitech.imaapp.feature.admin.manage_requests
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
@@ -12,12 +11,8 @@ import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.List
-import androidx.compose.material.icons.filled.ViewAgenda
 import androidx.compose.material.pullrefresh.PullRefreshState
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ScrollableTabRow
 import androidx.compose.material3.Tab
@@ -39,10 +34,7 @@ import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.zenitech.imaapp.feature.admin.devices.devices.AdminDevicesState
-import com.zenitech.imaapp.feature.admin.devices.devices.getFieldValue
-import com.zenitech.imaapp.feature.admin.devices.devices.matchesSearchQuery
 import com.zenitech.imaapp.ui.common.CircularLoadingIndicator
-import com.zenitech.imaapp.ui.model.DeviceStatusUi
 import com.zenitech.imaapp.ui.model.RequestStatusUi
 import com.zenitech.imaapp.ui.model.TestDeviceRequestUi
 import com.zenitech.imaapp.ui.theme.IMAAppTheme

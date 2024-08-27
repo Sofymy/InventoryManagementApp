@@ -1,13 +1,13 @@
-package org.openapitools.client.apis
+package com.zenitech.imaapp.data.network.api
 
 import retrofit2.http.*
 import retrofit2.Call
 
-import org.openapitools.client.models.CreateTestDeviceRequest
+import com.zenitech.imaapp.data.model.CreateTestDeviceRequest
 import com.zenitech.imaapp.data.model.DeviceAssignRequest
-import org.openapitools.client.models.DevicePage
-import org.openapitools.client.models.RequestStatus
-import org.openapitools.client.models.TestDeviceRequestPage
+import com.zenitech.imaapp.data.model.DevicePage
+import com.zenitech.imaapp.data.model.RequestStatus
+import com.zenitech.imaapp.data.model.TestDeviceRequestPage
 
 interface RequestApi {
     /**

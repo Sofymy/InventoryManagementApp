@@ -56,53 +56,9 @@ data class DeviceSearchRequestUi(
         )
     }
 
-    fun getAdminDeviceDetails(): List<AdminDeviceDetail> {
-        return listOf(
-            AdminDeviceDetail(
-                sectionTitle = "General Information",
-                details = listOf(
-                    "Inventory ID" to this.inventoryId,
-                    "Asset name" to this.assetName,
-                    "Type" to this.type,
-                    "Serial number" to this.serialNumber,
-                    "Invoice number" to this.invoiceNumber,
-                )
-            ),
-            AdminDeviceDetail(
-                sectionTitle = "Dates",
-                details = listOf(
-                    "Shipment date start" to this.shipmentDateBegin,
-                    "Shipment date end" to this.shipmentDateEnd,
-                    "Warranty start" to this.warrantyBegin,
-                    "Warranty end" to this.warrantyEnd,
-                )
-            ),
-            AdminDeviceDetail(
-                sectionTitle = "Status",
-                details = listOf(
-                    "Status" to this.status,
-                    "Condition" to this.condition,
-                    "Lease ID" to "98764637",
-                    "Lease start date" to this.leaseStartDate,
-                    "Lease end date" to this.leaseEndDate,
-                    "User" to this.userName
-                )
-            ),
-            AdminDeviceDetail(
-                sectionTitle = "Location",
-                details = listOf(
-                    "Location" to this.location,
-                    "Site" to this.site,
-                    "Supplier" to this.supplier,
-                    "Note" to this.note
-                )
-            )
-        )
-    }
 }
 
 data class DeviceDetail(val sectionTitle: String, val details: List<Pair<String, String>>)
 
-data class AdminDeviceDetail(val sectionTitle: String, val details: List<Pair<String, Any>>)
 
 

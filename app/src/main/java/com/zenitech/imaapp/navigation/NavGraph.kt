@@ -1,7 +1,6 @@
 package com.zenitech.imaapp.navigation
 
 import android.os.Bundle
-import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
@@ -11,20 +10,20 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import com.google.firebase.analytics.FirebaseAnalytics
+import com.zenitech.imaapp.feature.admin.AdminScreen
 import com.zenitech.imaapp.feature.admin.devices.add_device.AdminDevicesAddDeviceScreen
 import com.zenitech.imaapp.feature.admin.devices.add_device_successful.AdminDevicesAddDeviceSuccessfulScreen
-import com.zenitech.imaapp.feature.admin.devices.device_types.AdminDevicesAddDeviceTypesScreen
-import com.zenitech.imaapp.feature.admin.devices.devices.AdminDevicesScreen
-import com.zenitech.imaapp.feature.admin.AdminScreen
 import com.zenitech.imaapp.feature.admin.devices.device_assets.AdminDevicesDeviceAssetsScreen
 import com.zenitech.imaapp.feature.admin.devices.device_info.AdminDeviceInfoScreen
 import com.zenitech.imaapp.feature.admin.devices.device_info.device_details.AdminDeviceDetailsScreen
 import com.zenitech.imaapp.feature.admin.devices.device_info.device_history.AdminDeviceHistoryScreen
 import com.zenitech.imaapp.feature.admin.devices.device_manufacturers.AdminDevicesDeviceManufacturersScreen
 import com.zenitech.imaapp.feature.admin.devices.device_sites.AdminDevicesDeviceSitesScreen
+import com.zenitech.imaapp.feature.admin.devices.device_types.AdminDevicesAddDeviceTypesScreen
+import com.zenitech.imaapp.feature.admin.devices.devices.AdminDevicesScreen
 import com.zenitech.imaapp.feature.admin.manage_requests.ManageRequestsScreen
-import com.zenitech.imaapp.feature.my_devices.device_details.DeviceDetailsScreen
 import com.zenitech.imaapp.feature.my_devices.MyDevicesScreen
+import com.zenitech.imaapp.feature.my_devices.device_details.DeviceDetailsScreen
 import com.zenitech.imaapp.feature.qr_reader.QRReaderScreen
 import com.zenitech.imaapp.feature.request_test_device.RequestTestDeviceManufacturerScreen
 import com.zenitech.imaapp.feature.request_test_device.RequestTestDeviceScreen
@@ -40,7 +39,6 @@ import kotlinx.serialization.Serializable
 @Serializable object Admin
 
 
-@OptIn(ExperimentalSharedTransitionApi::class)
 @ExperimentalMaterial3Api
 @Composable
 fun NavGraph(

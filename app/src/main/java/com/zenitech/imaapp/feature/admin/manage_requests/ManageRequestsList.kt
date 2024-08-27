@@ -102,7 +102,6 @@ fun ManageRequestListPreview(){
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ManageRequestsList(
     requests: List<TestDeviceRequestUi>,

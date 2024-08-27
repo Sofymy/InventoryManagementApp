@@ -13,14 +13,9 @@
     "UnusedImport"
 )
 
-package org.openapitools.client.models
-
-import org.openapitools.client.models.DeviceCondition
-import org.openapitools.client.models.DeviceStatus
-import org.openapitools.client.models.Leasing
+package com.zenitech.imaapp.data.model
 
 import com.squareup.moshi.Json
-import com.squareup.moshi.JsonClass
 
 /**
  * 

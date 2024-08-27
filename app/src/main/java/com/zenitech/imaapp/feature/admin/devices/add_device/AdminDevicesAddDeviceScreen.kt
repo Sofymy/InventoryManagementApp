@@ -1,7 +1,6 @@
 package com.zenitech.imaapp.feature.admin.devices.add_device
 
 import android.annotation.SuppressLint
-import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -26,15 +25,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.zenitech.imaapp.R
-import com.zenitech.imaapp.feature.sign_in.SignInAnimatedBackground
-import com.zenitech.imaapp.feature.sign_in.SignInContent
 import com.zenitech.imaapp.ui.common.PrimaryButton
 import com.zenitech.imaapp.ui.common.PrimaryInputField
 import com.zenitech.imaapp.ui.common.SecondaryButton
@@ -42,7 +38,6 @@ import com.zenitech.imaapp.ui.theme.IMAAppTheme
 import com.zenitech.imaapp.ui.theme.LocalCardColorsPalette
 import com.zenitech.imaapp.ui.utils.validation.ValidationError
 import kotlinx.coroutines.launch
-import kotlin.time.Duration
 
 @Composable
 @Preview(showBackground = true)
@@ -202,7 +197,6 @@ fun AdminDevicesAddDeviceDisplayPageContent(
             page = page,
         )
         2 -> AdminDevicesAddDeviceStatus(
-            errors = errors,
             onChange = onChange,
             pagerState = pagerState,
             page = page,

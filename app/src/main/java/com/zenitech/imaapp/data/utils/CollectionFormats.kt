@@ -1,4 +1,4 @@
-package org.openapitools.client.infrastructure
+package com.zenitech.imaapp.data.utils
 
 class CollectionFormats {
 

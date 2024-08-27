@@ -2,12 +2,8 @@ package com.zenitech.imaapp.feature.admin.devices.device_info.device_history
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.zenitech.imaapp.domain.model.toDeviceSearchRequestUi
 import com.zenitech.imaapp.domain.model.toHistoryResponseUi
 import com.zenitech.imaapp.domain.usecases.admin.AdminUseCases
-import com.zenitech.imaapp.domain.usecases.device_details.DeviceDetailsUseCases
-import com.zenitech.imaapp.feature.admin.devices.device_info.device_details.AdminDeviceDetailsState
-import com.zenitech.imaapp.ui.model.DeviceSearchRequestUi
 import com.zenitech.imaapp.ui.model.HistoryResponseUi
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow

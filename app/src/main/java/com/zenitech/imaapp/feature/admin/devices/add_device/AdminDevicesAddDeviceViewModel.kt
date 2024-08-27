@@ -7,16 +7,11 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.zenitech.imaapp.domain.model.toCreateDeviceRequest
-import com.zenitech.imaapp.domain.model.toTestDeviceRequest
 import com.zenitech.imaapp.domain.usecases.admin.AdminUseCases
-import com.zenitech.imaapp.feature.request_test_device.RequestTestDeviceState
-import com.zenitech.imaapp.feature.request_test_device.RequestTestDeviceViewModel
-import com.zenitech.imaapp.feature.request_test_device.RequestTestDeviceViewModel.Companion
 import com.zenitech.imaapp.ui.model.CreateDeviceRequestUi
 import com.zenitech.imaapp.ui.model.DeviceConditionUi
 import com.zenitech.imaapp.ui.model.DeviceStatusUi
 import com.zenitech.imaapp.ui.model.LeasingUi
-import com.zenitech.imaapp.ui.model.TestDeviceRequestUi
 import com.zenitech.imaapp.ui.utils.validation.ValidateState
 import com.zenitech.imaapp.ui.utils.validation.ValidationError
 import dagger.hilt.android.lifecycle.HiltViewModel

@@ -6,7 +6,6 @@ import kotlinx.coroutines.flow.flow
 
 class RequestTestDeviceRepositoryImpl : RequestTestDeviceRepository {
 
-    // todo
     override fun getDeviceManufacturers(): Flow<List<String>> {
         return flow {
             val mockedDeviceManufacturers = mutableListOf(

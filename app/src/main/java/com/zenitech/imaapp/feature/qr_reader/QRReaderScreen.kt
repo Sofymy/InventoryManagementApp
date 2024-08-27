@@ -22,24 +22,19 @@ import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.twotone.FlashlightOff
 import androidx.compose.material.icons.twotone.FlashlightOn
-import androidx.compose.material.icons.twotone.Info
 import androidx.compose.material.icons.twotone.ZoomIn
 import androidx.compose.material.icons.twotone.ZoomOut
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -78,7 +73,6 @@ import com.google.mlkit.vision.barcode.BarcodeScanning
 import com.google.mlkit.vision.barcode.common.Barcode
 import com.google.mlkit.vision.common.InputImage
 import com.zenitech.imaapp.R
-import com.zenitech.imaapp.ui.common.CircularLoadingIndicator
 import com.zenitech.imaapp.ui.common.InstructionsComponent
 import com.zenitech.imaapp.ui.common.RoundedButton
 import com.zenitech.imaapp.ui.theme.LocalCardColorsPalette
@@ -280,7 +274,6 @@ fun QRReaderSquareCanvas(
         val strokeWidth = 8.dp.toPx()
 
         val width = canvasWidth * 0.8f
-        val height = width
 
         val topLeftX = (canvasWidth - width) / 2
         val topLeftY = canvasHeight * 0.1f
@@ -290,7 +283,7 @@ fun QRReaderSquareCanvas(
         // Draws the rectangle in the middle
         drawRoundRect(
             topLeft = Offset(topLeftX, topLeftY),
-            size = Size(width, height),
+            size = Size(width, width),
             color = Color.Transparent,
             cornerRadius = CornerRadius(15.dp.toPx()),
             blendMode = BlendMode.SrcIn
@@ -299,7 +292,7 @@ fun QRReaderSquareCanvas(
         drawRect(
             topLeft = Offset(topLeftX, topLeftY),
             color = borderColor,
-            size = Size(width, height),
+            size = Size(width, width),
             style = Stroke(width = 1.dp.toPx()),
             blendMode = BlendMode.Src
         )
@@ -336,28 +329,28 @@ fun QRReaderSquareCanvas(
         // Bottom-left corner
         drawLine(
             color = color,
-            start = Offset(topLeftX - (strokeWidth / 2), topLeftY + height),
-            end = Offset(topLeftX + cornerLength, topLeftY + height),
+            start = Offset(topLeftX - (strokeWidth / 2), topLeftY + width),
+            end = Offset(topLeftX + cornerLength, topLeftY + width),
             strokeWidth = strokeWidth
         )
         drawLine(
             color = color,
-            start = Offset(topLeftX, topLeftY + height),
-            end = Offset(topLeftX, topLeftY + height - cornerLength),
+            start = Offset(topLeftX, topLeftY + width),
+            end = Offset(topLeftX, topLeftY + width - cornerLength),
             strokeWidth = strokeWidth
         )
 
         // Bottom-right corner
         drawLine(
             color = color,
-            start = Offset(topLeftX + width + (strokeWidth / 2), topLeftY + height),
-            end = Offset(topLeftX + width - cornerLength, topLeftY + height),
+            start = Offset(topLeftX + width + (strokeWidth / 2), topLeftY + width),
+            end = Offset(topLeftX + width - cornerLength, topLeftY + width),
             strokeWidth = strokeWidth
         )
         drawLine(
             color = color,
-            start = Offset(topLeftX + width, topLeftY + height),
-            end = Offset(topLeftX + width, topLeftY + height - cornerLength),
+            start = Offset(topLeftX + width, topLeftY + width),
+            end = Offset(topLeftX + width, topLeftY + width - cornerLength),
             strokeWidth = strokeWidth
         )
     }
@@ -385,7 +378,6 @@ fun QRReaderLastScannedBarcode(
 class BarcodeCamera {
 
     private var camera: Camera? = null
-    private var zoomLevel: Float = 1f
     private var cameraControl: CameraControl? = null
 
     @Composable
@@ -439,7 +431,7 @@ class BarcodeCamera {
             val preview = Preview.Builder()
                 .build()
                 .also {
-                    it.setSurfaceProvider(previewView.surfaceProvider)
+                    it.surfaceProvider = previewView.surfaceProvider
                 }
 
             val imageAnalysis = ImageAnalysis.Builder()

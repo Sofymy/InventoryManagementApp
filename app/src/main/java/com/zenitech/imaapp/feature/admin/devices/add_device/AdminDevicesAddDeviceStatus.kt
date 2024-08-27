@@ -52,7 +52,6 @@ import com.zenitech.imaapp.ui.model.DeviceConditionUi
 import com.zenitech.imaapp.ui.model.DeviceStatusUi
 import com.zenitech.imaapp.ui.model.LeasingUi
 import com.zenitech.imaapp.ui.theme.LocalCardColorsPalette
-import com.zenitech.imaapp.ui.utils.validation.ValidationError
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -65,7 +64,6 @@ fun PreviewAdminDevicesAddDeviceStatus() {
         pagerState = mockedPagerState,
         page = 2,
         onChange = {},
-        errors = emptyList()
     )
 }
 
@@ -107,7 +105,6 @@ fun AdminDevicesAddDeviceStatus(
     pagerState: PagerState,
     page: Int,
     onChange: (AdminDevicesAddDeviceUserEvent) -> Unit,
-    errors: List<ValidationError?>
 ) {
     val selectedStatus = rememberSaveable {
         mutableStateOf(DeviceStatusUi.DRAFT)

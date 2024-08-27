@@ -1,11 +1,11 @@
-package org.openapitools.client.apis
+package com.zenitech.imaapp.data.network.api
 
 import retrofit2.http.*
 import retrofit2.Call
 
 import com.zenitech.imaapp.data.model.ReportFormat
-import org.openapitools.client.models.ReportResponse
-import org.openapitools.client.models.ReportType
+import com.zenitech.imaapp.data.model.ReportResponse
+import com.zenitech.imaapp.data.model.ReportType
 
 interface ReportApi {
     /**

@@ -1,11 +1,5 @@
 package com.zenitech.imaapp.feature.request_test_device
 
-import androidx.compose.animation.core.Animatable
-import androidx.compose.animation.core.LinearEasing
-import androidx.compose.animation.core.RepeatMode
-import androidx.compose.animation.core.infiniteRepeatable
-import androidx.compose.animation.core.tween
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -13,10 +7,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -44,10 +36,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -60,7 +50,6 @@ import com.zenitech.imaapp.ui.common.SecondaryButton
 import com.zenitech.imaapp.ui.common.simpleVerticalScrollbar
 import com.zenitech.imaapp.ui.theme.LocalCardColorsPalette
 import com.zenitech.imaapp.ui.utils.validation.ValidationError
-import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
@@ -178,14 +167,12 @@ fun RequestDeviceInputFields(
                 onRequestTestDeviceRequestDateChange = {
                     onEvent(RequestTestDeviceUserEvent.ChangeRequestDate(it))
                 },
-                errors = errors,
             )
             Spacer(modifier = Modifier.height(spacerHeight))
             RequestTestDeviceReturnDateInput(
                 onRequestTestDeviceReturnDateChange = {
                     onEvent(RequestTestDeviceUserEvent.ChangeReturnDate(it))
                 },
-                errors = errors,
             )
         }
 
@@ -256,7 +243,6 @@ fun RequestTestDeviceDeviceTypeInput(
 @Composable
 fun RequestTestDeviceReturnDateInput(
     onRequestTestDeviceReturnDateChange: (String) -> Unit,
-    errors: List<ValidationError?>,
 ) {
     RequestDeviceDateInput(
         type = stringResource(R.string.return_date),
@@ -308,7 +294,6 @@ fun RequestTestDeviceAdditionalRequestsInput(
 @Composable
 fun RequestTestDeviceRequestDateInput(
     onRequestTestDeviceRequestDateChange: (String) -> Unit,
-    errors: List<ValidationError?>
 ) {
     RequestDeviceDateInput(
         type = stringResource(R.string.request_date),

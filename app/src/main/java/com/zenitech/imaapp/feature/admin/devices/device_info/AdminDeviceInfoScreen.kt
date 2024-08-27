@@ -233,5 +233,5 @@ sealed class AdminDeviceInfoPagerTab(
     val title: String,
 ) {
     data object Details : AdminDeviceInfoPagerTab("Details")
-    data object History : AdminDeviceInfoPagerTab("History",)
+    data object History : AdminDeviceInfoPagerTab("History")
 }
