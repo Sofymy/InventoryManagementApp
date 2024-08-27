@@ -236,7 +236,7 @@ fun RequestTestDeviceDeviceTypeInput(
                     fontWeight = FontWeight.Bold)
             } },
         onClick = { onNavigateToDeviceType() },
-        isError = errors.any { it?.property == "type" }
+        isError = errors.any { it?.property == "asset" }
     )
 }
 
@@ -247,6 +247,7 @@ fun RequestTestDeviceReturnDateInput(
     RequestDeviceDateInput(
         type = stringResource(R.string.return_date),
         onValueChange = onRequestTestDeviceReturnDateChange,
+        plusTwoWeeks = true
     )
 }
 
@@ -268,7 +269,7 @@ fun RequestTestDeviceAdditionalRequestsInput(
             }
     ) {
         RequestDeviceInput(
-            onClick = { focusRequester.requestFocus() },
+            onClick = { },
             title = stringResource(R.string.additional_requests),
             value = {
                 Icon(
@@ -297,14 +298,16 @@ fun RequestTestDeviceRequestDateInput(
 ) {
     RequestDeviceDateInput(
         type = stringResource(R.string.request_date),
-        onValueChange = onRequestTestDeviceRequestDateChange
+        onValueChange = onRequestTestDeviceRequestDateChange,
+        plusTwoWeeks = false
     )
 }
 
 @Composable
 fun RequestDeviceDateInput(
     type: String,
-    onValueChange: (String) -> Unit
+    onValueChange: (String) -> Unit,
+    plusTwoWeeks: Boolean
 ) {
     var expanded by remember { mutableStateOf(false) }
 
@@ -314,7 +317,8 @@ fun RequestDeviceDateInput(
             RequestTestDeviceDatePickerWithDialog(
                 expanded = expanded,
                 onExpandedChange = { expanded = !expanded },
-                onValueChange = onValueChange
+                onValueChange = onValueChange,
+                plusTwoWeeks = plusTwoWeeks
             )
         },
         onClick = { expanded = !expanded },
@@ -326,13 +330,16 @@ fun RequestDeviceDateInput(
 fun RequestTestDeviceDatePickerWithDialog(
     expanded: Boolean,
     onExpandedChange: () -> Unit,
-    onValueChange: (String) -> Unit
+    onValueChange: (String) -> Unit,
+    plusTwoWeeks: Boolean
 ) {
     val dateState = rememberDatePickerState()
+    val dateIfEmpty = if(plusTwoWeeks) LocalDate.now().plusWeeks(2).format(DateTimeFormatter.ofPattern("yyyy.MM.dd")) else LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy.MM.dd"))
+
     val dateToString = dateState.selectedDateMillis?.let {
         val localDate = LocalDate.ofEpochDay(it / (24 * 60 * 60 * 1000))
         localDate.format(DateTimeFormatter.ofPattern("yyyy.MM.dd"))
-    } ?: LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy.MM.dd"))
+    } ?: dateIfEmpty
 
     Row(
         verticalAlignment = Alignment.CenterVertically,
