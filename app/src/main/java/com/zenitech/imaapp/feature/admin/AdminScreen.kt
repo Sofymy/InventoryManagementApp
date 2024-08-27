@@ -20,6 +20,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.twotone.Devices
+import androidx.compose.material.icons.twotone.Preview
 import androidx.compose.material.icons.twotone.SupervisorAccount
 import androidx.compose.material.icons.twotone.Textsms
 import androidx.compose.material3.Icon
@@ -48,11 +49,18 @@ import com.zenitech.imaapp.ui.theme.LocalAdminFolderColorsPalette
 
 @Preview(showBackground = true)
 @Composable
-fun AdminScreenPreview() {
+fun AdminFolderPreview() {
+    val folderColor = LocalAdminFolderColorsPalette.current.contentColor
+    val headColor = LocalAdminFolderColorsPalette.current.headColor
+
     IMAAppTheme {
-        AdminScreen(
-            onNavigateToAdminDevices = {},
-            onNavigateToManageRequests = {}
+        AdminFolderCard(
+            headColor = headColor,
+            containerColor = folderColor,
+            folderName = "Preview name",
+            folderIcon = Icons.TwoTone.Preview,
+            onClick = { },
+            state = null
         )
     }
 }

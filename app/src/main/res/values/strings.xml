@@ -100,5 +100,10 @@
     <string name="save_modifications">Save modifications</string>
     <string name="admin_device_history">Admin device history</string>
     <string name="admin_device_info" />
+    <string name="type_note_here">Type note here</string>
+    <string name="add_new_note">Add new note</string>
+    <string name="close">Close</string>
+    <string name="save_note">Save note</string>
+    <string name="save">Save</string>
 
 </resources>

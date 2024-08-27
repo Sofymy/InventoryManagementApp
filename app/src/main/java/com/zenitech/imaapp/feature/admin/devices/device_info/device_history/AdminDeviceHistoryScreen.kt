@@ -4,19 +4,37 @@ package com.zenitech.imaapp.feature.admin.devices.device_info.device_history
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.twotone.CalendarMonth
 import androidx.compose.material.icons.twotone.Clear
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material.icons.twotone.Note
+import androidx.compose.material.icons.twotone.Reviews
+import androidx.compose.material3.DateRangePicker
+import androidx.compose.material3.DisplayMode
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.material3.rememberDateRangePickerState
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -24,8 +42,10 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.zenitech.imaapp.R
 import com.zenitech.imaapp.feature.admin.devices.device_info.AdminDeviceInfoButton
 import com.zenitech.imaapp.ui.common.CircularLoadingIndicator
+import com.zenitech.imaapp.ui.common.PrimaryDialog
 import com.zenitech.imaapp.ui.model.HistoryResponseUi
 import com.zenitech.imaapp.ui.theme.IMAAppTheme
 import com.zenitech.imaapp.ui.theme.LocalCardColorsPalette
@@ -110,6 +130,7 @@ fun AdminDeviceHistoryList(deviceHistory: List<HistoryResponseUi>) {
     val isCalendarValueSet = remember(deviceHistory, dateRangeState.selectedStartDateMillis, dateRangeState.selectedEndDateMillis) {
         mutableStateOf(dateRangeState.selectedStartDateMillis != null || dateRangeState.selectedEndDateMillis != null)
     }
+    var showDialog by remember { mutableStateOf(false) }
 
     val filteredHistory = remember(deviceHistory, dateRangeState.selectedStartDateMillis, dateRangeState.selectedEndDateMillis) {
         deviceHistory.filter {
@@ -118,6 +139,16 @@ fun AdminDeviceHistoryList(deviceHistory: List<HistoryResponseUi>) {
             val endMillis = dateRangeState.selectedEndDateMillis ?: Long.MAX_VALUE
             timestampMillis in startMillis..endMillis
         }
+    }
+
+    if(showDialog){
+        PrimaryDialog(
+            title = stringResource(R.string.add_new_note),
+            onDismissRequest = { showDialog = false },
+            onConfirm = { showDialog = false },
+            dismissText = stringResource(R.string.close),
+            confirmText = stringResource(R.string.save)
+        )
     }
 
     Column {
@@ -129,10 +160,15 @@ fun AdminDeviceHistoryList(deviceHistory: List<HistoryResponseUi>) {
                 .fillMaxWidth()
         ) {
             AdminDeviceInfoButton(
+                icon = Icons.TwoTone.Reviews,
+            ) {
+                showDialog = showDialog.not()
+            }
+            AdminDeviceInfoButton(
                 icon = Icons.TwoTone.CalendarMonth,
                 tint = if(isCalendarValueSet.value) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onBackground
             ) {
-                isCalendarExpanded = !isCalendarExpanded
+                isCalendarExpanded = isCalendarExpanded.not()
             }
             AnimatedVisibility(visible = isCalendarValueSet.value) {
                 AdminDeviceInfoButton(
